@@ -269,7 +269,8 @@ includes an `Early-Data` header field with a value of "1".
 
 Using early data exposes a client to the risk that their request is replayed.  A
 retried or replayed request can produce different side effects on the server.
-That might be used for traffic analysis.
+That might be used for traffic analysis to recover information about requests or
+the resources those requests target.
 
 
 # IANA Considerations
@@ -301,8 +302,8 @@ Related information:
 
 : (empty)
 
-This document registers the 422 (Too Early) status code in the "HTTP Status
-Codes" registry established in {{!RFC7231}}.
+This document registers the 422 (Too Early) status code in the "Hypertext
+Transfer Protocol (HTTP) Status Code" registry established in {{!RFC7231}}.
 
 Value:
 
@@ -318,7 +319,3 @@ Reference:
 
 
 --- back
-
-# Acknowledgments
-
-Thomas Pornin provided significant input to this document.
