@@ -47,8 +47,8 @@ technique at intermediaries.
 
 TLS 1.3 {{?TLS13=I-D.ietf-tls-tls13}} introduces the concept of early data, or
 zero round trip data.  Early data allows a client to send data to a server in
-the first round trip, immediately after starting the TLS handshake, if the
-client has spoken to the same server recently.
+the first round trip of a connection, without waiting for the TLS handshake to
+complete, if the client has spoken to the same server recently.
 
 For HTTP {{!HTTP=RFC7230}}, early data allows clients to send requests
 immediately, avoiding the one or two round trip time needed for the TLS
@@ -140,7 +140,7 @@ consent of the client.
 
 For application data that is sent after the TLS handshake completes, TLS
 provides protection against replay.  Duplicated data is detected and treated as
-a fatal error condition (in DTLS {{?RFC6347}}, duplicated data is instead
+a fatal error condition (in DTLS {{?DTLS=RFC6347}}, duplicated data is instead
 discarded).  Similarly, transport layer loss recovery, such as TCP
 retransmission, does not generate replays because the transport discards
 duplicated data.
@@ -208,7 +208,7 @@ generate the 422 status code if it does not wish to process the request.
 ## The Early-Data Header Field
 
 The `Early-Data` header field is defined with two values, "0" and "1".  Here it
-is shown using the ABNF {{!RFC5234}}:
+is shown using the ABNF {{!ABNF=RFC5234}}:
 
 ```
 Early-Data = "0" / "1"
@@ -276,7 +276,7 @@ the resources those requests target.
 # IANA Considerations
 
 This document registers the `Early-Data` header field in the "Message Headers"
-registry {{!RFC3864}}.
+registry {{!HEADERS=RFC3864}}.
 
 Header field name:
 
