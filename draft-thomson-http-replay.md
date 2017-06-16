@@ -275,6 +275,13 @@ retried or replayed request can produce different side effects on the server.
 That might be used for traffic analysis to recover information about requests or
 the resources those requests target.
 
+A gateway that forwards requests that were received in early data MUST only do
+so if it knows that the server that receives those requests understands the
+`Early-Data` header field and will correctly generate a 422 (Too Early) status
+code.  A gateway that isn't certain about server support SHOULD either delay
+forwarding the request until the TLS handshake completes, or send a 422 (Too
+Early) status code in response.
+
 
 # IANA Considerations
 
