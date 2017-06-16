@@ -69,6 +69,8 @@ a gateway the ability to apply this technique.  This technique ensures that the
 choice to expose a request to the possibility of replay is mutual: client and
 server will both need to agree to accept the risk.
 
+The advice in this document also applies to use of 0-RTT in HTTP over QUIC
+{{?HQ=I-D.ietf-quic-http}}.
 
 
 # Conventions and Definitions
