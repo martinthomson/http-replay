@@ -6,9 +6,9 @@ httpbis                                                       M. Thomson
 Internet-Draft                                                   Mozilla
 Updates: 6066 (if approved)                                M. Nottingham
 Intended status: Standards Track                                    true
-Expires: December 15, 2017                                    W. Tarreau
+Expires: December 18, 2017                                    W. Tarreau
                                                               Exceliance
-                                                           June 13, 2017
+                                                           June 16, 2017
 
 
                       Using TLS Early Data in HTTP
@@ -36,7 +36,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 15, 2017.
+   This Internet-Draft will expire on December 18, 2017.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Thomson, et al.         Expires December 15, 2017               [Page 1]
+Thomson, et al.         Expires December 18, 2017               [Page 1]
 
 Internet-Draft               HTTP Early Data                   June 2017
 
@@ -109,13 +109,16 @@ Table of Contents
 
 
 
-Thomson, et al.         Expires December 15, 2017               [Page 2]
+Thomson, et al.         Expires December 18, 2017               [Page 2]
 
 Internet-Draft               HTTP Early Data                   June 2017
 
 
    possibility of replay is mutual: client and server will both need to
    agree to accept the risk.
+
+   The advice in this document also applies to use of 0-RTT in HTTP over
+   QUIC [HQ].
 
 2.  Conventions and Definitions
 
@@ -159,16 +162,16 @@ Internet-Draft               HTTP Early Data                   June 2017
 
    A client that wishes to use early data commences sending requests
    immediately after sending the TLS ClientHello.  If early data is
-   accepted, early data is concatenated with other application to form a
-   single stream of data.
 
 
 
-
-Thomson, et al.         Expires December 15, 2017               [Page 3]
+Thomson, et al.         Expires December 18, 2017               [Page 3]
 
 Internet-Draft               HTTP Early Data                   June 2017
 
+
+   accepted, early data is concatenated with other application to form a
+   single stream of data.
 
    A server cannot choose to selectively reject early data.  TLS only
    permits a server to accept all early data, or none of it.  Once a
@@ -216,16 +219,15 @@ Internet-Draft               HTTP Early Data                   June 2017
    data.  This gives a client explicit control over whether a given
    request is exposed to the risk of replay.
 
-   A server can also choose whether it processes early data before the
-   TLS handshake completes.  By deferring processing for a request until
 
 
-
-Thomson, et al.         Expires December 15, 2017               [Page 4]
+Thomson, et al.         Expires December 18, 2017               [Page 4]
 
 Internet-Draft               HTTP Early Data                   June 2017
 
 
+   A server can also choose whether it processes early data before the
+   TLS handshake completes.  By deferring processing for a request until
    the handshake is complete, it can ensure that only a successfully
    completed connection is used for processing early requests.  Assuming
    that a replayed ClientHello will not result in additional connections
@@ -262,39 +264,47 @@ Internet-Draft               HTTP Early Data                   June 2017
    To improve the ability of a gateway to accept and forward requests
    that arrive in early data, two signaling mechanisms are defined:
 
-   o  The "Early-Data" header field can be included by a gateway in a
-      request that it forwards to an origin server.
+   o  The "Early-Data" header field is added to any request that is sent
+      or received in early data.
 
    o  The 422 (Too Early) status code is defined for an origin server to
-      indicate that a request is not safe to make if included in early
-      data.
+      indicate that a request could not be processed due to the
+      consequences of a possible replay attack.
 
    In order for this technique to work well, the gateway needs to be
    certain that the origin server will understand the "Early-Data"
-   header field and correctly generate the 422 status code if it does
-   not wish to process the request.
 
 
 
 
-Thomson, et al.         Expires December 15, 2017               [Page 5]
+Thomson, et al.         Expires December 18, 2017               [Page 5]
 
 Internet-Draft               HTTP Early Data                   June 2017
 
+
+   header field and correctly generate the 422 status code if it does
+   not wish to process the request.
 
 7.1.  The Early-Data Header Field
 
    The "Early-Data" header field is defined with two values, "0" and
    "1".  Here it is shown using the ABNF [ABNF]:
 
-   "Early-Data = "0" / "1" "
+   Early-Data = "0" / "1"
 
    For example:
 
-   ``` POST /resource HTTP/1.0 Host: example.com Early-Data: 1 Content-
-   Length: 1
+   POST /resource HTTP/1.0
+   Host: example.com
+   Early-Data: 1
+   Content-Length: 14
 
-   ? ```
+   message body
+
+   A client SHOULD include the "Early-Data" header field with a value of
+   "1" if it sends a request in TLS early data.  This indicates to the
+   intermediary or server that it understands the 422 (Too Early) status
+   code and will retry the request.
 
    The "Early-Data" header field is omitted from a request or set to "0"
    when the request arrives after the TLS handshake completes.  An
@@ -313,11 +323,6 @@ Internet-Draft               HTTP Early Data                   June 2017
    intermediary can then wait until the TLS handshake completes and
    forward the request again.
 
-   A client SHOULD include the "Early-Data" header field with a value of
-   "1" if it sends a request in TLS early data.  This indicates to the
-   intermediary or server that it understands the 422 (Too Early) status
-   code and will retry the request.
-
 7.2.  The 422 (Too Early) Status Code
 
    A 422 (Too Early) status code indicates that the server that is
@@ -325,18 +330,17 @@ Internet-Draft               HTTP Early Data                   June 2017
 
    The primary use of this header field is to cause clients or
    intermediaries to retry a request.  A client or intermediary MAY
-   retry any request automatically if they receive a 422 (Too Early)
-   status code.  A request that receives a 422 (Too Early) status code
-   MUST NOT be retried in TLS early data.
 
 
 
-
-
-Thomson, et al.         Expires December 15, 2017               [Page 6]
+Thomson, et al.         Expires December 18, 2017               [Page 6]
 
 Internet-Draft               HTTP Early Data                   June 2017
 
+
+   retry any request automatically if they receive a 422 (Too Early)
+   status code.  A request that receives a 422 (Too Early) status code
+   MUST NOT be retried in TLS early data.
 
    An intermediary that forwards a request SHOULD wait until the TLS
    handshake on the connection that carries the original request is
@@ -357,6 +361,14 @@ Internet-Draft               HTTP Early Data                   June 2017
    recover information about requests or the resources those requests
    target.
 
+   A gateway that forwards requests that were received in early data
+   MUST only do so if it knows that the server that receives those
+   requests understands the "Early-Data" header field and will correctly
+   generate a 422 (Too Early) status code.  A gateway that isn't certain
+   about server support SHOULD either delay forwarding the request until
+   the TLS handshake completes, or send a 422 (Too Early) status code in
+   response.
+
 9.  IANA Considerations
 
    This document registers the "Early-Data" header field in the "Message
@@ -374,6 +386,14 @@ Internet-Draft               HTTP Early Data                   June 2017
 
    Related information:  (empty)
 
+
+
+
+Thomson, et al.         Expires December 18, 2017               [Page 7]
+
+Internet-Draft               HTTP Early Data                   June 2017
+
+
    This document registers the 422 (Too Early) status code in the
    "Hypertext Transfer Protocol (HTTP) Status Code" registry established
    in [RFC7231].
@@ -383,16 +403,6 @@ Internet-Draft               HTTP Early Data                   June 2017
    Description:  Too Early
 
    Reference:  This document
-
-
-
-
-
-
-Thomson, et al.         Expires December 15, 2017               [Page 7]
-
-Internet-Draft               HTTP Early Data                   June 2017
-
 
 10.  References
 
@@ -433,22 +443,26 @@ Internet-Draft               HTTP Early Data                   June 2017
               Security Version 1.2", RFC 6347, DOI 10.17487/RFC6347,
               January 2012, <http://www.rfc-editor.org/info/rfc6347>.
 
+
+
+Thomson, et al.         Expires December 18, 2017               [Page 8]
+
+Internet-Draft               HTTP Early Data                   June 2017
+
+
    [E2E]      Saltzer, J., Reed, D., and D. Clark, "End-to-end arguments
               in system design", ACM Transactions on Computer
               Systems Vol. 2, pp. 277-288, DOI 10.1145/357401.357402,
               November 1984.
 
+   [HQ]       Bishop, M., "Hypertext Transfer Protocol (HTTP) over
+              QUIC", draft-ietf-quic-http-04 (work in progress), June
+              2017.
+
    [HTTP2]    Belshe, M., Peon, R., and M. Thomson, Ed., "Hypertext
               Transfer Protocol Version 2 (HTTP/2)", RFC 7540,
               DOI 10.17487/RFC7540, May 2015,
               <http://www.rfc-editor.org/info/rfc7540>.
-
-
-
-Thomson, et al.         Expires December 15, 2017               [Page 8]
-
-Internet-Draft               HTTP Early Data                   June 2017
-
 
 Authors' Addresses
 
@@ -487,18 +501,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Thomson, et al.         Expires December 15, 2017               [Page 9]
+Thomson, et al.         Expires December 18, 2017               [Page 9]

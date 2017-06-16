@@ -299,7 +299,7 @@ address {
 
   <meta name="dct.creator" content="Thomson, M., Nottingham, M., and W. Tarreau" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-thomson-http-replay-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2017-6-13" />
+  <meta name="dct.issued" scheme="ISO8601" content="2017-6-16" />
   <meta name="dct.abstract" content="TLS early data presents both an opportunity and a risk.  The risks of using TLS early data are explained as they related to HTTP.  A technique for reducing these risks is described, including mechanisms that enable the use of that technique at intermediaries." />
   <meta name="description" content="TLS early data presents both an opportunity and a risk.  The risks of using TLS early data are explained as they related to HTTP.  A technique for reducing these risks is described, including mechanisms that enable the use of that technique at intermediaries." />
 
@@ -327,7 +327,7 @@ address {
 <td class="right">true</td>
 </tr>
 <tr>
-<td class="left">Expires: December 15, 2017</td>
+<td class="left">Expires: December 18, 2017</td>
 <td class="right">W. Tarreau</td>
 </tr>
 <tr>
@@ -336,7 +336,7 @@ address {
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">June 13, 2017</td>
+<td class="right">June 16, 2017</td>
 </tr>
 
     	
@@ -352,7 +352,7 @@ address {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on December 15, 2017.</p>
+<p>This Internet-Draft will expire on December 18, 2017.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2017 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -404,6 +404,7 @@ address {
 <p id="rfc.section.1.p.3">The primary cost of using early data is the risk that an attacker might capture and replay the early data.  TLS <a href="#TLS13" class="xref">[TLS13]</a> describes techniques that reduce the likelihood that an attacker can successfully replay a request, but these techniques can be difficult to deploy and it could be impossible to guarantee perfect protection against replay attack.</p>
 <p id="rfc.section.1.p.4">This document explores how HTTP treats both retries and replays of requests.</p>
 <p id="rfc.section.1.p.5">To help mitigate the risk of replay, a technique for controlling the risks inherent to the use of early data is outlined, including a mechanism that grants a gateway the ability to apply this technique.  This technique ensures that the choice to expose a request to the possibility of replay is mutual: client and server will both need to agree to accept the risk.</p>
+<p id="rfc.section.1.p.6">The advice in this document also applies to use of 0-RTT in HTTP over QUIC <a href="#HQ" class="xref">[HQ]</a>.</p>
 <h1 id="rfc.section.2">
 <a href="#rfc.section.2">2.</a> <a href="#conventions-and-definitions" id="conventions-and-definitions">Conventions and Definitions</a>
 </h1>
@@ -446,22 +447,30 @@ address {
 <p></p>
 
 <ul>
-<li>The <samp>Early-Data</samp> header field can be included by a gateway in a request that it forwards to an origin server.</li>
-<li>The 422 (Too Early) status code is defined for an origin server to indicate that a request is not safe to make if included in early data.</li>
+<li>The <samp>Early-Data</samp> header field is added to any request that is sent or received in early data.</li>
+<li>The 422 (Too Early) status code is defined for an origin server to indicate that a request could not be processed due to the consequences of a possible replay attack.</li>
 </ul>
 <p id="rfc.section.7.p.5">In order for this technique to work well, the gateway needs to be certain that the origin server will understand the <samp>Early-Data</samp> header field and correctly generate the 422 status code if it does not wish to process the request.</p>
 <h2 id="rfc.section.7.1">
 <a href="#rfc.section.7.1">7.1.</a> <a href="#the-early-data-header-field" id="the-early-data-header-field">The Early-Data Header Field</a>
 </h2>
 <p id="rfc.section.7.1.p.1">The <samp>Early-Data</samp> header field is defined with two values, &#8220;0&#8221; and &#8220;1&#8221;.  Here it is shown using the ABNF <a href="#ABNF" class="xref">[ABNF]</a>:</p>
-<p><samp>Early-Data = "0" / "1" </samp></p>
-<p id="rfc.section.7.1.p.3">For example:</p>
-<p id="rfc.section.7.1.p.4">``` POST /resource HTTP/1.0 Host: example.com Early-Data: 1 Content-Length: 1</p>
-<p id="rfc.section.7.1.p.5">? ```</p>
-<p id="rfc.section.7.1.p.6">The <samp>Early-Data</samp> header field is omitted from a request or set to &#8220;0&#8221; when the request arrives after the TLS handshake completes.  An intermediary MUST NOT add this header field with a value of &#8220;0&#8221; or remove a header field if it has a value of &#8220;1&#8221;.</p>
-<p id="rfc.section.7.1.p.7">A <samp>Early-Data</samp> header field with a value of &#8220;1&#8221; is added to a request when forwarding a request from a connection that has an incomplete TLS handshake.  In other words, a value of &#8220;1&#8221; identifies requests that were sent in TLS early data.  A value of &#8220;1&#8221; indicates that the request might have been replayed.</p>
-<p id="rfc.section.7.1.p.8">An intermediary that receives a request in TLS early data can forward the request with the <samp>Early-Data</samp> header field add and set to &#8220;1&#8221;.  If the server responds with a 422 (Too Early) status code, the intermediary can then wait until the TLS handshake completes and forward the request again.</p>
-<p id="rfc.section.7.1.p.9">A client SHOULD include the <samp>Early-Data</samp> header field with a value of &#8220;1&#8221; if it sends a request in TLS early data.  This indicates to the intermediary or server that it understands the 422 (Too Early) status code and will retry the request.</p>
+<pre>
+Early-Data = "0" / "1"
+</pre>
+<p id="rfc.section.7.1.p.2">For example:</p>
+<pre>
+POST /resource HTTP/1.0
+Host: example.com
+Early-Data: 1
+Content-Length: 14
+
+message body
+</pre>
+<p id="rfc.section.7.1.p.3">A client SHOULD include the <samp>Early-Data</samp> header field with a value of &#8220;1&#8221; if it sends a request in TLS early data.  This indicates to the intermediary or server that it understands the 422 (Too Early) status code and will retry the request.</p>
+<p id="rfc.section.7.1.p.4">The <samp>Early-Data</samp> header field is omitted from a request or set to &#8220;0&#8221; when the request arrives after the TLS handshake completes.  An intermediary MUST NOT add this header field with a value of &#8220;0&#8221; or remove a header field if it has a value of &#8220;1&#8221;.</p>
+<p id="rfc.section.7.1.p.5">A <samp>Early-Data</samp> header field with a value of &#8220;1&#8221; is added to a request when forwarding a request from a connection that has an incomplete TLS handshake.  In other words, a value of &#8220;1&#8221; identifies requests that were sent in TLS early data.  A value of &#8220;1&#8221; indicates that the request might have been replayed.</p>
+<p id="rfc.section.7.1.p.6">An intermediary that receives a request in TLS early data can forward the request with the <samp>Early-Data</samp> header field add and set to &#8220;1&#8221;.  If the server responds with a 422 (Too Early) status code, the intermediary can then wait until the TLS handshake completes and forward the request again.</p>
 <h2 id="rfc.section.7.2">
 <a href="#rfc.section.7.2">7.2.</a> <a href="#the-422-too-early-status-code" id="the-422-too-early-status-code">The 422 (Too Early) Status Code</a>
 </h2>
@@ -473,6 +482,7 @@ address {
 <a href="#rfc.section.8">8.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a>
 </h1>
 <p id="rfc.section.8.p.1">Using early data exposes a client to the risk that their request is replayed.  A retried or replayed request can produce different side effects on the server.  That might be used for traffic analysis to recover information about requests or the resources those requests target.</p>
+<p id="rfc.section.8.p.2">A gateway that forwards requests that were received in early data MUST only do so if it knows that the server that receives those requests understands the <samp>Early-Data</samp> header field and will correctly generate a 422 (Too Early) status code.  A gateway that isn&#8217;t certain about server support SHOULD either delay forwarding the request until the TLS handshake completes, or send a 422 (Too Early) status code in response.</p>
 <h1 id="rfc.section.9">
 <a href="#rfc.section.9">9.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a>
 </h1>
@@ -552,6 +562,11 @@ address {
 <td class="reference"><b id="E2E">[E2E]</b></td>
 <td class="top">
 <a>Saltzer, J.</a>, <a>Reed, D.</a> and <a>D. Clark</a>, "<a>End-to-end arguments in system design</a>", ACM Transactions on Computer Systems Vol. 2, pp. 277-288, DOI 10.1145/357401.357402, November 1984.</td>
+</tr>
+<tr>
+<td class="reference"><b id="HQ">[HQ]</b></td>
+<td class="top">
+<a>Bishop, M.</a>, "<a href="http://tools.ietf.org/html/draft-ietf-quic-http-04">Hypertext Transfer Protocol (HTTP) over QUIC</a>", Internet-Draft draft-ietf-quic-http-04, June 2017.</td>
 </tr>
 <tr>
 <td class="reference"><b id="HTTP2">[HTTP2]</b></td>
