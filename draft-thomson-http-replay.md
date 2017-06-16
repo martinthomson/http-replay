@@ -196,11 +196,12 @@ be forwarded.
 To improve the ability of a gateway to accept and forward requests that arrive
 in early data, two signaling mechanisms are defined:
 
-* The `Early-Data` header field can be included by a gateway in a request that
-  it forwards to an origin server.
+* The `Early-Data` header field is added to any request that is sent or
+  received in early data.
 
 * The 422 (Too Early) status code is defined for an origin server to indicate
-  that a request is not safe to make if included in early data.
+  that a request could not be processed due to the consequences of a possible
+  replay attack.
 
 In order for this technique to work well, the gateway needs to be certain that
 the origin server will understand the `Early-Data` header field and correctly
