@@ -213,20 +213,20 @@ generate the 422 status code if it does not wish to process the request.
 The `Early-Data` header field is defined with two values, "0" and "1".  Here it
 is shown using the ABNF {{!ABNF=RFC5234}}:
 
-```
+~~~
 Early-Data = "0" / "1"
-```
+~~~
 
 For example:
 
-```
+~~~
 POST /resource HTTP/1.0
 Host: example.com
 Early-Data: 1
-Content-Length: 1
+Content-Length: 14
 
-?
-```
+message body
+~~~
 
 The `Early-Data` header field is omitted from a request or set to "0" when the
 request arrives after the TLS handshake completes.  An intermediary MUST NOT add
