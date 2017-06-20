@@ -266,7 +266,7 @@ If the original request that arrived at the intermediary contained an
 `Early-Data` header field with a value of "1", the intermediary MAY instead
 forward the 422 (Too Early) status code.
 
-A server SHOULD NOT generate the 422 (Too Early) status code unless the request
+A server MUST NOT generate the 422 (Too Early) status code unless the request
 includes an `Early-Data` header field with a value of "1".
 
 
