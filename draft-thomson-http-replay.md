@@ -246,7 +246,8 @@ data.  A value of "1" indicates that the request might have been replayed.
 An intermediary that receives a request in TLS early data can forward the
 request with the `Early-Data` header field add and set to "1".  If the server
 responds with a 422 (Too Early) status code, the intermediary can then wait
-until the TLS handshake completes and forward the request again.
+until the TLS handshake completes and forward the request again, or simply
+pass the status code back to the client which will be able to retry appropriately.
 
 
 ## The 422 (Too Early) Status Code
