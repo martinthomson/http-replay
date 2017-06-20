@@ -122,7 +122,7 @@ early data.
 If a server rejects early data, a client MUST start sending again as though the
 connection was new.  For HTTP/2, this means re-sending the connection preface.
 Any requests sent in early data MUST be sent again, unless the client decides to
-abandon those requuests.
+abandon those requests.
 
 This results in a potential replay where the early data is sent to one server
 instance and the connection attempt is separately allowed to complete where the
