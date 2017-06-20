@@ -109,9 +109,10 @@ they are imperfect.
 
 Note that a server cannot choose to selectively reject early data. TLS only
 permits a server to accept all early data, or none of it. Once a server has
-decided to accept early data, it MUST process all requests in early data.
+decided to accept early data, it MUST process all requests in early data, even
+if the server rejects the request by sending a 418 (Too Early) response.
 
-Also, a server can limit the amount of early data with the `max_early_data_size`
+A server can limit the amount of early data with the `max_early_data_size`
 field. This can be used to avoid committing an arbitrary amount of memory for
 deferred requests. A server SHOULD ensure that when it accepts early data, it
 can defer processing of requests until after the TLS handshake completes.
@@ -210,7 +211,7 @@ if it has a value of "1".
 ## The 418 (Too Early) Status Code {#status}
 
 A 418 (Too Early) status code indicates that the server is unwilling to risk
-processing a request that might be (or have been) replayed.
+processing a request that might be (or has been) replayed.
 
 Clients (user-agents and intermediaries) that sent the request in early data
 MUST automatically retry the request when receiving a 418 (Too Early)
