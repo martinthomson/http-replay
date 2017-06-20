@@ -249,6 +249,9 @@ responds with a 422 (Too Early) status code, the intermediary can then wait
 until the TLS handshake completes and forward the request again, or simply
 pass the status code back to the client which will be able to retry appropriately.
 
+An intermediary MUST NOT add an Early-Data header field to a request which did
+not contain one if it did not receive the request as early data or if it is not
+able to perform a retry on its own.
 
 ## The 422 (Too Early) Status Code
 
