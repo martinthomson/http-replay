@@ -467,7 +467,7 @@ Content-Length: 14
 
 message body
 </pre>
-<p id="rfc.section.7.1.p.3">A client SHOULD include the <samp>Early-Data</samp> header field with a value of &#8220;1&#8221; if it sends a request in TLS early data.  This indicates to the intermediary or server that it understands the 422 (Too Early) status code and will retry the request.</p>
+<p id="rfc.section.7.1.p.3">A client SHOULD include the <samp>Early-Data</samp> header field with a value of &#8220;1&#8221; if it sends a request in TLS early data.  This indicates to the intermediary or server that it understands the 422 (Too Early) status code and is prepared to retry the request.</p>
 <p id="rfc.section.7.1.p.4">The <samp>Early-Data</samp> header field is omitted from a request or set to &#8220;0&#8221; when the request arrives after the TLS handshake completes.  An intermediary MUST NOT add this header field with a value of &#8220;0&#8221; or remove a header field if it has a value of &#8220;1&#8221;.</p>
 <p id="rfc.section.7.1.p.5">A <samp>Early-Data</samp> header field with a value of &#8220;1&#8221; is added to a request when forwarding a request from a connection that has an incomplete TLS handshake.  In other words, a value of &#8220;1&#8221; identifies requests that were sent in TLS early data.  A value of &#8220;1&#8221; indicates that the request might have been replayed.</p>
 <p id="rfc.section.7.1.p.6">An intermediary that receives a request in TLS early data can forward the request with the <samp>Early-Data</samp> header field add and set to &#8220;1&#8221;.  If the server responds with a 422 (Too Early) status code, the intermediary can then wait until the TLS handshake completes and forward the request again.</p>
