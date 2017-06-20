@@ -76,7 +76,7 @@ Table of Contents
    9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   7
    10. References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
      10.1.  Normative References . . . . . . . . . . . . . . . . . .   8
-     10.2.  Informative References . . . . . . . . . . . . . . . . .   8
+     10.2.  Informative References . . . . . . . . . . . . . . . . .   9
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   9
 
 1.  Introduction
@@ -188,7 +188,8 @@ Internet-Draft               HTTP Early Data                   June 2017
    to complete where the server instance rejects the early data.
    Replays are also possible if there are multiple server instances that
    will accept early data, or if the same server accepts early data
-   (though this would be in violation of requirements in TLS).
+   multiple times (though this would be in violation of requirements in
+   TLS).
 
 5.  Replay Attacks
 
@@ -216,8 +217,7 @@ Internet-Draft               HTTP Early Data                   June 2017
 
    It is immediately obvious that a client can make an explicit choice
    on each request it makes as to whether it sends that request in early
-   data.  This gives a client explicit control over whether a given
-   request is exposed to the risk of replay.
+
 
 
 
@@ -225,6 +225,9 @@ Thomson, et al.         Expires December 22, 2017               [Page 4]
 
 Internet-Draft               HTTP Early Data                   June 2017
 
+
+   data.  This gives a client explicit control over whether a given
+   request is exposed to the risk of replay.
 
    A server can also choose whether it processes early data before the
    TLS handshake completes.  By deferring processing for a request until
@@ -271,9 +274,6 @@ Internet-Draft               HTTP Early Data                   June 2017
       indicate that a request could not be processed due to the
       consequences of a possible replay attack.
 
-   In order for this technique to work well, the gateway needs to be
-   certain that the origin server will understand the "Early-Data"
-
 
 
 
@@ -282,6 +282,8 @@ Thomson, et al.         Expires December 22, 2017               [Page 5]
 Internet-Draft               HTTP Early Data                   June 2017
 
 
+   In order for this technique to work well, the gateway needs to be
+   certain that the origin server will understand the "Early-Data"
    header field and correctly generate the 422 status code if it does
    not wish to process the request.
 
@@ -328,8 +330,6 @@ Internet-Draft               HTTP Early Data                   June 2017
    A 422 (Too Early) status code indicates that the server that is
    unwilling to risk processing requests that might be replayed.
 
-   The primary use of this header field is to cause clients or
-   intermediaries to retry a request.  A client or intermediary MAY
 
 
 
@@ -338,6 +338,8 @@ Thomson, et al.         Expires December 22, 2017               [Page 6]
 Internet-Draft               HTTP Early Data                   June 2017
 
 
+   The primary use of this header field is to cause clients or
+   intermediaries to retry a request.  A client or intermediary MAY
    retry any request automatically if they receive a 422 (Too Early)
    status code.  A request that receives a 422 (Too Early) status code
    MUST NOT be retried in TLS early data.
@@ -384,8 +386,6 @@ Internet-Draft               HTTP Early Data                   June 2017
 
    Specification document(s):  This document
 
-   Related information:  (empty)
-
 
 
 
@@ -393,6 +393,8 @@ Thomson, et al.         Expires December 22, 2017               [Page 7]
 
 Internet-Draft               HTTP Early Data                   June 2017
 
+
+   Related information:  (empty)
 
    This document registers the 422 (Too Early) status code in the
    "Hypertext Transfer Protocol (HTTP) Status Code" registry established
@@ -437,11 +439,9 @@ Internet-Draft               HTTP Early Data                   June 2017
               Version 1.3", draft-ietf-tls-tls13-20 (work in progress),
               April 2017.
 
-10.2.  Informative References
 
-   [DTLS]     Rescorla, E. and N. Modadugu, "Datagram Transport Layer
-              Security Version 1.2", RFC 6347, DOI 10.17487/RFC6347,
-              January 2012, <http://www.rfc-editor.org/info/rfc6347>.
+
+
 
 
 
@@ -449,6 +449,12 @@ Thomson, et al.         Expires December 22, 2017               [Page 8]
 
 Internet-Draft               HTTP Early Data                   June 2017
 
+
+10.2.  Informative References
+
+   [DTLS]     Rescorla, E. and N. Modadugu, "Datagram Transport Layer
+              Security Version 1.2", RFC 6347, DOI 10.17487/RFC6347,
+              January 2012, <http://www.rfc-editor.org/info/rfc6347>.
 
    [E2E]      Saltzer, J., Reed, D., and D. Clark, "End-to-end arguments
               in system design", ACM Transactions on Computer
@@ -482,12 +488,6 @@ Authors' Addresses
    Exceliance
 
    Email: w@1wt.eu
-
-
-
-
-
-
 
 
 
