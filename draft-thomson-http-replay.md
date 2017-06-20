@@ -61,6 +61,9 @@ be used to reduce the likelihood that an attacker can successfully replay a
 request, but these techniques can be difficult to deploy, and still leave some
 possibility of a successful attack.
 
+Note that this is different from automated or user-initiated retries; replays
+are under the control of an attacker, and are therefore malicious.
+
 To help mitigate the risk of replays in HTTP, this document gives an overview
 of techniques for controlling these risks. It also defines a mechanism that
 enables clients to communicate with origin servers about early data, to assure
