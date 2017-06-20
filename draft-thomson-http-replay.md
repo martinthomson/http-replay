@@ -135,7 +135,7 @@ requirements in TLS).
 # Replay Attacks
 
 What distinguishes a replay attack from a retry is that a retry is explicitly
-initiated by a client or user.  A client that attempts a retry In contrast, a
+initiated by a client or user.  In contrast, a
 replay attack is initiated by an attacker.  The attacker creates a copy of the
 messages sent by a client and replays these messages without the knowledge or
 consent of the client.
