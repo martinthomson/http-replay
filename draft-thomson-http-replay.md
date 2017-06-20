@@ -101,7 +101,7 @@ If this is not known by the server, it MUST defer the request.
 
 3. When a request received in early data contains the `Early-Data` request
 header field ({{header}}), the server can trigger a retry without the use of
-early data by responding with the 418 (Too Early) status code ({{status)}}), in
+early data by responding with the 4NN (Too Early) status code ({{status)}}), in
 cases where the risk of replay is judged too great.
 
 4. Finally, TLS {{?TLS13}} describes several mitigation strategies that reduce
@@ -112,7 +112,7 @@ they are imperfect.
 Note that a server cannot choose to selectively reject early data. TLS only
 permits a server to accept all early data, or none of it. Once a server has
 decided to accept early data, it MUST process all requests in early data, even
-if the server rejects the request by sending a 418 (Too Early) response.
+if the server rejects the request by sending a 4NN (Too Early) response.
 
 A server can limit the amount of early data with the `max_early_data_size`
 field. This can be used to avoid committing an arbitrary amount of memory for
@@ -145,7 +145,7 @@ requirements in TLS).
 
 Clients MUST identify requests sent in early data with the `Early-Data` request
 header field; see {{header}}. Clients that use early data MUST retry requests
-upon receipt of a 418 (Too Early) status code; see {{status}}.
+upon receipt of a 4NN (Too Early) status code; see {{status}}.
 
 Clients MUST NOT use early data in requests when a proxy is configured.
 
@@ -162,7 +162,7 @@ To meet these needs, two signalling mechanisms are defined:
 * The `Early-Data` header field is added to any request that is sent or
   received in early data.
 
-* The 418 (Too Early) status code is defined for an origin server to indicate
+* The 4NN (Too Early) status code is defined for an origin server to indicate
   that a request could not be processed due to the consequences of a possible
   replay attack.
 
@@ -181,7 +181,7 @@ and its origin server.
 
 The `Early-Data` request header field indicates that the request has been
 conveyed in early data, and additionally indicates that a downstream client
-understands the 418 (Too Early) status code.
+understands the 4NN (Too Early) status code.
 
 It has two possible values, "0" and "1". Its syntax is defined by the following
 ABNF {{!ABNF=RFC5234}}:
@@ -210,26 +210,26 @@ if it has a value of "1".
 
 
 
-## The 418 (Too Early) Status Code {#status}
+## The 4NN (Too Early) Status Code {#status}
 
-A 418 (Too Early) status code indicates that the server is unwilling to risk
+A 4NN (Too Early) status code indicates that the server is unwilling to risk
 processing a request that might be (or has been) replayed.
 
 Clients (user-agents and intermediaries) that sent the request in early data
-MUST automatically retry the request when receiving a 418 (Too Early)
+MUST automatically retry the request when receiving a 4NN (Too Early)
 response status code. Such retries MUST NOT be sent in early data, and SHOULD
 NOT be sent if the TLS handshake on the original connection does not
 successfully complete.
 
-Intermediaries that receive the 418 (Too Early) status code MUST NOT
+Intermediaries that receive the 4NN (Too Early) status code MUST NOT
 automatically retry requests when the original request already contained the
 `Early-Data` header field with a value of "1"; instead, they MUST forward the
-418 (Too Early) response to the upstream client.
+4NN (Too Early) response to the upstream client.
 
-A server SHOULD NOT generate the 418 (Too Early) status code unless the request
+A server SHOULD NOT generate the 4NN (Too Early) status code unless the request
 includes an `Early-Data` header field with a value of "1".
 
-The 418 (Too Early) status code is not cacheable by default. Its payload is not
+The 4NN (Too Early) status code is not cacheable by default. Its payload is not
 the representation of any identified resource.
 
 
@@ -242,9 +242,9 @@ the resources those requests target.
 
 A gateway that forwards requests that were received in early data MUST only do
 so if it knows that the server that receives those requests understands the
-`Early-Data` header field and will correctly generate a 418 (Too Early) status
+`Early-Data` header field and will correctly generate a 4NN (Too Early) status
 code.  A gateway that isn't certain about server support SHOULD either delay
-forwarding the request until the TLS handshake completes, or send a 418 (Too
+forwarding the request until the TLS handshake completes, or send a 4NN (Too
 Early) status code in response.
 
 
@@ -277,12 +277,12 @@ Related information:
 
 : (empty)
 
-This document registers the 418 (Too Early) status code in the "Hypertext
+This document registers the 4NN (Too Early) status code in the "Hypertext
 Transfer Protocol (HTTP) Status Code" registry established in {{!RFC7231}}.
 
 Value:
 
-: 418
+: 4NN
 
 Description:
 
