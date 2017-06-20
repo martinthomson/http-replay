@@ -82,9 +82,9 @@ defined in {{!RFC2119}}.
 # Retries in HTTP
 
 In many circumstances, HTTP requests are retried.  Applications care about
-reliability and will frequently retry requests in the event of errors.  This
-might happen automatically.  Many HTTP libraries or intermediaries automatically
-retry requests in certain conditions.
+reliability and will frequently retry requests in the event of errors.  Many
+HTTP libraries or intermediaries automatically retry requests in certain
+conditions.
 
 Idempotent methods {{?RFC7231}} are specifically defined to support automatic
 retry.  Processing a request with an idempotent method more than once does not
