@@ -128,7 +128,8 @@ This results in a potential replay where the early data is sent to one server
 instance and the connection attempt is separately allowed to complete where the
 server instance rejects the early data.  Replays are also possible if there are
 multiple server instances that will accept early data, or if the same server
-accepts early data (though this would be in violation of requirements in TLS).
+accepts early data multiple times (though this would be in violation of
+requirements in TLS).
 
 
 # Replay Attacks
