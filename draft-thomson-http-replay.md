@@ -26,8 +26,8 @@ author:
  -
     ins: W. Tarreau
     name: Willy Tarreau
-    organization: Exceliance
-    email: w@1wt.eu
+    organization: HAProxy Technologies
+    email: willy@haproxy.org
 
 
 informative:
