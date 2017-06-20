@@ -35,7 +35,7 @@ informative:
 --- abstract
 
 TLS early data presents both an opportunity and a risk.  The risks of using TLS
-early data are explained as they related to HTTP.  A technique for reducing
+early data are explained as they relate to HTTP.  A technique for reducing
 these risks is described, including mechanisms that enable the use of that
 technique at intermediaries.
 
