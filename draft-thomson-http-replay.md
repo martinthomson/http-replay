@@ -52,11 +52,11 @@ complete, if the client has spoken to the same server recently.
 
 For HTTP {{!HTTP=RFC7230}}, early data allows clients to send requests
 immediately, avoiding the one or two round trip time needed for the TLS
-handshake.  This is a significant performance enhancement, however early data
+handshake.  This is a significant performance enhancement; however, early data
 has some significant limitations.
 
-The primary cost of using early data is the risk that an attacker might capture
-and replay the early data.  TLS {{!TLS13}} describes techniques that reduce the
+The primary risk of using early data is that an attacker might capture and
+replay the early data. TLS {{!TLS13}} describes techniques that reduce the
 likelihood that an attacker can successfully replay a request, but these
 techniques can be difficult to deploy and it could be impossible to guarantee
 perfect protection against replay attack.
@@ -243,7 +243,7 @@ other words, a value of "1" identifies requests that were sent in TLS early
 data.  A value of "1" indicates that the request might have been replayed.
 
 An intermediary that receives a request in TLS early data can forward the
-request with the `Early-Data` header field add and set to "1".  If the server
+request with the `Early-Data` header field added and set to "1".  If the server
 responds with a 422 (Too Early) status code, the intermediary can then wait
 until the TLS handshake completes and forward the request again.
 
