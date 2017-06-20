@@ -229,7 +229,8 @@ message body
 
 A client SHOULD include the `Early-Data` header field with a value of "1" if it
 sends a request in TLS early data.  This indicates to the intermediary or server
-that it understands the 422 (Too Early) status code and will retry the request.
+that it understands the 422 (Too Early) status code and is prepared to retry
+the request.
 
 The `Early-Data` header field is omitted from a request or set to "0" when the
 request arrives after the TLS handshake completes.  An intermediary MUST NOT add
