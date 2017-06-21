@@ -101,7 +101,7 @@ If this is not known by the server, it MUST defer the request.
 
 3. When a request received in early data contains the `Early-Data` request
 header field ({{header}}), the server can trigger a retry without the use of
-early data by responding with the 4NN (Too Early) status code ({{status)}}), in
+early data by responding with the 4NN (Too Early) status code ({{status}}), in
 cases where the risk of replay is judged too great.
 
 4. Finally, TLS {{?TLS13}} describes several mitigation strategies that reduce
