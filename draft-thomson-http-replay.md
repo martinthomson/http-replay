@@ -135,7 +135,7 @@ requirements in TLS).
 # Replay Attacks
 
 What distinguishes a replay attack from a retry is that a retry is explicitly
-initiated by a client or user.  A client that attempts a retry In contrast, a
+initiated by a client or user.  In contrast, a
 replay attack is initiated by an attacker.  The attacker creates a copy of the
 messages sent by a client and replays these messages without the knowledge or
 consent of the client.
@@ -246,8 +246,12 @@ data.  A value of "1" indicates that the request might have been replayed.
 An intermediary that receives a request in TLS early data can forward the
 request with the `Early-Data` header field add and set to "1".  If the server
 responds with a 422 (Too Early) status code, the intermediary can then wait
-until the TLS handshake completes and forward the request again.
+until the TLS handshake completes and forward the request again, or simply
+pass the status code back to the client which will be able to retry appropriately.
 
+An intermediary MUST NOT add an Early-Data header field to a request which did
+not contain one if it did not receive the request as early data or if it is not
+able to perform a retry on its own.
 
 ## The 422 (Too Early) Status Code
 
@@ -265,7 +269,7 @@ If the original request that arrived at the intermediary contained an
 `Early-Data` header field with a value of "1", the intermediary MAY instead
 forward the 422 (Too Early) status code.
 
-A server SHOULD NOT generate the 422 (Too Early) status code unless the request
+A server MUST NOT generate the 422 (Too Early) status code unless the request
 includes an `Early-Data` header field with a value of "1".
 
 
