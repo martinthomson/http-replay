@@ -193,12 +193,16 @@ Internet-Draft               HTTP Early Data                   June 2017
    the connection preface.  Any requests sent in early data MUST be sent
    again, unless the client decides to abandon those requests.
 
-   Note that this results in a potential replay where the early data is
-   sent to one server instance and the connection attempt is separately
-   allowed to complete where the server instance rejects the early data.
-   Replays are also possible if there are multiple server instances that
-   will accept early data, or if the same server accepts early data
-   (though this would be in violation of requirements in TLS).
+   This automatic retry exposes the request to a potential replay
+   attack.  An attacker sends early data to one server instance that
+   accepts and processes the early data, but allows that connection to
+   proceed no further.  The attacker then forwards the same messages
+   from the client to another server instance that will reject early
+   data.  The client the retries the request, resulting in the request
+   being processed twice.  Replays are also possible if there are
+   multiple server instances that will accept early data, or if the same
+   server accepts early data multiple times (though this would be in
+   violation of requirements in TLS).
 
    Clients MUST identify requests sent in early data with the "Early-
    Data" request header field; see Section 4.1.  Clients that use early
@@ -214,10 +218,6 @@ Internet-Draft               HTTP Early Data                   June 2017
    explicitly communicate whether a request has been sent in early data
    on a previous connection.  Likewise, some means of explicitly
    triggering a retry when early data is not desirable is necessary.
-   Finally, it is necessary to know whether the client will actually
-   perform such a retry.
-
-   To meet these needs, two signaling mechanisms are defined:
 
 
 
@@ -225,6 +225,11 @@ Thomson, et al.         Expires December 23, 2017               [Page 4]
 
 Internet-Draft               HTTP Early Data                   June 2017
 
+
+   Finally, it is necessary to know whether the client will actually
+   perform such a retry.
+
+   To meet these needs, two signaling mechanisms are defined:
 
    o  The "Early-Data" header field is added to any request that is sent
       or received in early data.
@@ -268,11 +273,6 @@ Internet-Draft               HTTP Early Data                   June 2017
    MUST send it with the "Early-Data" header field set to "1" (i.e., it
    adds it if not present in the request).
 
-   An intermediary MUST NOT add this header field with a value of "0" or
-   remove it if it has a value of "1".
-
-
-
 
 
 
@@ -281,6 +281,9 @@ Thomson, et al.         Expires December 23, 2017               [Page 5]
 
 Internet-Draft               HTTP Early Data                   June 2017
 
+
+   An intermediary MUST NOT add this header field with a value of "0" or
+   remove it if it has a value of "1".
 
 4.2.  The 4NN (Too Early) Status Code
 
@@ -327,9 +330,6 @@ Internet-Draft               HTTP Early Data                   June 2017
    This document registers the "Early-Data" header field in the "Message
    Headers" registry [HEADERS].
 
-   Header field name:  Early-Data
-
-   Applicable protocol:  http
 
 
 
@@ -337,6 +337,10 @@ Thomson, et al.         Expires December 23, 2017               [Page 6]
 
 Internet-Draft               HTTP Early Data                   June 2017
 
+
+   Header field name:  Early-Data
+
+   Applicable protocol:  http
 
    Status:  standard
 
@@ -380,10 +384,6 @@ Internet-Draft               HTTP Early Data                   June 2017
               DOI 10.17487/RFC2119, March 1997,
               <http://www.rfc-editor.org/info/rfc2119>.
 
-   [RFC7231]  Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
-              Protocol (HTTP/1.1): Semantics and Content", RFC 7231,
-              DOI 10.17487/RFC7231, June 2014,
-              <http://www.rfc-editor.org/info/rfc7231>.
 
 
 
@@ -393,6 +393,11 @@ Thomson, et al.         Expires December 23, 2017               [Page 7]
 
 Internet-Draft               HTTP Early Data                   June 2017
 
+
+   [RFC7231]  Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
+              Protocol (HTTP/1.1): Semantics and Content", RFC 7231,
+              DOI 10.17487/RFC7231, June 2014,
+              <http://www.rfc-editor.org/info/rfc7231>.
 
    [TLS13]    Rescorla, E., "The Transport Layer Security (TLS) Protocol
               Version 1.3", draft-ietf-tls-tls13-20 (work in progress),
@@ -422,11 +427,6 @@ Authors' Addresses
    HAProxy Technologies
 
    Email: willy@haproxy.org
-
-
-
-
-
 
 
 
