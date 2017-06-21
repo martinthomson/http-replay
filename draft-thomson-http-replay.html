@@ -278,19 +278,17 @@ address {
 
   <link href="#rfc.toc" rel="Contents">
 <link href="#rfc.section.1" rel="Chapter" title="1 Introduction">
-<link href="#rfc.section.2" rel="Chapter" title="2 Conventions and Definitions">
-<link href="#rfc.section.3" rel="Chapter" title="3 Retries in HTTP">
-<link href="#rfc.section.4" rel="Chapter" title="4 TLS Early Data in HTTP">
-<link href="#rfc.section.5" rel="Chapter" title="5 Replay Attacks">
-<link href="#rfc.section.6" rel="Chapter" title="6 Reducing the Risk of Replay">
-<link href="#rfc.section.7" rel="Chapter" title="7 Replay Avoidance for Gateways">
-<link href="#rfc.section.7.1" rel="Chapter" title="7.1 The Early-Data Header Field">
-<link href="#rfc.section.7.2" rel="Chapter" title="7.2 The 422 (Too Early) Status Code">
-<link href="#rfc.section.8" rel="Chapter" title="8 Security Considerations">
-<link href="#rfc.section.9" rel="Chapter" title="9 IANA Considerations">
-<link href="#rfc.references" rel="Chapter" title="10 References">
-<link href="#rfc.references.1" rel="Chapter" title="10.1 Normative References">
-<link href="#rfc.references.2" rel="Chapter" title="10.2 Informative References">
+<link href="#rfc.section.1.1" rel="Chapter" title="1.1 Conventions and Definitions">
+<link href="#rfc.section.2" rel="Chapter" title="2 Supporting Early Data in HTTP Servers">
+<link href="#rfc.section.3" rel="Chapter" title="3 Using Early Data in HTTP Clients">
+<link href="#rfc.section.4" rel="Chapter" title="4 Extensions for Early Data in HTTP">
+<link href="#rfc.section.4.1" rel="Chapter" title="4.1 The Early-Data Header Field">
+<link href="#rfc.section.4.2" rel="Chapter" title="4.2 The 4NN (Too Early) Status Code">
+<link href="#rfc.section.5" rel="Chapter" title="5 Security Considerations">
+<link href="#rfc.section.6" rel="Chapter" title="6 IANA Considerations">
+<link href="#rfc.references" rel="Chapter" title="7 References">
+<link href="#rfc.references.1" rel="Chapter" title="7.1 Normative References">
+<link href="#rfc.references.2" rel="Chapter" title="7.2 Informative References">
 <link href="#rfc.authors" rel="Chapter">
 
 
@@ -300,8 +298,8 @@ address {
   <meta name="dct.creator" content="Thomson, M., Nottingham, M., and W. Tarreau" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-thomson-http-replay-latest" />
   <meta name="dct.issued" scheme="ISO8601" content="2017-6-21" />
-  <meta name="dct.abstract" content="TLS early data presents both an opportunity and a risk.  The risks of using TLS early data are explained as they relate to HTTP.  A technique for reducing these risks is described, including mechanisms that enable the use of that technique at intermediaries." />
-  <meta name="description" content="TLS early data presents both an opportunity and a risk.  The risks of using TLS early data are explained as they relate to HTTP.  A technique for reducing these risks is described, including mechanisms that enable the use of that technique at intermediaries." />
+  <meta name="dct.abstract" content="This document explains the risks of using early data for HTTP and describes techniques for reducing them. In particular, it defines a mechanism that enables clients to communicate with servers about early data, to assure correct operation." />
+  <meta name="description" content="This document explains the risks of using early data for HTTP and describes techniques for reducing them. In particular, it defines a mechanism that enables clients to communicate with servers about early data, to assure correct operation." />
 
 </head>
 
@@ -347,7 +345,7 @@ address {
   <span class="filename">draft-thomson-http-replay-latest</span></p>
   
   <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
-<p>TLS early data presents both an opportunity and a risk.  The risks of using TLS early data are explained as they relate to HTTP.  A technique for reducing these risks is described, including mechanisms that enable the use of that technique at intermediaries.</p>
+<p>This document explains the risks of using early data for HTTP and describes techniques for reducing them. In particular, it defines a mechanism that enables clients to communicate with servers about early data, to assure correct operation.</p>
 <h1 id="rfc.status"><a href="#rfc.status">Status of This Memo</a></h1>
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
@@ -364,31 +362,27 @@ address {
 
   	<li>1.   <a href="#rfc.section.1">Introduction</a>
 </li>
-<li>2.   <a href="#rfc.section.2">Conventions and Definitions</a>
+<ul><li>1.1.   <a href="#rfc.section.1.1">Conventions and Definitions</a>
 </li>
-<li>3.   <a href="#rfc.section.3">Retries in HTTP</a>
+</ul><li>2.   <a href="#rfc.section.2">Supporting Early Data in HTTP Servers</a>
 </li>
-<li>4.   <a href="#rfc.section.4">TLS Early Data in HTTP</a>
+<li>3.   <a href="#rfc.section.3">Using Early Data in HTTP Clients</a>
 </li>
-<li>5.   <a href="#rfc.section.5">Replay Attacks</a>
+<li>4.   <a href="#rfc.section.4">Extensions for Early Data in HTTP</a>
 </li>
-<li>6.   <a href="#rfc.section.6">Reducing the Risk of Replay</a>
+<ul><li>4.1.   <a href="#rfc.section.4.1">The Early-Data Header Field</a>
 </li>
-<li>7.   <a href="#rfc.section.7">Replay Avoidance for Gateways</a>
+<li>4.2.   <a href="#rfc.section.4.2">The 4NN (Too Early) Status Code</a>
 </li>
-<ul><li>7.1.   <a href="#rfc.section.7.1">The Early-Data Header Field</a>
+</ul><li>5.   <a href="#rfc.section.5">Security Considerations</a>
 </li>
-<li>7.2.   <a href="#rfc.section.7.2">The 422 (Too Early) Status Code</a>
+<li>6.   <a href="#rfc.section.6">IANA Considerations</a>
 </li>
-</ul><li>8.   <a href="#rfc.section.8">Security Considerations</a>
+<li>7.   <a href="#rfc.references">References</a>
 </li>
-<li>9.   <a href="#rfc.section.9">IANA Considerations</a>
+<ul><li>7.1.   <a href="#rfc.references.1">Normative References</a>
 </li>
-<li>10.   <a href="#rfc.references">References</a>
-</li>
-<ul><li>10.1.   <a href="#rfc.references.1">Normative References</a>
-</li>
-<li>10.2.   <a href="#rfc.references.2">Informative References</a>
+<li>7.2.   <a href="#rfc.references.2">Informative References</a>
 </li>
 </ul><li><a href="#rfc.authors">Authors' Addresses</a>
 </li>
@@ -399,94 +393,87 @@ address {
   <h1 id="rfc.section.1">
 <a href="#rfc.section.1">1.</a> <a href="#introduction" id="introduction">Introduction</a>
 </h1>
-<p id="rfc.section.1.p.1">TLS 1.3 <a href="#TLS13" class="xref">[TLS13]</a> introduces the concept of early data, or zero round trip data.  Early data allows a client to send data to a server in the first round trip of a connection, without waiting for the TLS handshake to complete, if the client has spoken to the same server recently.</p>
-<p id="rfc.section.1.p.2">For HTTP <a href="#HTTP" class="xref">[HTTP]</a>, early data allows clients to send requests immediately, avoiding the one or two round trip time needed for the TLS handshake.  This is a significant performance enhancement, however early data has some significant limitations.</p>
-<p id="rfc.section.1.p.3">The primary cost of using early data is the risk that an attacker might capture and replay the early data.  TLS <a href="#TLS13" class="xref">[TLS13]</a> describes techniques that reduce the likelihood that an attacker can successfully replay a request, but these techniques can be difficult to deploy and it could be impossible to guarantee perfect protection against replay attack.</p>
-<p id="rfc.section.1.p.4">This document explores how HTTP treats both retries and replays of requests.</p>
-<p id="rfc.section.1.p.5">To help mitigate the risk of replay, a technique for controlling the risks inherent to the use of early data is outlined, including a mechanism that grants a gateway the ability to apply this technique.  This technique ensures that the choice to expose a request to the possibility of replay is mutual: client and server will both need to agree to accept the risk.</p>
+<p id="rfc.section.1.p.1">TLS 1.3 <a href="#TLS13" class="xref">[TLS13]</a> introduces the concept of early data (also known as zero round trip data). Early data allows a client to send data to a server in the first round trip of a connection, without waiting for the TLS handshake to complete if the client has spoken to the same server recently.</p>
+<p id="rfc.section.1.p.2">For HTTP <a href="#HTTP" class="xref">[HTTP]</a>, early data allows clients to send requests immediately, avoiding the one or two round trip delay needed for the TLS handshake. This is a significant performance enhancement; however, it has significant limitations.</p>
+<p id="rfc.section.1.p.3">The primary risk of using early data is that an attacker might capture and replay the request(s) it contains. TLS <a href="#TLS13" class="xref">[TLS13]</a> describes techniques that can be used to reduce the likelihood that an attacker can successfully replay a request, but these techniques can be difficult to deploy, and still leave some possibility of a successful attack.</p>
+<p id="rfc.section.1.p.4">Note that this is different from automated or user-initiated retries; replays are under the control of an attacker, and are therefore malicious.</p>
+<p id="rfc.section.1.p.5">To help mitigate the risk of replays in HTTP, this document gives an overview of techniques for controlling these risks. It also defines a mechanism that enables clients to communicate with origin servers about early data, to assure correct operation.</p>
 <p id="rfc.section.1.p.6">The advice in this document also applies to use of 0-RTT in HTTP over QUIC <a href="#HQ" class="xref">[HQ]</a>.</p>
+<h2 id="rfc.section.1.1">
+<a href="#rfc.section.1.1">1.1.</a> <a href="#conventions-and-definitions" id="conventions-and-definitions">Conventions and Definitions</a>
+</h2>
+<p id="rfc.section.1.1.p.1">The words &#8220;MUST&#8221;, &#8220;MUST NOT&#8221;, &#8220;SHOULD&#8221;, and &#8220;MAY&#8221; are used in this document.  It&#8217;s not shouting; when they are capitalized, they have the special meaning defined in <a href="#RFC2119" class="xref">[RFC2119]</a>.</p>
 <h1 id="rfc.section.2">
-<a href="#rfc.section.2">2.</a> <a href="#conventions-and-definitions" id="conventions-and-definitions">Conventions and Definitions</a>
+<a href="#rfc.section.2">2.</a> <a href="#supporting-early-data-in-http-servers" id="supporting-early-data-in-http-servers">Supporting Early Data in HTTP Servers</a>
 </h1>
-<p id="rfc.section.2.p.1">The words &#8220;MUST&#8221;, &#8220;MUST NOT&#8221;, &#8220;SHOULD&#8221;, and &#8220;MAY&#8221; are used in this document.  It&#8217;s not shouting; when they are capitalized, they have the special meaning defined in <a href="#RFC2119" class="xref">[RFC2119]</a>.</p>
+<p id="rfc.section.2.p.1">A server decides whether or not to offer a client the ability to send early data on future connections when sending the TLS session ticket.</p>
+<p id="rfc.section.2.p.2">When early data is enabled by the server, there are a number of techniques it can use to mitigate the risks of replay:</p>
+<p></p>
+
+<ol>
+<li>The server can choose whether it processes early data before the TLS handshake completes. By deferring request processing until the handshake is complete, it can ensure that only a successfully completed connection is used for processing those requests. Assuming that a replayed ClientHello will not result in additional connections being made by the client, this provides the server with some assurance that the early data was not replayed.</li>
+<li>If the server receives multiple requests in early data, it can determine whether to defer HTTP processing on a per-request basis. When doing so, it SHOULD defer any requests that have state-changing side effects on the server.  If this is not known by the server, it MUST defer the request.</li>
+<li>When a request received in early data contains the <samp>Early-Data</samp> request header field (<a href="#header" class="xref">Section 4.1</a>), the server can trigger a retry without the use of early data by responding with the 4NN (Too Early) status code (<a href="#status" class="xref">Section 4.2</a>), in cases where the risk of replay is judged too great.</li>
+<li>Finally, TLS <a href="#TLS13" class="xref">[TLS13]</a> describes several mitigation strategies that reduce the ability of an attacker to successfully replay early data. Servers are strongly encouraged to implement these techniques, but to also recognize that they are imperfect.</li>
+</ol>
+<p id="rfc.section.2.p.4">Note that a server cannot choose to selectively reject early data. TLS only permits a server to accept all early data, or none of it. Once a server has decided to accept early data, it MUST process all requests in early data, even if the server rejects the request by sending a 4NN (Too Early) response.</p>
+<p id="rfc.section.2.p.5">A server can limit the amount of early data with the <samp>max_early_data_size</samp> field. This can be used to avoid committing an arbitrary amount of memory for deferred requests. A server SHOULD ensure that when it accepts early data, it can defer processing of requests until after the TLS handshake completes.</p>
 <h1 id="rfc.section.3">
-<a href="#rfc.section.3">3.</a> <a href="#retries-in-http" id="retries-in-http">Retries in HTTP</a>
+<a href="#rfc.section.3">3.</a> <a href="#using-early-data-in-http-clients" id="using-early-data-in-http-clients">Using Early Data in HTTP Clients</a>
 </h1>
-<p id="rfc.section.3.p.1">In many circumstances, HTTP requests are retried.  Applications care about reliability and will frequently retry requests in the event of errors.  Many HTTP libraries or intermediaries automatically retry requests in certain conditions.</p>
-<p id="rfc.section.3.p.2">Idempotent methods <a href="#RFC7231" class="xref">[RFC7231]</a> are specifically defined to support automatic retry.  Processing a request with an idempotent method more than once does not result in a different end state.  HTTP/2 <a href="#HTTP2" class="xref">[HTTP2]</a> also defines circumstances in which automatic retry of a request does not result in duplicate processing at a server, allowing retry of requests with non-idempotent methods.</p>
-<p id="rfc.section.3.p.3">However, many clients will retry a request even if a retry is not safe.  For instance, many clients will retry POST requests if a connection is terminated before any octets of a response are received.  Even in the absence of automatic retries, when errors are presented to users, users might initiate a retry, by pressing a &#8220;reload&#8221; button or re-initiating a transaction.</p>
-<p id="rfc.section.3.p.4">The prevalence of retries means that applications that use HTTP SHOULD implement measures for detecting and rejecting unwanted retries.  This can be seen as an application of the end-to-end principle of system design <a href="#E2E" class="xref">[E2E]</a>: no protocol is expected to simultaneously provide a guarantee of at-most-once delivery and error tolerance.</p>
+<p id="rfc.section.3.p.1">A client that wishes to use early data commences sending HTTP requests immediately after sending the TLS ClientHello.</p>
+<p id="rfc.section.3.p.2">By their nature, clients have control over whether a given request is sent in early data &#8211; thereby giving the client control over risk of replay. Absent other information, clients MAY send requests with safe HTTP methods in early data when it is available, and SHOULD NOT send unsafe methods (or methods whose safety is not known) in early data.</p>
+<p id="rfc.section.3.p.3">If the server rejects early data, a client MUST start sending again as though the connection was new. For HTTP/2, this means re-sending the connection preface. Any requests sent in early data MUST be sent again, unless the client decides to abandon those requests.</p>
+<p id="rfc.section.3.p.4">Note that this results in a potential replay where the early data is sent to one server instance and the connection attempt is separately allowed to complete where the server instance rejects the early data. Replays are also possible if there are multiple server instances that will accept early data, or if the same server accepts early data (though this would be in violation of requirements in TLS).</p>
+<p id="rfc.section.3.p.5">Clients MUST identify requests sent in early data with the <samp>Early-Data</samp> request header field; see <a href="#header" class="xref">Section 4.1</a>. Clients that use early data MUST retry requests upon receipt of a 4NN (Too Early) status code; see <a href="#status" class="xref">Section 4.2</a>.</p>
+<p id="rfc.section.3.p.6">Clients MUST NOT use early data in requests when a proxy is configured.</p>
 <h1 id="rfc.section.4">
-<a href="#rfc.section.4">4.</a> <a href="#tls-early-data-in-http" id="tls-early-data-in-http">TLS Early Data in HTTP</a>
+<a href="#rfc.section.4">4.</a> <a href="#extensions-for-early-data-in-http" id="extensions-for-early-data-in-http">Extensions for Early Data in HTTP</a>
 </h1>
-<p id="rfc.section.4.p.1">A server can decide whether or not to offer clients the ability to send early data.  This decision is made when sending a session ticket to clients.</p>
-<p id="rfc.section.4.p.2">A client that wishes to use early data commences sending requests immediately after sending the TLS ClientHello.  If early data is accepted, early data is concatenated with other application to form a single stream of data.</p>
-<p id="rfc.section.4.p.3">A server cannot choose to selectively reject early data.  TLS only permits a server to accept all early data, or none of it.  Once a server has decided to accept early data, it MUST process the messages that are sent by the client in early data.</p>
-<p id="rfc.section.4.p.4">If a server rejects early data, a client MUST start sending again as though the connection was new.  For HTTP/2, this means re-sending the connection preface.  Any requests sent in early data MUST be sent again, unless the client decides to abandon those requests.</p>
-<p id="rfc.section.4.p.5">This results in a potential replay where the early data is sent to one server instance and the connection attempt is separately allowed to complete where the server instance rejects the early data.  Replays are also possible if there are multiple server instances that will accept early data, or if the same server accepts early data multiple times (though this would be in violation of requirements in TLS).</p>
-<h1 id="rfc.section.5">
-<a href="#rfc.section.5">5.</a> <a href="#replay-attacks" id="replay-attacks">Replay Attacks</a>
-</h1>
-<p id="rfc.section.5.p.1">What distinguishes a replay attack from a retry is that a retry is explicitly initiated by a client or user.  A client that attempts a retry In contrast, a replay attack is initiated by an attacker.  The attacker creates a copy of the messages sent by a client and replays these messages without the knowledge or consent of the client.</p>
-<p id="rfc.section.5.p.2">For application data that is sent after the TLS handshake completes, TLS provides protection against replay.  Duplicated data is detected and treated as a fatal error condition (in DTLS <a href="#DTLS" class="xref">[DTLS]</a>, duplicated data is instead discarded).  Similarly, transport layer loss recovery, such as TCP retransmission, does not generate replays because the transport discards duplicated data.</p>
-<p id="rfc.section.5.p.3">TLS early data creates the potential for a replay attack that cannot be detected by TLS or the transport protocol.  TLS <a href="#TLS13" class="xref">[TLS13]</a> describes several mitigation strategies that reduce the ability of an attacker to successfully replay early data.  Servers are strongly encouraged to implement these techniques, but to also recognize that they are imperfect.</p>
-<h1 id="rfc.section.6">
-<a href="#rfc.section.6">6.</a> <a href="#reducing-the-risk-of-replay" id="reducing-the-risk-of-replay">Reducing the Risk of Replay</a>
-</h1>
-<p id="rfc.section.6.p.1">It is immediately obvious that a client can make an explicit choice on each request it makes as to whether it sends that request in early data.  This gives a client explicit control over whether a given request is exposed to the risk of replay.</p>
-<p id="rfc.section.6.p.2">A server can also choose whether it processes early data before the TLS handshake completes.  By deferring processing for a request until the handshake is complete, it can ensure that only a successfully completed connection is used for processing early requests.  Assuming that a replayed ClientHello will not result in additional connections being made by the client, this provides the server with some assurance that the early data was not replayed.</p>
-<p id="rfc.section.6.p.3">If the server receives multiple requests in early data, it can make a determination about whether to defer processing on a per-request basis.</p>
-<p id="rfc.section.6.p.4">The amount of data that a client can send in early data can be limited by a server using the <samp>max_early_data_size</samp> field that is sent when a server enables early data.  A server can use this to avoid having to commit an arbitrary amount of memory for deferred requests.  A server SHOULD ensure that when it accepts early data, it can defer processing of requests until after the TLS handshake completes.</p>
-<p id="rfc.section.6.p.5">Using this technique ensures that, for any given request, both client and server need to agree to accept the risk of replay if that risk exists.</p>
-<h1 id="rfc.section.7">
-<a href="#rfc.section.7">7.</a> <a href="#replay-avoidance-for-gateways" id="replay-avoidance-for-gateways">Replay Avoidance for Gateways</a>
-</h1>
-<p id="rfc.section.7.p.1">A generic gateway might be unable to make a determination about whether a given request can be processed safely when it is sent in early data.  In many cases, only the origin server has the necessary information to decide whether the risk of replay is acceptable.</p>
-<p id="rfc.section.7.p.2">This leads to a strong incentive for gateways to be quite conservative, either disabling early data entirely, or only allowing a narrow subset of requests to be forwarded.</p>
-<p id="rfc.section.7.p.3">To improve the ability of a gateway to accept and forward requests that arrive in early data, two signaling mechanisms are defined:</p>
+<p id="rfc.section.4.p.1">Because HTTP requests can span multiple &#8220;hops&#8221;, it is necessary to explicitly communicate whether a request has been sent in early data on a previous connection. Likewise, some means of explicitly triggering a retry when early data is not desirable is necessary. Finally, it is necessary to know whether the client will actually perform such a retry.</p>
+<p id="rfc.section.4.p.2">To meet these needs, two signalling mechanisms are defined:</p>
 <p></p>
 
 <ul>
 <li>The <samp>Early-Data</samp> header field is added to any request that is sent or received in early data.</li>
-<li>The 422 (Too Early) status code is defined for an origin server to indicate that a request could not be processed due to the consequences of a possible replay attack.</li>
+<li>The 4NN (Too Early) status code is defined for an origin server to indicate that a request could not be processed due to the consequences of a possible replay attack.</li>
 </ul>
-<p id="rfc.section.7.p.5">In order for this technique to work well, the gateway needs to be certain that the origin server will understand the <samp>Early-Data</samp> header field and correctly generate the 422 status code if it does not wish to process the request.</p>
-<h2 id="rfc.section.7.1">
-<a href="#rfc.section.7.1">7.1.</a> <a href="#the-early-data-header-field" id="the-early-data-header-field">The Early-Data Header Field</a>
+<p id="rfc.section.4.p.4">They are designed to enable better coordination of the use of early data between the user agent and origin server, and also when a gateway (also &#8220;reverse proxy&#8221;, &#8220;Content Delivery Network&#8221;, or &#8220;surrogate&#8221;) is present.</p>
+<p id="rfc.section.4.p.5">Gateways typically don&#8217;t have specific information about whether a given request can be processed safely when it is sent in early data. In many cases, only the origin server has the necessary information to decide whether the risk of replay is acceptable. These extensions allow coordination between a gateway and its origin server.</p>
+<h2 id="rfc.section.4.1">
+<a href="#rfc.section.4.1">4.1.</a> <a href="#header" id="header">The Early-Data Header Field</a>
 </h2>
-<p id="rfc.section.7.1.p.1">The <samp>Early-Data</samp> header field is defined with two values, &#8220;0&#8221; and &#8220;1&#8221;.  Here it is shown using the ABNF <a href="#ABNF" class="xref">[ABNF]</a>:</p>
+<p id="rfc.section.4.1.p.1">The <samp>Early-Data</samp> request header field indicates that the request has been conveyed in early data, and additionally indicates that a downstream client understands the 4NN (Too Early) status code.</p>
+<p id="rfc.section.4.1.p.2">It has two possible values, &#8220;0&#8221; and &#8220;1&#8221;. Its syntax is defined by the following ABNF <a href="#ABNF" class="xref">[ABNF]</a>:</p>
 <pre>
 Early-Data = "0" / "1"
 </pre>
-<p id="rfc.section.7.1.p.2">For example:</p>
+<p id="rfc.section.4.1.p.3">For example:</p>
 <pre>
-POST /resource HTTP/1.0
+GET /resource HTTP/1.0
 Host: example.com
 Early-Data: 1
-Content-Length: 14
-
-message body
 </pre>
-<p id="rfc.section.7.1.p.3">A client SHOULD include the <samp>Early-Data</samp> header field with a value of &#8220;1&#8221; if it sends a request in TLS early data.  This indicates to the intermediary or server that it understands the 422 (Too Early) status code and is prepared to retry the request.</p>
-<p id="rfc.section.7.1.p.4">The <samp>Early-Data</samp> header field is omitted from a request or set to &#8220;0&#8221; when the request arrives after the TLS handshake completes.  An intermediary MUST NOT add this header field with a value of &#8220;0&#8221; or remove a header field if it has a value of &#8220;1&#8221;.</p>
-<p id="rfc.section.7.1.p.5">A <samp>Early-Data</samp> header field with a value of &#8220;1&#8221; is added to a request when forwarding a request from a connection that has an incomplete TLS handshake.  In other words, a value of &#8220;1&#8221; identifies requests that were sent in TLS early data.  A value of &#8220;1&#8221; indicates that the request might have been replayed.</p>
-<p id="rfc.section.7.1.p.6">An intermediary that receives a request in TLS early data can forward the request with the <samp>Early-Data</samp> header field add and set to &#8220;1&#8221;.  If the server responds with a 422 (Too Early) status code, the intermediary can then wait until the TLS handshake completes and forward the request again.</p>
-<h2 id="rfc.section.7.2">
-<a href="#rfc.section.7.2">7.2.</a> <a href="#the-422-too-early-status-code" id="the-422-too-early-status-code">The 422 (Too Early) Status Code</a>
+<p id="rfc.section.4.1.p.4">A client that sends a request in early data MUST include the <samp>Early-Data</samp> header field with a value of &#8220;1&#8221;.</p>
+<p id="rfc.section.4.1.p.5">An intermediary that forwards a request received in TLS early data MUST send it with the <samp>Early-Data</samp> header field set to &#8220;1&#8221; (i.e., it adds it if not present in the request).</p>
+<p id="rfc.section.4.1.p.6">An intermediary MUST NOT add this header field with a value of &#8220;0&#8221; or remove it if it has a value of &#8220;1&#8221;.</p>
+<h2 id="rfc.section.4.2">
+<a href="#rfc.section.4.2">4.2.</a> <a href="#status" id="status">The 4NN (Too Early) Status Code</a>
 </h2>
-<p id="rfc.section.7.2.p.1">A 422 (Too Early) status code indicates that the server that is unwilling to risk processing requests that might be replayed.</p>
-<p id="rfc.section.7.2.p.2">The primary use of this header field is to cause clients or intermediaries to retry a request.  A client or intermediary MAY retry any request automatically if they receive a 422 (Too Early) status code.  A request that receives a 422 (Too Early) status code MUST NOT be retried in TLS early data.</p>
-<p id="rfc.section.7.2.p.3">An intermediary that forwards a request SHOULD wait until the TLS handshake on the connection that carries the original request is complete before retrying.  If the original request that arrived at the intermediary contained an <samp>Early-Data</samp> header field with a value of &#8220;1&#8221;, the intermediary MAY instead forward the 422 (Too Early) status code.</p>
-<p id="rfc.section.7.2.p.4">A server SHOULD NOT generate the 422 (Too Early) status code unless the request includes an <samp>Early-Data</samp> header field with a value of &#8220;1&#8221;.</p>
-<h1 id="rfc.section.8">
-<a href="#rfc.section.8">8.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a>
+<p id="rfc.section.4.2.p.1">A 4NN (Too Early) status code indicates that the server is unwilling to risk processing a request that might be (or has been) replayed.</p>
+<p id="rfc.section.4.2.p.2">Clients (user-agents and intermediaries) that sent the request in early data MUST automatically retry the request when receiving a 4NN (Too Early) response status code. Such retries MUST NOT be sent in early data, and SHOULD NOT be sent if the TLS handshake on the original connection does not successfully complete.</p>
+<p id="rfc.section.4.2.p.3">Intermediaries that receive the 4NN (Too Early) status code MUST NOT automatically retry requests when the original request already contained the <samp>Early-Data</samp> header field with a value of &#8220;1&#8221;; instead, they MUST forward the 4NN (Too Early) response to the upstream client.</p>
+<p id="rfc.section.4.2.p.4">A server SHOULD NOT generate the 4NN (Too Early) status code unless the request includes an <samp>Early-Data</samp> header field with a value of &#8220;1&#8221;.</p>
+<p id="rfc.section.4.2.p.5">The 4NN (Too Early) status code is not cacheable by default. Its payload is not the representation of any identified resource.</p>
+<h1 id="rfc.section.5">
+<a href="#rfc.section.5">5.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a>
 </h1>
-<p id="rfc.section.8.p.1">Using early data exposes a client to the risk that their request is replayed.  A retried or replayed request can produce different side effects on the server.  That might be used for traffic analysis to recover information about requests or the resources those requests target.</p>
-<p id="rfc.section.8.p.2">A gateway that forwards requests that were received in early data MUST only do so if it knows that the server that receives those requests understands the <samp>Early-Data</samp> header field and will correctly generate a 422 (Too Early) status code.  A gateway that isn&#8217;t certain about server support SHOULD either delay forwarding the request until the TLS handshake completes, or send a 422 (Too Early) status code in response.</p>
-<h1 id="rfc.section.9">
-<a href="#rfc.section.9">9.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a>
+<p id="rfc.section.5.p.1">Using early data exposes a client to the risk that their request is replayed.  A retried or replayed request can produce different side effects on the server.  That might be used for traffic analysis to recover information about requests or the resources those requests target.</p>
+<p id="rfc.section.5.p.2">A gateway that forwards requests that were received in early data MUST only do so if it knows that the server that receives those requests understands the <samp>Early-Data</samp> header field and will correctly generate a 4NN (Too Early) status code.  A gateway that isn&#8217;t certain about server support SHOULD either delay forwarding the request until the TLS handshake completes, or send a 4NN (Too Early) status code in response.</p>
+<h1 id="rfc.section.6">
+<a href="#rfc.section.6">6.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a>
 </h1>
-<p id="rfc.section.9.p.1">This document registers the <samp>Early-Data</samp> header field in the &#8220;Message Headers&#8221; registry <a href="#HEADERS" class="xref">[HEADERS]</a>.</p>
+<p id="rfc.section.6.p.1">This document registers the <samp>Early-Data</samp> header field in the &#8220;Message Headers&#8221; registry <a href="#HEADERS" class="xref">[HEADERS]</a>.</p>
 <p></p>
 
 <dl>
@@ -503,21 +490,21 @@ message body
 <dt>Related information:</dt>
 <dd style="margin-left: 8">(empty)</dd>
 </dl>
-<p id="rfc.section.9.p.3">This document registers the 422 (Too Early) status code in the &#8220;Hypertext Transfer Protocol (HTTP) Status Code&#8221; registry established in <a href="#RFC7231" class="xref">[RFC7231]</a>.</p>
+<p id="rfc.section.6.p.3">This document registers the 4NN (Too Early) status code in the &#8220;Hypertext Transfer Protocol (HTTP) Status Code&#8221; registry established in <a href="#RFC7231" class="xref">[RFC7231]</a>.</p>
 <p></p>
 
 <dl>
 <dt>Value:</dt>
-<dd style="margin-left: 8">422</dd>
+<dd style="margin-left: 8">4NN</dd>
 <dt>Description:</dt>
 <dd style="margin-left: 8">Too Early</dd>
 <dt>Reference:</dt>
 <dd style="margin-left: 8">This document</dd>
 </dl>
 <h1 id="rfc.references">
-<a href="#rfc.references">10.</a> References</h1>
+<a href="#rfc.references">7.</a> References</h1>
 <h2 id="rfc.references.1">
-<a href="#rfc.references.1">10.1.</a> Normative References</h2>
+<a href="#rfc.references.1">7.1.</a> Normative References</h2>
 <table><tbody>
 <tr>
 <td class="reference"><b id="ABNF">[ABNF]</b></td>
@@ -551,29 +538,12 @@ message body
 </tr>
 </tbody></table>
 <h2 id="rfc.references.2">
-<a href="#rfc.references.2">10.2.</a> Informative References</h2>
-<table><tbody>
-<tr>
-<td class="reference"><b id="DTLS">[DTLS]</b></td>
-<td class="top">
-<a>Rescorla, E.</a> and <a>N. Modadugu</a>, "<a href="http://tools.ietf.org/html/rfc6347">Datagram Transport Layer Security Version 1.2</a>", RFC 6347, DOI 10.17487/RFC6347, January 2012.</td>
-</tr>
-<tr>
-<td class="reference"><b id="E2E">[E2E]</b></td>
-<td class="top">
-<a>Saltzer, J.</a>, <a>Reed, D.</a> and <a>D. Clark</a>, "<a>End-to-end arguments in system design</a>", ACM Transactions on Computer Systems Vol. 2, pp. 277-288, DOI 10.1145/357401.357402, November 1984.</td>
-</tr>
-<tr>
+<a href="#rfc.references.2">7.2.</a> Informative References</h2>
+<table><tbody><tr>
 <td class="reference"><b id="HQ">[HQ]</b></td>
 <td class="top">
 <a>Bishop, M.</a>, "<a href="http://tools.ietf.org/html/draft-ietf-quic-http-04">Hypertext Transfer Protocol (HTTP) over QUIC</a>", Internet-Draft draft-ietf-quic-http-04, June 2017.</td>
-</tr>
-<tr>
-<td class="reference"><b id="HTTP2">[HTTP2]</b></td>
-<td class="top">
-<a>Belshe, M.</a>, <a>Peon, R.</a> and <a>M. Thomson</a>, "<a href="http://tools.ietf.org/html/rfc7540">Hypertext Transfer Protocol Version 2 (HTTP/2)</a>", RFC 7540, DOI 10.17487/RFC7540, May 2015.</td>
-</tr>
-</tbody></table>
+</tr></tbody></table>
 <h1 id="rfc.authors"><a href="#rfc.authors">Authors' Addresses</a></h1>
 <div class="avoidbreak">
   <address class="vcard">
