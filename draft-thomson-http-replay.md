@@ -136,12 +136,14 @@ the connection was new. For HTTP/2, this means re-sending the connection
 preface. Any requests sent in early data MUST be sent again, unless the client
 decides to abandon those requests.
 
-Note that this results in a potential replay where the early data is sent to
-one server instance and the connection attempt is separately allowed to
-complete where the server instance rejects the early data. Replays are also
-possible if there are multiple server instances that will accept early data, or
-if the same server accepts early data (though this would be in violation of
-requirements in TLS).
+This automatic retry exposes the request to a potential replay attack.  An
+attacker sends early data to one server instance that accepts and processes the
+early data, but allows that connection to proceed no further.  The attacker then
+forwards the same messages from the client to another server instance that will
+reject early data.  The client the retries the request, resulting in the request
+being processed twice.  Replays are also possible if there are multiple server
+instances that will accept early data, or if the same server accepts early data
+multiple times (though this would be in violation of requirements in TLS).
 
 Clients MUST identify requests sent in early data with the `Early-Data` request
 header field; see {{header}}. Clients that use early data MUST retry requests
