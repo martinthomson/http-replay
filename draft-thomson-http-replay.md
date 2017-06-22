@@ -161,9 +161,8 @@ being processed twice.  Replays are also possible if there are multiple server
 instances that will accept early data, or if the same server accepts early data
 multiple times (though this would be in violation of requirements in TLS).
 
-Clients MUST identify requests sent in early data with the `Early-Data` request
-header field; see {{header}}. Clients that use early data MUST retry requests
-upon receipt of a 4NN (Too Early) status code; see {{status}}.
+Clients that use early data MUST retry requests upon receipt of a 4NN (Too
+Early) status code; see {{status}}.
 
 Clients MUST NOT use early data in requests when a proxy is configured.
 
