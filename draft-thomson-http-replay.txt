@@ -313,9 +313,10 @@ Internet-Draft               HTTP Early Data                   June 2017
    request arrived at the intermediary in early data; instead, they MUST
    forward the 4NN (Too Early) response to the upstream client.
 
-   A server SHOULD NOT generate the 4NN (Too Early) status code unless
-   the request includes an "Early-Data" header field with a value of "1"
-   or it arrives in early data.
+   The server cannot assume that a client is able to retry a request
+   unless the request is received in early data or the "Early-Data"
+   header field is set to "1".  A server SHOULD NOT emit the 4NN status
+   code unless one of these conditions is met.
 
    The 4NN (Too Early) status code is not cacheable by default.  Its
    payload is not the representation of any identified resource.
@@ -328,8 +329,7 @@ Internet-Draft               HTTP Early Data                   June 2017
    recover information about requests or the resources those requests
    target.
 
-   A gateway that forwards requests that were received in early data
-   MUST only do so if it knows that the server that receives those
+
 
 
 
@@ -338,6 +338,8 @@ Thomson, et al.         Expires December 24, 2017               [Page 6]
 Internet-Draft               HTTP Early Data                   June 2017
 
 
+   A gateway that forwards requests that were received in early data
+   MUST only do so if it knows that the server that receives those
    requests understands the "Early-Data" header field and will correctly
    generate a 4NN (Too Early) status code.  A gateway that isn't certain
    about server support SHOULD either delay forwarding the request until
@@ -384,8 +386,6 @@ Internet-Draft               HTTP Early Data                   June 2017
               Procedures for Message Header Fields", BCP 90, RFC 3864,
               DOI 10.17487/RFC3864, September 2004,
               <http://www.rfc-editor.org/info/rfc3864>.
-
-
 
 
 
