@@ -297,7 +297,7 @@ address {
 
   <meta name="dct.creator" content="Thomson, M., Nottingham, M., and W. Tarreau" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-thomson-http-replay-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2017-6-21" />
+  <meta name="dct.issued" scheme="ISO8601" content="2017-6-22" />
   <meta name="dct.abstract" content="This document explains the risks of using early data for HTTP and describes techniques for reducing them. In particular, it defines a mechanism that enables clients to communicate with servers about early data, to assure correct operation." />
   <meta name="description" content="This document explains the risks of using early data for HTTP and describes techniques for reducing them. In particular, it defines a mechanism that enables clients to communicate with servers about early data, to assure correct operation." />
 
@@ -321,7 +321,7 @@ address {
 <td class="right">M. Nottingham</td>
 </tr>
 <tr>
-<td class="left">Expires: December 23, 2017</td>
+<td class="left">Expires: December 24, 2017</td>
 <td class="right">true</td>
 </tr>
 <tr>
@@ -334,7 +334,7 @@ address {
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">June 21, 2017</td>
+<td class="right">June 22, 2017</td>
 </tr>
 
     	
@@ -350,7 +350,7 @@ address {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on December 23, 2017.</p>
+<p>This Internet-Draft will expire on December 24, 2017.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2017 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -427,6 +427,7 @@ address {
 <p id="rfc.section.3.p.4">This automatic retry exposes the request to a potential replay attack.  An attacker sends early data to one server instance that accepts and processes the early data, but allows that connection to proceed no further.  The attacker then forwards the same messages from the client to another server instance that will reject early data.  The client the retries the request, resulting in the request being processed twice.  Replays are also possible if there are multiple server instances that will accept early data, or if the same server accepts early data multiple times (though this would be in violation of requirements in TLS).</p>
 <p id="rfc.section.3.p.5">Clients MUST identify requests sent in early data with the <samp>Early-Data</samp> request header field; see <a href="#header" class="xref">Section 4.1</a>. Clients that use early data MUST retry requests upon receipt of a 4NN (Too Early) status code; see <a href="#status" class="xref">Section 4.2</a>.</p>
 <p id="rfc.section.3.p.6">Clients MUST NOT use early data in requests when a proxy is configured.</p>
+<p id="rfc.section.3.p.7">An intermediary MUST NOT use early data when forwarding a request unless early data was used on a previous hop.  That means that an intermediary can only use early data if the request that either arrived in early data or arrived with the <samp>Early-Data</samp> header field set to &#8220;1&#8221;.</p>
 <h1 id="rfc.section.4">
 <a href="#rfc.section.4">4.</a> <a href="#extensions-for-early-data-in-http" id="extensions-for-early-data-in-http">Extensions for Early Data in HTTP</a>
 </h1>
@@ -435,7 +436,7 @@ address {
 <p></p>
 
 <ul>
-<li>The <samp>Early-Data</samp> header field is added to any request that is sent or received in early data.</li>
+<li>The <samp>Early-Data</samp> header field is added to any request that is received in early data.</li>
 <li>The 4NN (Too Early) status code is defined for an origin server to indicate that a request could not be processed due to the consequences of a possible replay attack.</li>
 </ul>
 <p id="rfc.section.4.p.4">They are designed to enable better coordination of the use of early data between the user agent and origin server, and also when a gateway (also &#8220;reverse proxy&#8221;, &#8220;Content Delivery Network&#8221;, or &#8220;surrogate&#8221;) is present.</p>
@@ -454,16 +455,16 @@ GET /resource HTTP/1.0
 Host: example.com
 Early-Data: 1
 </pre>
-<p id="rfc.section.4.1.p.4">A client that sends a request in early data MUST include the <samp>Early-Data</samp> header field with a value of &#8220;1&#8221;.</p>
-<p id="rfc.section.4.1.p.5">An intermediary that forwards a request received in TLS early data MUST send it with the <samp>Early-Data</samp> header field set to &#8220;1&#8221; (i.e., it adds it if not present in the request).</p>
-<p id="rfc.section.4.1.p.6">An intermediary MUST NOT add this header field with a value of &#8220;0&#8221; or remove it if it has a value of &#8220;1&#8221;.</p>
+<p id="rfc.section.4.1.p.4">An intermediary that forwards a request received in TLS early data MUST send it with the <samp>Early-Data</samp> header field set to &#8220;1&#8221; (i.e., it adds it if not present in the request).</p>
+<p id="rfc.section.4.1.p.5">An intermediary MUST NOT add this header field with a value of &#8220;0&#8221; or remove it if it has a value of &#8220;1&#8221;.</p>
+<p id="rfc.section.4.1.p.6">The <samp>Early-Data</samp> header field is not intended for use by user agents (that is, the original initiator of a request).  Sending a request in early data implies that the client understands this specification and is willing to retry a request in response to a 4NN (Too Early) status code.  A user agent that sends a request in early data does not need to include the <samp>Early-Data</samp> header field.</p>
 <h2 id="rfc.section.4.2">
 <a href="#rfc.section.4.2">4.2.</a> <a href="#status" id="status">The 4NN (Too Early) Status Code</a>
 </h2>
 <p id="rfc.section.4.2.p.1">A 4NN (Too Early) status code indicates that the server is unwilling to risk processing a request that might be (or has been) replayed.</p>
 <p id="rfc.section.4.2.p.2">Clients (user-agents and intermediaries) that sent the request in early data MUST automatically retry the request when receiving a 4NN (Too Early) response status code. Such retries MUST NOT be sent in early data, and SHOULD NOT be sent if the TLS handshake on the original connection does not successfully complete.</p>
-<p id="rfc.section.4.2.p.3">Intermediaries that receive the 4NN (Too Early) status code MUST NOT automatically retry requests when the original request already contained the <samp>Early-Data</samp> header field with a value of &#8220;1&#8221;; instead, they MUST forward the 4NN (Too Early) response to the upstream client.</p>
-<p id="rfc.section.4.2.p.4">A server SHOULD NOT generate the 4NN (Too Early) status code unless the request includes an <samp>Early-Data</samp> header field with a value of &#8220;1&#8221;.</p>
+<p id="rfc.section.4.2.p.3">Intermediaries that receive the 4NN (Too Early) status code MUST NOT automatically retry requests when the original request already contained the <samp>Early-Data</samp> header field with a value of &#8220;1&#8221; or the request arrived at the intermediary in early data; instead, they MUST forward the 4NN (Too Early) response to the upstream client.</p>
+<p id="rfc.section.4.2.p.4">A server SHOULD NOT generate the 4NN (Too Early) status code unless the request includes an <samp>Early-Data</samp> header field with a value of &#8220;1&#8221; or it arrives in early data.</p>
 <p id="rfc.section.4.2.p.5">The 4NN (Too Early) status code is not cacheable by default. Its payload is not the representation of any identified resource.</p>
 <h1 id="rfc.section.5">
 <a href="#rfc.section.5">5.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a>
