@@ -45,7 +45,7 @@ operation.
 # Introduction
 
 TLS 1.3 {{?TLS13=I-D.ietf-tls-tls13}} introduces the concept of early data
-(also known as zero round trip data). Early data allows a client to send data
+(also known as zero round trip data or 0-RTT data). Early data allows a client to send data
 to a server in the first round trip of a connection, without waiting for the
 TLS handshake to complete if the client has spoken to the same server recently.
 
