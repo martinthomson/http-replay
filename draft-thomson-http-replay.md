@@ -181,7 +181,7 @@ connection. Likewise, some means of explicitly triggering a retry when early
 data is not desirable is necessary. Finally, it is necessary to know whether the
 client will actually perform such a retry.
 
-To meet these needs, two signaling mechanisms are defined:
+To meet these needs, two signalling mechanisms are defined:
 
 * The `Early-Data` header field is added to any request that is received in
   early data.
