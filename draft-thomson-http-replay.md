@@ -141,9 +141,10 @@ early data, even if the server rejects the request by sending a 4NN (Too Early)
 response.
 
 A server can limit the amount of early data with the `max_early_data_size`
-field. This can be used to avoid committing an arbitrary amount of memory for
-deferred requests. A server SHOULD ensure that when it accepts early data, it
-can defer processing of requests until after the TLS handshake completes.
+field of the `early_data` TLS extension. This can be used to avoid committing
+an arbitrary amount of memory for deferred requests. A server SHOULD ensure
+that when it accepts early data, it can defer processing of requests until
+after the TLS handshake completes.
 
 
 # Using Early Data in HTTP Clients
