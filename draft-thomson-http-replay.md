@@ -64,9 +64,8 @@ Note that this is different from automated or user-initiated retries; replays
 are under the control of an attacker, and are therefore malicious.
 
 To help mitigate the risk of replays in HTTP, this document gives an overview
-of techniques for controlling these risks. It also defines a mechanism that
-enables clients to communicate with origin servers about early data, to assure
-correct operation.
+of techniques for controlling these risks in servers, and defines requirements
+for clients when sending requests in early data.
 
 The advice in this document also applies to use of 0-RTT in HTTP over QUIC
 {{?HQ=I-D.ietf-quic-http}}.
