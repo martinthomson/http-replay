@@ -94,9 +94,8 @@ made by the client, this provides the server with some assurance that the early
 data was not replayed.
 
 2. If the server receives multiple requests in early data, it can determine
-whether to defer HTTP processing on a per-request basis. When doing so, it
-SHOULD defer any requests that have state-changing side effects on the server.
-If this is not known by the server, it MUST defer the request.
+whether to defer HTTP processing on a per-request basis. This may require
+buffering the responses to preserve ordering in HTTP/1.1.
 
 3. The server can trigger a retry without the use of early data by responding
 with the 4NN (Too Early) status code ({{status}}), in cases where the risk of
@@ -106,6 +105,25 @@ replay is judged too great.
 the ability of an attacker to successfully replay early data. Servers are
 strongly encouraged to implement these techniques, but to also recognize that
 they are imperfect.
+
+For a given request, the level of tolerance to replay risk is specific to the
+resource it operates upon (and therefore only known to the origin server). In
+general, if a request does not have state-changing side effects on a resource,
+the consequences of replay are not significant.
+
+The request method's safety ({{!RFC7231}}, Section 4.2.1) is one way to
+determine this. However, some resources do elect to associate side effects with
+safe methods, so this cannot be universally relied upon.
+
+It is RECOMMENDED that origin servers allow resources to explicitly configure
+whether early data is appropriate in requests. Absent such explicit
+information, they SHOULD mitigate against early data in requests that have
+unsafe methods, using the techniques outlined above.
+
+Intermediary servers do not have sufficient information to make this
+determination, so {{status}} describes a way for the origin to signal to them
+that a particular request isn't appropriate for early data. Intermediaries that
+accept early data MUST implement that mechanism.
 
 Note that a server cannot choose to selectively reject early data. TLS only
 permits a server to accept all early data, or none of it. Once a server has
