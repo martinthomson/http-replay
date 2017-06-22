@@ -183,7 +183,7 @@ client will actually perform such a retry.
 
 To meet these needs, two signalling mechanisms are defined:
 
-* The `Early-Data` header field is added to any request that is received in
+* The `Early-Data` header field is included in requests that are received in
   early data.
 
 * The 4NN (Too Early) status code is defined for an origin server to indicate
