@@ -98,10 +98,9 @@ whether to defer HTTP processing on a per-request basis. When doing so, it
 SHOULD defer any requests that have state-changing side effects on the server.
 If this is not known by the server, it MUST defer the request.
 
-3. When a request received in early data contains the `Early-Data` request
-header field ({{header}}), the server can trigger a retry without the use of
-early data by responding with the 4NN (Too Early) status code ({{status}}), in
-cases where the risk of replay is judged too great.
+3. The server can trigger a retry without the use of early data by responding
+with the 4NN (Too Early) status code ({{status}}), in cases where the risk of
+replay is judged too great.
 
 4. Finally, TLS {{?TLS13}} describes several mitigation strategies that reduce
 the ability of an attacker to successfully replay early data. Servers are
