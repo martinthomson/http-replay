@@ -87,24 +87,24 @@ When a server enables early data, there are a number of techniques it can use
 to mitigate the risks of replay:
 
 1. The server can choose whether it will process early data before the TLS
-handshake completes. By deferring processing, it can ensure that only a
-successfully completed connection is used for the request(s) therein. Assuming
-that a replayed ClientHello will not result in additional connections being
-made by the client, this provides the server with some assurance that the early
-data was not replayed.
+   handshake completes. By deferring processing, it can ensure that only a
+   successfully completed connection is used for the request(s) therein.
+   Assuming that a replayed ClientHello will not result in additional
+   connections being made by the client, this provides the server with some
+   assurance that the early data was not replayed.
 
 2. If the server receives multiple requests in early data, it can determine
-whether to defer HTTP processing on a per-request basis. This may require
-buffering the responses to preserve ordering in HTTP/1.1.
+   whether to defer HTTP processing on a per-request basis. This may require
+   buffering the responses to preserve ordering in HTTP/1.1.
 
-3. The server can trigger a retry without the use of early data by responding
-with the 4NN (Too Early) status code ({{status}}), in cases where the risk of
-replay is judged too great.
+3. The server can cause a client to retry a request and not use early data by
+   responding with the 4NN (Too Early) status code ({{status}}), in cases where
+   the risk of replay is judged too great.
 
 4. Finally, TLS {{?TLS13}} describes several mitigation strategies that reduce
-the ability of an attacker to successfully replay early data. Servers are
-strongly encouraged to implement these techniques, but to also recognize that
-they are imperfect.
+   the ability of an attacker to successfully replay early data. Servers are
+   strongly encouraged to implement these techniques, but to also recognize
+   that they are imperfect.
 
 For a given request, the level of tolerance to replay risk is specific to the
 resource it operates upon (and therefore only known to the origin server). In
