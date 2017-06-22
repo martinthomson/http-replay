@@ -83,8 +83,8 @@ defined in {{!RFC2119}}.
 A server decides whether or not to offer a client the ability to send early
 data on future connections when sending the TLS session ticket.
 
-When early data is enabled by the server, there are a number of techniques it
-can use to mitigate the risks of replay:
+When a server enables early data, there are a number of techniques it can use
+to mitigate the risks of replay:
 
 1. The server can choose whether it processes early data before the TLS
 handshake completes. By deferring request processing until the handshake is
