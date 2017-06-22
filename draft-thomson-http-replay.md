@@ -49,9 +49,9 @@ TLS 1.3 {{?TLS13=I-D.ietf-tls-tls13}} introduces the concept of early data
 to a server in the first round trip of a connection, without waiting for the
 TLS handshake to complete if the client has spoken to the same server recently.
 
-For HTTP {{!HTTP=RFC7230}}, early data allows clients to send requests
-immediately, avoiding the one or two round trip delay needed for the TLS
-handshake. This is a significant performance enhancement; however, it has
+When used with HTTP {{!HTTP=RFC7230}}, early data allows clients to send
+requests immediately, avoiding the one or two round trip delay needed for the
+TLS handshake. This is a significant performance enhancement; however, it has
 significant limitations.
 
 The primary risk of using early data is that an attacker might capture and
