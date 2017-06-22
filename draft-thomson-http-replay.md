@@ -204,7 +204,7 @@ and its origin server.
 ## The Early-Data Header Field {#header}
 
 The `Early-Data` request header field indicates that the request has been
-conveyed in early data, and additionally indicates that a downstream client
+conveyed in early data, and additionally indicates that an upstream client
 understands the 4NN (Too Early) status code.
 
 It has two possible values, "0" and "1". Its syntax is defined by the following
