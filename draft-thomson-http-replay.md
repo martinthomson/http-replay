@@ -167,8 +167,10 @@ Early) status code; see {{status}}.
 Clients MUST NOT use early data in requests when a proxy is configured.
 
 An intermediary MUST NOT use early data when forwarding a request unless early
-data was used on a previous hop.  That means that an intermediary can only use
-early data if the request that either arrived in early data or arrived with the
+data was used on a previous hop, or it knows that the request can be retried
+safely without consequences (typically, using out-of-band configuration).
+Absent better information, that means that an intermediary can only use early
+data if the request that either arrived in early data or arrived with the
 `Early-Data` header field set to "1".
 
 
