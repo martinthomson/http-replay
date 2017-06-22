@@ -164,11 +164,11 @@ multiple times (though this would be in violation of requirements in TLS).
 Clients that use early data MUST retry requests upon receipt of a 4NN (Too
 Early) status code; see {{status}}.
 
-Clients MUST NOT use early data in requests when a proxy is configured.
-
 An intermediary MUST NOT use early data when forwarding a request unless early
-data was used on a previous hop.  That means that an intermediary can only use
-early data if the request that either arrived in early data or arrived with the
+data was used on a previous hop, or it knows that the request can be retried
+safely without consequences (typically, using out-of-band configuration).
+Absent better information, that means that an intermediary can only use early
+data if the request that either arrived in early data or arrived with the
 `Early-Data` header field set to "1".
 
 
@@ -206,11 +206,11 @@ The `Early-Data` request header field indicates that the request has been
 conveyed in early data, and additionally indicates that a client understands
 the 4NN (Too Early) status code.
 
-It has two possible values, "0" and "1". Its syntax is defined by the following
-ABNF {{!ABNF=RFC5234}}:
+It has just one valid value: "1". Its syntax is defined by the following ABNF
+{{!ABNF=RFC5234}}:
 
 ~~~
-Early-Data = "0" / "1"
+Early-Data = "1"
 ~~~
 
 For example:
@@ -225,8 +225,7 @@ An intermediary that forwards a request received in TLS early data MUST send it
 with the `Early-Data` header field set to "1" (i.e., it adds it if not present
 in the request).
 
-An intermediary MUST NOT add this header field with a value of "0" or remove it
-if it has a value of "1".
+An intermediary MUST NOT remove this header field if it is present in a request.
 
 The `Early-Data` header field is not intended for use by user agents (that is,
 the original initiator of a request).  Sending a request in early data implies
