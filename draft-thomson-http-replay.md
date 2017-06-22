@@ -86,7 +86,7 @@ data on future connections when sending the TLS session ticket.
 When a server enables early data, there are a number of techniques it can use
 to mitigate the risks of replay:
 
-1. The server can choose whether it processes early data before the TLS
+1. The server can choose whether it will process early data before the TLS
 handshake completes. By deferring request processing until the handshake is
 complete, it can ensure that only a successfully completed connection is used
 for processing those requests. Assuming that a replayed ClientHello will not
