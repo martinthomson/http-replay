@@ -1,5 +1,5 @@
 ---
-title: Using TLS Early Data in HTTP
+title: Using Early Data in HTTP
 abbrev: HTTP Early Data
 docname: draft-thomson-http-replay-latest
 category: std
