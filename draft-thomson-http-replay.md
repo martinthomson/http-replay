@@ -206,11 +206,11 @@ The `Early-Data` request header field indicates that the request has been
 conveyed in early data, and additionally indicates that a client understands
 the 4NN (Too Early) status code.
 
-It has two possible values, "0" and "1". Its syntax is defined by the following
-ABNF {{!ABNF=RFC5234}}:
+It has just one valid value: "1". Its syntax is defined by the following ABNF
+{{!ABNF=RFC5234}}:
 
 ~~~
-Early-Data = "0" / "1"
+Early-Data = "1"
 ~~~
 
 For example:
@@ -225,8 +225,7 @@ An intermediary that forwards a request received in TLS early data MUST send it
 with the `Early-Data` header field set to "1" (i.e., it adds it if not present
 in the request).
 
-An intermediary MUST NOT add this header field with a value of "0" or remove it
-if it has a value of "1".
+An intermediary MUST NOT remove this header field if it is present in a request.
 
 The `Early-Data` header field is not intended for use by user agents (that is,
 the original initiator of a request).  Sending a request in early data implies
