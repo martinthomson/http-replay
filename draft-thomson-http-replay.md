@@ -164,8 +164,6 @@ multiple times (though this would be in violation of requirements in TLS).
 Clients that use early data MUST retry requests upon receipt of a 4NN (Too
 Early) status code; see {{status}}.
 
-Clients MUST NOT use early data in requests when a proxy is configured.
-
 An intermediary MUST NOT use early data when forwarding a request unless early
 data was used on a previous hop, or it knows that the request can be retried
 safely without consequences (typically, using out-of-band configuration).
