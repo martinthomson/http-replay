@@ -203,8 +203,8 @@ and its origin server.
 ## The Early-Data Header Field {#header}
 
 The `Early-Data` request header field indicates that the request has been
-conveyed in early data, and additionally indicates that an upstream client
-understands the 4NN (Too Early) status code.
+conveyed in early data, and additionally indicates that a client understands
+the 4NN (Too Early) status code.
 
 It has two possible values, "0" and "1". Its syntax is defined by the following
 ABNF {{!ABNF=RFC5234}}:
@@ -250,7 +250,7 @@ Intermediaries that receive the 4NN (Too Early) status code MUST NOT
 automatically retry requests when the original request already contained the
 `Early-Data` header field with a value of "1" or the request arrived at the
 intermediary in early data; instead, they MUST forward the 4NN (Too Early)
-response to the upstream client.
+response to the client.
 
 The server cannot assume that a client is able to retry a request unless the
 request is received in early data or the `Early-Data` header field is set to
