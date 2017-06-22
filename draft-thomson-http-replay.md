@@ -1,5 +1,5 @@
 ---
-title: Using TLS Early Data in HTTP
+title: Using Early Data in HTTP
 abbrev: HTTP Early Data
 docname: draft-thomson-http-replay-latest
 category: std
@@ -49,9 +49,9 @@ TLS 1.3 {{?TLS13=I-D.ietf-tls-tls13}} introduces the concept of early data
 to a server in the first round trip of a connection, without waiting for the
 TLS handshake to complete if the client has spoken to the same server recently.
 
-For HTTP {{!HTTP=RFC7230}}, early data allows clients to send requests
-immediately, avoiding the one or two round trip delay needed for the TLS
-handshake. This is a significant performance enhancement; however, it has
+When used with HTTP {{!HTTP=RFC7230}}, early data allows clients to send
+requests immediately, avoiding the one or two round trip delay needed for the
+TLS handshake. This is a significant performance enhancement; however, it has
 significant limitations.
 
 The primary risk of using early data is that an attacker might capture and
@@ -64,9 +64,8 @@ Note that this is different from automated or user-initiated retries; replays
 are under the control of an attacker, and are therefore malicious.
 
 To help mitigate the risk of replays in HTTP, this document gives an overview
-of techniques for controlling these risks. It also defines a mechanism that
-enables clients to communicate with origin servers about early data, to assure
-correct operation.
+of techniques for controlling these risks in servers, and defines requirements
+for clients when sending requests in early data.
 
 The advice in this document also applies to use of 0-RTT in HTTP over QUIC
 {{?HQ=I-D.ietf-quic-http}}.
@@ -84,30 +83,47 @@ defined in {{!RFC2119}}.
 A server decides whether or not to offer a client the ability to send early
 data on future connections when sending the TLS session ticket.
 
-When early data is enabled by the server, there are a number of techniques it
-can use to mitigate the risks of replay:
+When a server enables early data, there are a number of techniques it can use
+to mitigate the risks of replay:
 
-1. The server can choose whether it processes early data before the TLS
-handshake completes. By deferring request processing until the handshake is
-complete, it can ensure that only a successfully completed connection is used
-for processing those requests. Assuming that a replayed ClientHello will not
-result in additional connections being made by the client, this provides the
-server with some assurance that the early data was not replayed.
+1. The server can choose whether it will process early data before the TLS
+handshake completes. By deferring processing, it can ensure that only a
+successfully completed connection is used for the request(s) therein. Assuming
+that a replayed ClientHello will not result in additional connections being
+made by the client, this provides the server with some assurance that the early
+data was not replayed.
 
 2. If the server receives multiple requests in early data, it can determine
-whether to defer HTTP processing on a per-request basis. When doing so, it
-SHOULD defer any requests that have state-changing side effects on the server.
-If this is not known by the server, it MUST defer the request.
+whether to defer HTTP processing on a per-request basis. This may require
+buffering the responses to preserve ordering in HTTP/1.1.
 
-3. When a request received in early data contains the `Early-Data` request
-header field ({{header}}), the server can trigger a retry without the use of
-early data by responding with the 4NN (Too Early) status code ({{status}}), in
-cases where the risk of replay is judged too great.
+3. The server can trigger a retry without the use of early data by responding
+with the 4NN (Too Early) status code ({{status}}), in cases where the risk of
+replay is judged too great.
 
 4. Finally, TLS {{?TLS13}} describes several mitigation strategies that reduce
 the ability of an attacker to successfully replay early data. Servers are
 strongly encouraged to implement these techniques, but to also recognize that
 they are imperfect.
+
+For a given request, the level of tolerance to replay risk is specific to the
+resource it operates upon (and therefore only known to the origin server). In
+general, if a request does not have state-changing side effects on a resource,
+the consequences of replay are not significant.
+
+The request method's safety ({{!RFC7231}}, Section 4.2.1) is one way to
+determine this. However, some resources do elect to associate side effects with
+safe methods, so this cannot be universally relied upon.
+
+It is RECOMMENDED that origin servers allow resources to explicitly configure
+whether early data is appropriate in requests. Absent such explicit
+information, they SHOULD mitigate against early data in requests that have
+unsafe methods, using the techniques outlined above.
+
+Intermediary servers do not have sufficient information to make this
+determination, so {{status}} describes a way for the origin to signal to them
+that a particular request isn't appropriate for early data. Intermediaries that
+accept early data MUST implement that mechanism.
 
 Note that a server cannot choose to selectively reject early data. TLS only
 permits a server to accept all early data, or none of it. Once a server has
@@ -127,9 +143,9 @@ immediately after sending the TLS ClientHello.
 
 By their nature, clients have control over whether a given request is sent in
 early data -- thereby giving the client control over risk of replay. Absent
-other information, clients MAY send requests with safe HTTP methods in early
-data when it is available, and SHOULD NOT send unsafe methods (or methods whose
-safety is not known) in early data.
+other information, clients MAY send requests with safe HTTP methods (see
+{{!RFC7231}}, Section 4.2.1) in early data when it is available, and SHOULD NOT
+send unsafe methods (or methods whose safety is not known) in early data.
 
 If the server rejects early data, a client MUST start sending again as though
 the connection was new. For HTTP/2, this means re-sending the connection
@@ -145,9 +161,8 @@ being processed twice.  Replays are also possible if there are multiple server
 instances that will accept early data, or if the same server accepts early data
 multiple times (though this would be in violation of requirements in TLS).
 
-Clients MUST identify requests sent in early data with the `Early-Data` request
-header field; see {{header}}. Clients that use early data MUST retry requests
-upon receipt of a 4NN (Too Early) status code; see {{status}}.
+Clients that use early data MUST retry requests upon receipt of a 4NN (Too
+Early) status code; see {{status}}.
 
 Clients MUST NOT use early data in requests when a proxy is configured.
 
@@ -165,9 +180,9 @@ connection. Likewise, some means of explicitly triggering a retry when early
 data is not desirable is necessary. Finally, it is necessary to know whether the
 client will actually perform such a retry.
 
-To meet these needs, two signaling mechanisms are defined:
+To meet these needs, two signalling mechanisms are defined:
 
-* The `Early-Data` header field is added to any request that is received in
+* The `Early-Data` header field is included in requests that are received in
   early data.
 
 * The 4NN (Too Early) status code is defined for an origin server to indicate
@@ -188,8 +203,8 @@ and its origin server.
 ## The Early-Data Header Field {#header}
 
 The `Early-Data` request header field indicates that the request has been
-conveyed in early data, and additionally indicates that a downstream client
-understands the 4NN (Too Early) status code.
+conveyed in early data, and additionally indicates that a client understands
+the 4NN (Too Early) status code.
 
 It has two possible values, "0" and "1". Its syntax is defined by the following
 ABNF {{!ABNF=RFC5234}}:
@@ -235,7 +250,7 @@ Intermediaries that receive the 4NN (Too Early) status code MUST NOT
 automatically retry requests when the original request already contained the
 `Early-Data` header field with a value of "1" or the request arrived at the
 intermediary in early data; instead, they MUST forward the 4NN (Too Early)
-response to the upstream client.
+response to the client.
 
 The server cannot assume that a client is able to retry a request unless the
 request is received in early data or the `Early-Data` header field is set to
