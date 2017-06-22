@@ -143,9 +143,9 @@ immediately after sending the TLS ClientHello.
 
 By their nature, clients have control over whether a given request is sent in
 early data -- thereby giving the client control over risk of replay. Absent
-other information, clients MAY send requests with safe HTTP methods in early
-data when it is available, and SHOULD NOT send unsafe methods (or methods whose
-safety is not known) in early data.
+other information, clients MAY send requests with safe HTTP methods (see
+{{!RFC7231}}, Section 4.2.1) in early data when it is available, and SHOULD NOT
+send unsafe methods (or methods whose safety is not known) in early data.
 
 If the server rejects early data, a client MUST start sending again as though
 the connection was new. For HTTP/2, this means re-sending the connection
