@@ -70,7 +70,6 @@ choice to expose a request to the possibility of replay is mutual: client and
 server will both need to agree to accept the risk.
 
 
-
 # Conventions and Definitions
 
 The words "MUST", "MUST NOT", "SHOULD", and "MAY" are used in this document.
