@@ -125,10 +125,11 @@ determination, so {{status}} describes a way for the origin to signal to them
 that a particular request isn't appropriate for early data. Intermediaries that
 accept early data MUST implement that mechanism.
 
-Note that a server cannot choose to selectively reject early data. TLS only
-permits a server to accept all early data, or none of it. Once a server has
-decided to accept early data, it MUST process all requests in early data, even
-if the server rejects the request by sending a 4NN (Too Early) response.
+Note that a server cannot choose to selectively reject early data at the TLS
+layer. TLS only permits a server to accept all early data, or none of it. Once
+a server has decided to accept early data, it MUST process all requests in
+early data, even if the server rejects the request by sending a 4NN (Too Early)
+response.
 
 A server can limit the amount of early data with the `max_early_data_size`
 field. This can be used to avoid committing an arbitrary amount of memory for
