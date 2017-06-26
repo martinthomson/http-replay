@@ -104,7 +104,9 @@ replay is judged too great.
 4. Finally, TLS {{?TLS13}} describes several mitigation strategies that reduce
 the ability of an attacker to successfully replay early data. Servers are
 strongly encouraged to implement these techniques, but to also recognize that
-they are imperfect.
+they are imperfect. These anti-replay techniques can reduce the number of
+replays that will be successful from being essentially unbounded to a fixed
+value.
 
 For a given request, the level of tolerance to replay risk is specific to the
 resource it operates upon (and therefore only known to the origin server). In
