@@ -148,10 +148,10 @@ other information, clients MAY send requests with safe HTTP methods (see
 {{!RFC7231}}, Section 4.2.1) in early data when it is available, and SHOULD NOT
 send unsafe methods (or methods whose safety is not known) in early data.
 
-If the server rejects early data, a client MUST start sending again as though
-the connection was new. For HTTP/2, this means re-sending the connection
-preface. Any requests sent in early data MUST be sent again, unless the client
-decides to abandon those requests.
+If the server rejects early data at the TLS layer, a client MUST start sending
+again as though the connection was new. For HTTP/2, this means re-sending the
+connection preface. Any requests sent in early data MUST be sent again, unless
+the client decides to abandon those requests.
 
 This automatic retry exposes the request to a potential replay attack.  An
 attacker sends early data to one server instance that accepts and processes the
