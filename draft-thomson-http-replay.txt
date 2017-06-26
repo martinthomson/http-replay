@@ -5,10 +5,10 @@
 httpbis                                                       M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                           M. Nottingham
-Expires: December 24, 2017                                          true
+Expires: December 28, 2017                                          true
                                                               W. Tarreau
                                                     HAProxy Technologies
-                                                           June 22, 2017
+                                                           June 26, 2017
 
 
                         Using Early Data in HTTP
@@ -36,7 +36,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 24, 2017.
+   This Internet-Draft will expire on December 28, 2017.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Thomson, et al.         Expires December 24, 2017               [Page 1]
+Thomson, et al.         Expires December 28, 2017               [Page 1]
 
 Internet-Draft               HTTP Early Data                   June 2017
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thomson, et al.         Expires December 24, 2017               [Page 2]
+Thomson, et al.         Expires December 28, 2017               [Page 2]
 
 Internet-Draft               HTTP Early Data                   June 2017
 
@@ -165,7 +165,7 @@ Internet-Draft               HTTP Early Data                   June 2017
 
 
 
-Thomson, et al.         Expires December 24, 2017               [Page 3]
+Thomson, et al.         Expires December 28, 2017               [Page 3]
 
 Internet-Draft               HTTP Early Data                   June 2017
 
@@ -221,7 +221,7 @@ Internet-Draft               HTTP Early Data                   June 2017
 
 
 
-Thomson, et al.         Expires December 24, 2017               [Page 4]
+Thomson, et al.         Expires December 28, 2017               [Page 4]
 
 Internet-Draft               HTTP Early Data                   June 2017
 
@@ -277,7 +277,7 @@ Internet-Draft               HTTP Early Data                   June 2017
 
 
 
-Thomson, et al.         Expires December 24, 2017               [Page 5]
+Thomson, et al.         Expires December 28, 2017               [Page 5]
 
 Internet-Draft               HTTP Early Data                   June 2017
 
@@ -333,7 +333,7 @@ Internet-Draft               HTTP Early Data                   June 2017
 
 
 
-Thomson, et al.         Expires December 24, 2017               [Page 6]
+Thomson, et al.         Expires December 28, 2017               [Page 6]
 
 Internet-Draft               HTTP Early Data                   June 2017
 
@@ -389,7 +389,7 @@ Internet-Draft               HTTP Early Data                   June 2017
 
 
 
-Thomson, et al.         Expires December 24, 2017               [Page 7]
+Thomson, et al.         Expires December 28, 2017               [Page 7]
 
 Internet-Draft               HTTP Early Data                   June 2017
 
@@ -445,7 +445,7 @@ Authors' Addresses
 
 
 
-Thomson, et al.         Expires December 24, 2017               [Page 8]
+Thomson, et al.         Expires December 28, 2017               [Page 8]
 
 Internet-Draft               HTTP Early Data                   June 2017
 
@@ -501,4 +501,4 @@ Internet-Draft               HTTP Early Data                   June 2017
 
 
 
-Thomson, et al.         Expires December 24, 2017               [Page 9]
+Thomson, et al.         Expires December 28, 2017               [Page 9]
