@@ -206,10 +206,11 @@ Internet-Draft               HTTP Early Data                   June 2017
    it is available, and SHOULD NOT send unsafe methods (or methods whose
    safety is not known) in early data.
 
-   If the server rejects early data, a client MUST start sending again
-   as though the connection was new.  For HTTP/2, this means re-sending
-   the connection preface.  Any requests sent in early data MUST be sent
-   again, unless the client decides to abandon those requests.
+   If the server rejects early data at the TLS layer, a client MUST
+   start sending again as though the connection was new.  For HTTP/2,
+   this means re-sending the connection preface.  Any requests sent in
+   early data MUST be sent again, unless the client decides to abandon
+   those requests.
 
    This automatic retry exposes the request to a potential replay
    attack.  An attacker sends early data to one server instance that
@@ -217,7 +218,6 @@ Internet-Draft               HTTP Early Data                   June 2017
    proceed no further.  The attacker then forwards the same messages
    from the client to another server instance that will reject early
    data.  The client the retries the request, resulting in the request
-   being processed twice.  Replays are also possible if there are
 
 
 
@@ -226,6 +226,7 @@ Thomson, et al.         Expires December 28, 2017               [Page 4]
 Internet-Draft               HTTP Early Data                   June 2017
 
 
+   being processed twice.  Replays are also possible if there are
    multiple server instances that will accept early data, or if the same
    server accepts early data multiple times (though this would be in
    violation of requirements in TLS).
@@ -269,7 +270,6 @@ Internet-Draft               HTTP Early Data                   June 2017
    In many cases, only the origin server has the necessary information
    to decide whether the risk of replay is acceptable.  These extensions
    allow coordination between a gateway and its origin server.
-
 
 
 
