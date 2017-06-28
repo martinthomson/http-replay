@@ -74,8 +74,8 @@ Table of Contents
    6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   7
    7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
      7.1.  Normative References  . . . . . . . . . . . . . . . . . .   8
-     7.2.  Informative References  . . . . . . . . . . . . . . . . .   8
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   8
+     7.2.  Informative References  . . . . . . . . . . . . . . . . .   9
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   9
 
 1.  Introduction
 
@@ -180,6 +180,14 @@ Internet-Draft               HTTP Early Data                   June 2017
    requests that have unsafe methods, using the techniques outlined
    above.
 
+   A request might be sent partially in early data with the remainder of
+   the request being sent after the handshake completes.  This does not
+   necessarily affect handling of that request; what matters is when the
+   server starts acting upon the contents of a request.  Any time a
+   server might initiate processing prior to completion of the handshake
+   needs to consider how a possible replay of early data could affect
+   that processing.
+
    Intermediary servers do not have sufficient information to make this
    determination, so Section 4.2 describes a way for the origin to
    signal to them that a particular request isn't appropriate for early
@@ -210,14 +218,6 @@ Internet-Draft               HTTP Early Data                   June 2017
    it is available, and SHOULD NOT send unsafe methods (or methods whose
    safety is not known) in early data.
 
-   If the server rejects early data at the TLS layer, a client MUST
-   start sending again as though the connection was new.  For HTTP/2,
-   this means re-sending the connection preface.  Any requests sent in
-   early data MUST be sent again, unless the client decides to abandon
-   those requests.
-
-   This automatic retry exposes the request to a potential replay
-   attack.  An attacker sends early data to one server instance that
 
 
 
@@ -226,6 +226,14 @@ Thomson, et al.         Expires December 30, 2017               [Page 4]
 Internet-Draft               HTTP Early Data                   June 2017
 
 
+   If the server rejects early data at the TLS layer, a client MUST
+   start sending again as though the connection was new.  For HTTP/2,
+   this means re-sending the connection preface.  Any requests sent in
+   early data MUST be sent again, unless the client decides to abandon
+   those requests.
+
+   This automatic retry exposes the request to a potential replay
+   attack.  An attacker sends early data to one server instance that
    accepts and processes the early data, but allows that connection to
    proceed no further.  The attacker then forwards the same messages
    from the client to another server instance that will reject early
@@ -266,6 +274,14 @@ Internet-Draft               HTTP Early Data                   June 2017
 
    They are designed to enable better coordination of the use of early
    data between the user agent and origin server, and also when a
+
+
+
+Thomson, et al.         Expires December 30, 2017               [Page 5]
+
+Internet-Draft               HTTP Early Data                   June 2017
+
+
    gateway (also "reverse proxy", "Content Delivery Network", or
    "surrogate") is present.
 
@@ -274,13 +290,6 @@ Internet-Draft               HTTP Early Data                   June 2017
    In many cases, only the origin server has the necessary information
    to decide whether the risk of replay is acceptable.  These extensions
    allow coordination between a gateway and its origin server.
-
-
-
-Thomson, et al.         Expires December 30, 2017               [Page 5]
-
-Internet-Draft               HTTP Early Data                   June 2017
-
 
 4.1.  The Early-Data Header Field
 
@@ -321,6 +330,14 @@ Internet-Draft               HTTP Early Data                   June 2017
    Clients (user-agents and intermediaries) that sent the request in
    early data MUST automatically retry the request when receiving a 4NN
    (Too Early) response status code.  Such retries MUST NOT be sent in
+
+
+
+Thomson, et al.         Expires December 30, 2017               [Page 6]
+
+Internet-Draft               HTTP Early Data                   June 2017
+
+
    early data, and SHOULD NOT be sent if the TLS handshake on the
    original connection does not successfully complete.
 
@@ -329,14 +346,6 @@ Internet-Draft               HTTP Early Data                   June 2017
    contained the "Early-Data" header field with a value of "1" or the
    request arrived at the intermediary in early data; instead, they MUST
    forward the 4NN (Too Early) response to the client.
-
-
-
-
-Thomson, et al.         Expires December 30, 2017               [Page 6]
-
-Internet-Draft               HTTP Early Data                   June 2017
-
 
    The server cannot assume that a client is able to retry a request
    unless the request is received in early data or the "Early-Data"
@@ -377,6 +386,14 @@ Internet-Draft               HTTP Early Data                   June 2017
 
    Specification document(s):  This document
 
+
+
+
+Thomson, et al.         Expires December 30, 2017               [Page 7]
+
+Internet-Draft               HTTP Early Data                   June 2017
+
+
    Related information:  (empty)
 
    This document registers the 4NN (Too Early) status code in the
@@ -386,13 +403,6 @@ Internet-Draft               HTTP Early Data                   June 2017
    Value:  4NN
 
    Description:  Too Early
-
-
-
-Thomson, et al.         Expires December 30, 2017               [Page 7]
-
-Internet-Draft               HTTP Early Data                   June 2017
-
 
    Reference:  This document
 
@@ -429,6 +439,17 @@ Internet-Draft               HTTP Early Data                   June 2017
               Version 1.3", draft-ietf-tls-tls13-20 (work in progress),
               April 2017.
 
+
+
+
+
+
+
+Thomson, et al.         Expires December 30, 2017               [Page 8]
+
+Internet-Draft               HTTP Early Data                   June 2017
+
+
 7.2.  Informative References
 
    [HQ]       Bishop, M., "Hypertext Transfer Protocol (HTTP) over
@@ -443,13 +464,6 @@ Authors' Addresses
    Email: martin.thomson@gmail.com
 
 
-
-
-Thomson, et al.         Expires December 30, 2017               [Page 8]
-
-Internet-Draft               HTTP Early Data                   June 2017
-
-
    Mark Nottingham
    true
 
@@ -460,20 +474,6 @@ Internet-Draft               HTTP Early Data                   June 2017
    HAProxy Technologies
 
    Email: willy@haproxy.org
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
