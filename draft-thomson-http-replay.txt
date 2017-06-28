@@ -157,9 +157,9 @@ Internet-Draft               HTTP Early Data                   June 2017
 
    For a given request, the level of tolerance to replay risk is
    specific to the resource it operates upon (and therefore only known
-   to the origin server).  In general, if a request does not have state-
-   changing side effects on a resource, the consequences of replay are
-   not significant.
+   to the origin server).  In general, if processing a request does not
+   have state-changing side effects, the consequences of replay are not
+   significant.
 
 
 
