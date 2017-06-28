@@ -110,8 +110,8 @@ value.
 
 For a given request, the level of tolerance to replay risk is specific to the
 resource it operates upon (and therefore only known to the origin server). In
-general, if a request does not have state-changing side effects on a resource,
-the consequences of replay are not significant.
+general, if processing a request does not have state-changing side effects, the
+consequences of replay are not significant.
 
 The request method's safety ({{!RFC7231}}, Section 4.2.1) is one way to
 determine this. However, some resources do elect to associate side effects with
