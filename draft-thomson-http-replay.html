@@ -297,7 +297,7 @@ address {
 
   <meta name="dct.creator" content="Thomson, M., Nottingham, M., and W. Tarreau" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-thomson-http-replay-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2017-6-26" />
+  <meta name="dct.issued" scheme="ISO8601" content="2017-6-28" />
   <meta name="dct.abstract" content="This document explains the risks of using early data for HTTP and describes techniques for reducing them. In particular, it defines a mechanism that enables clients to communicate with servers about early data, to assure correct operation." />
   <meta name="description" content="This document explains the risks of using early data for HTTP and describes techniques for reducing them. In particular, it defines a mechanism that enables clients to communicate with servers about early data, to assure correct operation." />
 
@@ -321,7 +321,7 @@ address {
 <td class="right">M. Nottingham</td>
 </tr>
 <tr>
-<td class="left">Expires: December 28, 2017</td>
+<td class="left">Expires: December 30, 2017</td>
 <td class="right">true</td>
 </tr>
 <tr>
@@ -334,7 +334,7 @@ address {
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">June 26, 2017</td>
+<td class="right">June 28, 2017</td>
 </tr>
 
     	
@@ -350,7 +350,7 @@ address {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on December 28, 2017.</p>
+<p>This Internet-Draft will expire on December 30, 2017.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2017 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -414,7 +414,7 @@ address {
 <li>The server can choose whether it will process early data before the TLS handshake completes. By deferring processing, it can ensure that only a successfully completed connection is used for the request(s) therein. Assuming that a replayed ClientHello will not result in additional connections being made by the client, this provides the server with some assurance that the early data was not replayed.</li>
 <li>If the server receives multiple requests in early data, it can determine whether to defer HTTP processing on a per-request basis. This may require buffering the responses to preserve ordering in HTTP/1.1.</li>
 <li>The server can trigger a retry without the use of early data by responding with the 4NN (Too Early) status code (<a href="#status" class="xref">Section 4.2</a>), in cases where the risk of replay is judged too great.</li>
-<li>Finally, TLS <a href="#TLS13" class="xref">[TLS13]</a> describes several mitigation strategies that reduce the ability of an attacker to successfully replay early data. Servers are strongly encouraged to implement these techniques, but to also recognize that they are imperfect.</li>
+<li>Finally, TLS <a href="#TLS13" class="xref">[TLS13]</a> describes several mitigation strategies that reduce the ability of an attacker to successfully replay early data. Servers are strongly encouraged to implement these techniques, but to also recognize that they are imperfect. These anti-replay techniques can reduce the number of replays that will be successful from being essentially unbounded to a fixed value.</li>
 </ol>
 <p id="rfc.section.2.p.4">For a given request, the level of tolerance to replay risk is specific to the resource it operates upon (and therefore only known to the origin server). In general, if a request does not have state-changing side effects on a resource, the consequences of replay are not significant.</p>
 <p id="rfc.section.2.p.5">The request method&#8217;s safety (<a href="#RFC7231" class="xref">[RFC7231]</a>, Section 4.2.1) is one way to determine this. However, some resources do elect to associate side effects with safe methods, so this cannot be universally relied upon.</p>
