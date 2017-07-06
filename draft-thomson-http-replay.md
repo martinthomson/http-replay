@@ -283,7 +283,8 @@ so if it knows that the server that receives those requests understands the
 `Early-Data` header field and will correctly generate a 4NN (Too Early) status
 code.  A gateway that isn't certain about server support SHOULD either delay
 forwarding the request until the TLS handshake completes, or send a 4NN (Too
-Early) status code in response.
+Early) status code in response.  A gateway that is uncertain about whether an
+origin server supports the `Early-Data` header field can disable early data.
 
 
 # IANA Considerations
