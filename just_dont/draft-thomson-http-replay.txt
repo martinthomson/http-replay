@@ -370,7 +370,7 @@ Internet-Draft               HTTP Early Data                   July 2017
    about server support SHOULD either delay forwarding the request until
    the TLS handshake completes, or send a 4NN (Too Early) status code in
    response.  A gateway that is uncertain about whether an origin server
-   supports the "Early-Data" header field can disable early data.
+   supports the "Early-Data" header field SHOULD disable early data.
 
 6.  IANA Considerations
 
