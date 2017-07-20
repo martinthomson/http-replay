@@ -248,7 +248,7 @@ in early data does not need to include the `Early-Data` header field.
 ## The 4NN (Too Early) Status Code {#status}
 
 A 4NN (Too Early) status code indicates that the server is unwilling to risk
-processing a request that might be (or has been) replayed.
+processing a request that might be replayed.
 
 Clients (user-agents and intermediaries) that sent the request in early data
 MUST automatically retry the request when receiving a 4NN (Too Early)
