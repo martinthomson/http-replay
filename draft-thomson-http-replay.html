@@ -463,7 +463,7 @@ Early-Data: 1
 <h2 id="rfc.section.4.2">
 <a href="#rfc.section.4.2">4.2.</a> <a href="#status" id="status">The 4NN (Too Early) Status Code</a>
 </h2>
-<p id="rfc.section.4.2.p.1">A 4NN (Too Early) status code indicates that the server is unwilling to risk processing a request that might be (or has been) replayed.</p>
+<p id="rfc.section.4.2.p.1">A 4NN (Too Early) status code indicates that the server is unwilling to risk processing a request that might be replayed.</p>
 <p id="rfc.section.4.2.p.2">Clients (user-agents and intermediaries) that sent the request in early data MUST automatically retry the request when receiving a 4NN (Too Early) response status code. Such retries MUST NOT be sent in early data, and SHOULD NOT be sent if the TLS handshake on the original connection does not successfully complete.</p>
 <p id="rfc.section.4.2.p.3">Intermediaries that receive the 4NN (Too Early) status code MUST NOT automatically retry requests when the original request already contained the <samp>Early-Data</samp> header field with a value of &#8220;1&#8221; or the request arrived at the intermediary in early data; instead, they MUST forward the 4NN (Too Early) response to the client.</p>
 <p id="rfc.section.4.2.p.4">The server cannot assume that a client is able to retry a request unless the request is received in early data or the <samp>Early-Data</samp> header field is set to &#8220;1&#8221;.  A server SHOULD NOT emit the 4NN status code unless one of these conditions is met.</p>
