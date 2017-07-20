@@ -232,17 +232,13 @@ Host: example.com
 Early-Data: 1
 ~~~
 
-An intermediary that forwards a request received in TLS early data MUST send it
-with the `Early-Data` header field set to "1" (i.e., it adds it if not present
-in the request).
+A client that constructs a request that it sends in early data, even if only
+part of the request is sent in early data, MUST include an `Early-Data` header
+field with a value of "1".
 
 An intermediary MUST NOT remove this header field if it is present in a request.
-
-The `Early-Data` header field is not intended for use by user agents (that is,
-the original initiator of a request).  Sending a request in early data implies
-that the client understands this specification and is willing to retry a request
-in response to a 4NN (Too Early) status code.  A user agent that sends a request
-in early data does not need to include the `Early-Data` header field.
+An intermediary MAY reject requests that are received in early data if the
+`Early-Data` header field is not present.
 
 
 ## The 4NN (Too Early) Status Code {#status}
@@ -251,21 +247,20 @@ A 4NN (Too Early) status code indicates that the server is unwilling to risk
 processing a request that might be replayed.
 
 Clients (user-agents and intermediaries) that sent the request in early data
-MUST automatically retry the request when receiving a 4NN (Too Early)
-response status code. Such retries MUST NOT be sent in early data, and SHOULD
-NOT be sent if the TLS handshake on the original connection does not
-successfully complete.
+MUST automatically retry the request when receiving a 4NN (Too Early) response
+status code. Retries of requests MUST NOT be sent in early data, MUST NOT
+include the `Early-Data header field, and SHOULD NOT be sent if the TLS
+handshake on the original connection does not successfully complete.
 
 Intermediaries that receive the 4NN (Too Early) status code MUST NOT
 automatically retry requests when the original request already contained the
-`Early-Data` header field with a value of "1" or the request arrived at the
-intermediary in early data; instead, they MUST forward the 4NN (Too Early)
-response to the client.
+`Early-Data` header field with a value of "1"; instead, they MUST forward the
+4NN (Too Early) response to the client.  This ensures that the retry is visible
+to clients.
 
 The server cannot assume that a client is able to retry a request unless the
-request is received in early data or the `Early-Data` header field is set to
-"1".  A server SHOULD NOT emit the 4NN status code unless one of these
-conditions is met.
+`Early-Data` header field is present.  A server SHOULD NOT emit the 4NN status
+code unless one of these conditions is met.
 
 The 4NN (Too Early) status code is not cacheable by default. Its payload is not
 the representation of any identified resource.
