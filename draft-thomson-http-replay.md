@@ -275,8 +275,9 @@ the representation of any identified resource.
 
 Using early data exposes a client to the risk that their request is replayed.  A
 retried or replayed request can produce different side effects on the server.
-That might be used for traffic analysis to recover information about requests or
-the resources those requests target.
+In addition to those side effects, replays and retries might be used for traffic
+analysis to recover information about requests or the resources those requests
+target.
 
 A gateway that forwards requests that were received in early data MUST only do
 so if it knows that the server that receives those requests understands the
