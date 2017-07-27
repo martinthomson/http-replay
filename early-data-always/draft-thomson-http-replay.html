@@ -283,6 +283,8 @@ address {
 <link href="#rfc.section.4.1" rel="Chapter" title="4.1 The Early-Data Header Field">
 <link href="#rfc.section.4.2" rel="Chapter" title="4.2 The 4NN (Too Early) Status Code">
 <link href="#rfc.section.5" rel="Chapter" title="5 Security Considerations">
+<link href="#rfc.section.5.1" rel="Chapter" title="5.1 Gateways and Early Data">
+<link href="#rfc.section.5.2" rel="Chapter" title="5.2 Consistent Handling of Early Data">
 <link href="#rfc.section.6" rel="Chapter" title="6 IANA Considerations">
 <link href="#rfc.references" rel="Chapter" title="7 References">
 <link href="#rfc.references.1" rel="Chapter" title="7.1 Normative References">
@@ -295,7 +297,7 @@ address {
 
   <meta name="dct.creator" content="Thomson, M., Nottingham, M., and W. Tarreau" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-thomson-http-replay-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2017-7-20" />
+  <meta name="dct.issued" scheme="ISO8601" content="2017-7-27" />
   <meta name="dct.abstract" content="This document explains the risks of using early data for HTTP and describes techniques for reducing them. In particular, it defines a mechanism that enables clients to communicate with servers about early data, to assure correct operation." />
   <meta name="description" content="This document explains the risks of using early data for HTTP and describes techniques for reducing them. In particular, it defines a mechanism that enables clients to communicate with servers about early data, to assure correct operation." />
 
@@ -319,7 +321,7 @@ address {
 <td class="right">M. Nottingham</td>
 </tr>
 <tr>
-<td class="left">Expires: January 21, 2018</td>
+<td class="left">Expires: January 28, 2018</td>
 <td class="right">true</td>
 </tr>
 <tr>
@@ -332,7 +334,7 @@ address {
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">July 20, 2017</td>
+<td class="right">July 27, 2017</td>
 </tr>
 
     	
@@ -348,7 +350,7 @@ address {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on January 21, 2018.</p>
+<p>This Internet-Draft will expire on January 28, 2018.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2017 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -374,7 +376,11 @@ address {
 </li>
 </ul><li>5.   <a href="#rfc.section.5">Security Considerations</a>
 </li>
-<li>6.   <a href="#rfc.section.6">IANA Considerations</a>
+<ul><li>5.1.   <a href="#rfc.section.5.1">Gateways and Early Data</a>
+</li>
+<li>5.2.   <a href="#rfc.section.5.2">Consistent Handling of Early Data</a>
+</li>
+</ul><li>6.   <a href="#rfc.section.6">IANA Considerations</a>
 </li>
 <li>7.   <a href="#rfc.references">References</a>
 </li>
@@ -470,8 +476,17 @@ Early-Data: 1
 <h1 id="rfc.section.5">
 <a href="#rfc.section.5">5.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a>
 </h1>
-<p id="rfc.section.5.p.1">Using early data exposes a client to the risk that their request is replayed.  A retried or replayed request can produce different side effects on the server.  That might be used for traffic analysis to recover information about requests or the resources those requests target.</p>
-<p id="rfc.section.5.p.2">A gateway that forwards requests that were received in early data MUST only do so if it knows that the server that receives those requests understands the <samp>Early-Data</samp> header field and will correctly generate a 4NN (Too Early) status code.  A gateway that isn&#8217;t certain about server support SHOULD either delay forwarding the request until the TLS handshake completes, or send a 4NN (Too Early) status code in response.  A gateway that is uncertain about whether an origin server supports the <samp>Early-Data</samp> header field SHOULD disable early data.</p>
+<p id="rfc.section.5.p.1">Using early data exposes a client to the risk that their request is replayed.  A retried or replayed request can produce different side effects on the server.  In addition to those side effects, replays and retries might be used for traffic analysis to recover information about requests or the resources those requests target.</p>
+<h2 id="rfc.section.5.1">
+<a href="#rfc.section.5.1">5.1.</a> <a href="#gateways-and-early-data" id="gateways-and-early-data">Gateways and Early Data</a>
+</h2>
+<p id="rfc.section.5.1.p.1">A gateway that forwards requests that were received in early data MUST only do so if it knows that the server that receives those requests understands the <samp>Early-Data</samp> header field and will correctly generate a 4NN (Too Early) status code.  A gateway that isn&#8217;t certain about server support SHOULD either delay forwarding the request until the TLS handshake completes, or send a 4NN (Too Early) status code in response.  A gateway that is uncertain about whether an origin server supports the <samp>Early-Data</samp> header field SHOULD disable early data.</p>
+<h2 id="rfc.section.5.2">
+<a href="#rfc.section.5.2">5.2.</a> <a href="#consistent-handling-of-early-data" id="consistent-handling-of-early-data">Consistent Handling of Early Data</a>
+</h2>
+<p id="rfc.section.5.2.p.1">Consistent treatment of a request that arrives in - or partially in - early data is critical to avoiding inappropriate processing of replayed requests.  Requests that might be processed prior to the handshake completing MUST be processed the same way, even if the handshake is complete when processing occurs.</p>
+<p id="rfc.section.5.2.p.2">Depending on the details of a TLS implementation, an attacker might be able to delay packet arrival so that requests are processed after the handshake completes.  Those requests might appear to be safe to handle, but this doesn&#8217;t guarantee that they were not processed prior to handshake completion on a connection where the early data was replayed.</p>
+<p id="rfc.section.5.2.p.3">To avoid this confusion, the <samp>Early-Data</samp> header field is mandatory to use when sending requests in early data.  A server MUST NOT process request with this header field unless it determines that it is free from side-effects.  Otherwise, the server MUST either use the 4NN status code, or delay processing until the handshake completes.</p>
 <h1 id="rfc.section.6">
 <a href="#rfc.section.6">6.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a>
 </h1>

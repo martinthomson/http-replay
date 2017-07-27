@@ -5,10 +5,10 @@
 httpbis                                                       M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                           M. Nottingham
-Expires: January 21, 2018                                           true
+Expires: January 28, 2018                                           true
                                                               W. Tarreau
                                                     HAProxy Technologies
-                                                           July 20, 2017
+                                                           July 27, 2017
 
 
                         Using Early Data in HTTP
@@ -36,7 +36,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on January 21, 2018.
+   This Internet-Draft will expire on January 28, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Thomson, et al.         Expires January 21, 2018                [Page 1]
+Thomson, et al.         Expires January 28, 2018                [Page 1]
 
 Internet-Draft               HTTP Early Data                   July 2017
 
@@ -71,10 +71,12 @@ Table of Contents
      4.1.  The Early-Data Header Field . . . . . . . . . . . . . . .   6
      4.2.  The 4NN (Too Early) Status Code . . . . . . . . . . . . .   6
    5.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
-   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   7
+     5.1.  Gateways and Early Data . . . . . . . . . . . . . . . . .   7
+     5.2.  Consistent Handling of Early Data . . . . . . . . . . . .   7
+   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
    7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
      7.1.  Normative References  . . . . . . . . . . . . . . . . . .   8
-     7.2.  Informative References  . . . . . . . . . . . . . . . . .   8
+     7.2.  Informative References  . . . . . . . . . . . . . . . . .   9
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   9
 
 1.  Introduction
@@ -107,9 +109,7 @@ Table of Contents
 
 
 
-
-
-Thomson, et al.         Expires January 21, 2018                [Page 2]
+Thomson, et al.         Expires January 28, 2018                [Page 2]
 
 Internet-Draft               HTTP Early Data                   July 2017
 
@@ -165,7 +165,7 @@ Internet-Draft               HTTP Early Data                   July 2017
 
 
 
-Thomson, et al.         Expires January 21, 2018                [Page 3]
+Thomson, et al.         Expires January 28, 2018                [Page 3]
 
 Internet-Draft               HTTP Early Data                   July 2017
 
@@ -221,7 +221,7 @@ Internet-Draft               HTTP Early Data                   July 2017
 
 
 
-Thomson, et al.         Expires January 21, 2018                [Page 4]
+Thomson, et al.         Expires January 28, 2018                [Page 4]
 
 Internet-Draft               HTTP Early Data                   July 2017
 
@@ -277,7 +277,7 @@ Internet-Draft               HTTP Early Data                   July 2017
 
 
 
-Thomson, et al.         Expires January 21, 2018                [Page 5]
+Thomson, et al.         Expires January 28, 2018                [Page 5]
 
 Internet-Draft               HTTP Early Data                   July 2017
 
@@ -333,7 +333,7 @@ Internet-Draft               HTTP Early Data                   July 2017
 
 
 
-Thomson, et al.         Expires January 21, 2018                [Page 6]
+Thomson, et al.         Expires January 28, 2018                [Page 6]
 
 Internet-Draft               HTTP Early Data                   July 2017
 
@@ -353,9 +353,11 @@ Internet-Draft               HTTP Early Data                   July 2017
 
    Using early data exposes a client to the risk that their request is
    replayed.  A retried or replayed request can produce different side
-   effects on the server.  That might be used for traffic analysis to
-   recover information about requests or the resources those requests
-   target.
+   effects on the server.  In addition to those side effects, replays
+   and retries might be used for traffic analysis to recover information
+   about requests or the resources those requests target.
+
+5.1.  Gateways and Early Data
 
    A gateway that forwards requests that were received in early data
    MUST only do so if it knows that the server that receives those
@@ -365,6 +367,35 @@ Internet-Draft               HTTP Early Data                   July 2017
    the TLS handshake completes, or send a 4NN (Too Early) status code in
    response.  A gateway that is uncertain about whether an origin server
    supports the "Early-Data" header field SHOULD disable early data.
+
+5.2.  Consistent Handling of Early Data
+
+   Consistent treatment of a request that arrives in - or partially in -
+   early data is critical to avoiding inappropriate processing of
+   replayed requests.  Requests that might be processed prior to the
+   handshake completing MUST be processed the same way, even if the
+   handshake is complete when processing occurs.
+
+   Depending on the details of a TLS implementation, an attacker might
+   be able to delay packet arrival so that requests are processed after
+   the handshake completes.  Those requests might appear to be safe to
+   handle, but this doesn't guarantee that they were not processed prior
+   to handshake completion on a connection where the early data was
+   replayed.
+
+   To avoid this confusion, the "Early-Data" header field is mandatory
+   to use when sending requests in early data.  A server MUST NOT
+   process request with this header field unless it determines that it
+
+
+
+Thomson, et al.         Expires January 28, 2018                [Page 7]
+
+Internet-Draft               HTTP Early Data                   July 2017
+
+
+   is free from side-effects.  Otherwise, the server MUST either use the
+   4NN status code, or delay processing until the handshake completes.
 
 6.  IANA Considerations
 
@@ -386,13 +417,6 @@ Internet-Draft               HTTP Early Data                   July 2017
    This document registers the 4NN (Too Early) status code in the
    "Hypertext Transfer Protocol (HTTP) Status Code" registry established
    in [RFC7231].
-
-
-
-Thomson, et al.         Expires January 21, 2018                [Page 7]
-
-Internet-Draft               HTTP Early Data                   July 2017
-
 
    Value:  4NN
 
@@ -419,6 +443,13 @@ Internet-Draft               HTTP Early Data                   July 2017
               RFC 7230, DOI 10.17487/RFC7230, June 2014,
               <http://www.rfc-editor.org/info/rfc7230>.
 
+
+
+Thomson, et al.         Expires January 28, 2018                [Page 8]
+
+Internet-Draft               HTTP Early Data                   July 2017
+
+
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
@@ -438,17 +469,6 @@ Internet-Draft               HTTP Early Data                   July 2017
    [HQ]       Bishop, M., "Hypertext Transfer Protocol (HTTP) over
               QUIC", draft-ietf-quic-http-04 (work in progress), June
               2017.
-
-
-
-
-
-
-
-Thomson, et al.         Expires January 21, 2018                [Page 8]
-
-Internet-Draft               HTTP Early Data                   July 2017
-
 
 Authors' Addresses
 
@@ -481,24 +501,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Thomson, et al.         Expires January 21, 2018                [Page 9]
+Thomson, et al.         Expires January 28, 2018                [Page 9]
