@@ -232,17 +232,13 @@ Host: example.com
 Early-Data: 1
 ~~~
 
-An intermediary that forwards a request received in TLS early data MUST send it
-with the `Early-Data` header field set to "1" (i.e., it adds it if not present
-in the request).
+A client that constructs a request that it sends in early data, even if only
+part of the request is sent in early data, MUST include an `Early-Data` header
+field with a value of "1".
 
 An intermediary MUST NOT remove this header field if it is present in a request.
-
-The `Early-Data` header field is not intended for use by user agents (that is,
-the original initiator of a request).  Sending a request in early data implies
-that the client understands this specification and is willing to retry a request
-in response to a 4NN (Too Early) status code.  A user agent that sends a request
-in early data does not need to include the `Early-Data` header field.
+An intermediary MAY reject requests that are received in early data if the
+`Early-Data` header field is not present.
 
 
 ## The 4NN (Too Early) Status Code {#status}
@@ -251,21 +247,20 @@ A 4NN (Too Early) status code indicates that the server is unwilling to risk
 processing a request that might be replayed.
 
 Clients (user-agents and intermediaries) that sent the request in early data
-MUST automatically retry the request when receiving a 4NN (Too Early)
-response status code. Such retries MUST NOT be sent in early data, and SHOULD
-NOT be sent if the TLS handshake on the original connection does not
-successfully complete.
+MUST automatically retry the request when receiving a 4NN (Too Early) response
+status code. Retries of requests MUST NOT be sent in early data, MUST NOT
+include the `Early-Data header field, and SHOULD NOT be sent if the TLS
+handshake on the original connection does not successfully complete.
 
 Intermediaries that receive the 4NN (Too Early) status code MUST NOT
 automatically retry requests when the original request already contained the
-`Early-Data` header field with a value of "1" or the request arrived at the
-intermediary in early data; instead, they MUST forward the 4NN (Too Early)
-response to the client.
+`Early-Data` header field with a value of "1"; instead, they MUST forward the
+4NN (Too Early) response to the client.  This ensures that the retry is visible
+to clients.
 
 The server cannot assume that a client is able to retry a request unless the
-request is received in early data or the `Early-Data` header field is set to
-"1".  A server SHOULD NOT emit the 4NN status code unless one of these
-conditions is met.
+`Early-Data` header field is present.  A server SHOULD NOT emit the 4NN status
+code unless one of these conditions is met.
 
 The 4NN (Too Early) status code is not cacheable by default. Its payload is not
 the representation of any identified resource.
@@ -279,6 +274,8 @@ In addition to those side effects, replays and retries might be used for traffic
 analysis to recover information about requests or the resources those requests
 target.
 
+## Gateways and Early Data
+
 A gateway that forwards requests that were received in early data MUST only do
 so if it knows that the server that receives those requests understands the
 `Early-Data` header field and will correctly generate a 4NN (Too Early) status
@@ -286,6 +283,25 @@ code.  A gateway that isn't certain about server support SHOULD either delay
 forwarding the request until the TLS handshake completes, or send a 4NN (Too
 Early) status code in response.  A gateway that is uncertain about whether an
 origin server supports the `Early-Data` header field SHOULD disable early data.
+
+## Consistent Handling of Early Data
+
+Consistent treatment of a request that arrives in - or partially in - early data
+is critical to avoiding inappropriate processing of replayed requests.  Requests
+that might be processed prior to the handshake completing MUST be processed the
+same way, even if the handshake is complete when processing occurs.
+
+Depending on the details of a TLS implementation, an attacker might be able to
+delay packet arrival so that requests are processed after the handshake
+completes.  Those requests might appear to be safe to handle, but this doesn't
+guarantee that they were not processed prior to handshake completion on a
+connection where the early data was replayed.
+
+To avoid this confusion, the `Early-Data` header field is mandatory to use when
+sending requests in early data.  A server MUST NOT process request with this
+header field unless it determines that it is free from side-effects.  Otherwise,
+the server MUST consistently use the same approach: either using the 4NN status
+code, or delaying processing until the handshake completes.
 
 
 # IANA Considerations
