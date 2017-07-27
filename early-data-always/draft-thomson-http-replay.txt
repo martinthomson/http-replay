@@ -394,8 +394,9 @@ Thomson, et al.         Expires January 28, 2018                [Page 7]
 Internet-Draft               HTTP Early Data                   July 2017
 
 
-   is free from side-effects.  Otherwise, the server MUST either use the
-   4NN status code, or delay processing until the handshake completes.
+   is free from side-effects.  Otherwise, the server MUST consistently
+   use the same approach: either using the 4NN status code, or delaying
+   processing until the handshake completes.
 
 6.  IANA Considerations
 
@@ -438,10 +439,9 @@ Internet-Draft               HTTP Early Data                   July 2017
               DOI 10.17487/RFC3864, September 2004,
               <http://www.rfc-editor.org/info/rfc3864>.
 
-   [HTTP]     Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
-              Protocol (HTTP/1.1): Message Syntax and Routing",
-              RFC 7230, DOI 10.17487/RFC7230, June 2014,
-              <http://www.rfc-editor.org/info/rfc7230>.
+
+
+
 
 
 
@@ -449,6 +449,11 @@ Thomson, et al.         Expires January 28, 2018                [Page 8]
 
 Internet-Draft               HTTP Early Data                   July 2017
 
+
+   [HTTP]     Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
+              Protocol (HTTP/1.1): Message Syntax and Routing",
+              RFC 7230, DOI 10.17487/RFC7230, June 2014,
+              <http://www.rfc-editor.org/info/rfc7230>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -488,11 +493,6 @@ Authors' Addresses
    HAProxy Technologies
 
    Email: willy@haproxy.org
-
-
-
-
-
 
 
 

@@ -486,7 +486,7 @@ Early-Data: 1
 </h2>
 <p id="rfc.section.5.2.p.1">Consistent treatment of a request that arrives in - or partially in - early data is critical to avoiding inappropriate processing of replayed requests.  Requests that might be processed prior to the handshake completing MUST be processed the same way, even if the handshake is complete when processing occurs.</p>
 <p id="rfc.section.5.2.p.2">Depending on the details of a TLS implementation, an attacker might be able to delay packet arrival so that requests are processed after the handshake completes.  Those requests might appear to be safe to handle, but this doesn&#8217;t guarantee that they were not processed prior to handshake completion on a connection where the early data was replayed.</p>
-<p id="rfc.section.5.2.p.3">To avoid this confusion, the <samp>Early-Data</samp> header field is mandatory to use when sending requests in early data.  A server MUST NOT process request with this header field unless it determines that it is free from side-effects.  Otherwise, the server MUST either use the 4NN status code, or delay processing until the handshake completes.</p>
+<p id="rfc.section.5.2.p.3">To avoid this confusion, the <samp>Early-Data</samp> header field is mandatory to use when sending requests in early data.  A server MUST NOT process request with this header field unless it determines that it is free from side-effects.  Otherwise, the server MUST consistently use the same approach: either using the 4NN status code, or delaying processing until the handshake completes.</p>
 <h1 id="rfc.section.6">
 <a href="#rfc.section.6">6.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a>
 </h1>
