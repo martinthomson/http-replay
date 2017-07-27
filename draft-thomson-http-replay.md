@@ -274,6 +274,8 @@ In addition to those side effects, replays and retries might be used for traffic
 analysis to recover information about requests or the resources those requests
 target.
 
+## Gateways and Early Data
+
 A gateway that forwards requests that were received in early data MUST only do
 so if it knows that the server that receives those requests understands the
 `Early-Data` header field and will correctly generate a 4NN (Too Early) status
@@ -281,6 +283,25 @@ code.  A gateway that isn't certain about server support SHOULD either delay
 forwarding the request until the TLS handshake completes, or send a 4NN (Too
 Early) status code in response.  A gateway that is uncertain about whether an
 origin server supports the `Early-Data` header field SHOULD disable early data.
+
+## Consistent Handling of Early Data
+
+Consistent treatment of a request that arrives in - or partially in - early data
+is critical to avoiding inappropriate processing of replayed requests.  Requests
+that might be processed prior to the handshake completing MUST be processed the
+same way, even if the handshake is complete when processing occurs.
+
+Depending on the details of a TLS implementation, an attacker might be able to
+delay packet arrival so that requests are processed after the handshake
+completes.  Those requests might appear to be safe to handle, but this doesn't
+guarantee that they were not processed prior to handshake completion on a
+connection where the early data was replayed.
+
+To avoid this confusion, the `Early-Data` header field is mandatory to use when
+sending requests in early data.  A server MUST NOT process request with this
+header field unless it determines that it is free from side-effects.  Otherwise,
+the server MUST consistently use the same approach: either using the 4NN status
+code, or delaying processing until the handshake completes.
 
 
 # IANA Considerations
