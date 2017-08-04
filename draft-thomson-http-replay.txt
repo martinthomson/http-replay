@@ -65,16 +65,17 @@ Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
      1.1.  Conventions and Definitions . . . . . . . . . . . . . . .   3
-   2.  Supporting Early Data in HTTP Servers . . . . . . . . . . . .   3
-   3.  Using Early Data in HTTP Clients  . . . . . . . . . . . . . .   4
-   4.  Extensions for Early Data in HTTP . . . . . . . . . . . . . .   5
-     4.1.  The Early-Data Header Field . . . . . . . . . . . . . . .   6
-     4.2.  The 4NN (Too Early) Status Code . . . . . . . . . . . . .   6
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
-   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   7
-   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
-     7.1.  Normative References  . . . . . . . . . . . . . . . . . .   8
-     7.2.  Informative References  . . . . . . . . . . . . . . . . .   9
+   2.  Early Data in HTTP  . . . . . . . . . . . . . . . . . . . . .   3
+   3.  Supporting Early Data in HTTP Servers . . . . . . . . . . . .   3
+   4.  Using Early Data in HTTP Clients  . . . . . . . . . . . . . .   5
+   5.  Extensions for Early Data in HTTP . . . . . . . . . . . . . .   5
+     5.1.  The Early-Data Header Field . . . . . . . . . . . . . . .   6
+     5.2.  The 4NN (Too Early) Status Code . . . . . . . . . . . . .   7
+   6.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
+   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
+     8.1.  Normative References  . . . . . . . . . . . . . . . . . .   8
+     8.2.  Informative References  . . . . . . . . . . . . . . . . .   9
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   9
 
 1.  Introduction
@@ -108,7 +109,6 @@ Table of Contents
 
 
 
-
 Thomson, et al.         Expires February 5, 2018                [Page 2]
 
 Internet-Draft               HTTP Early Data                 August 2017
@@ -123,7 +123,20 @@ Internet-Draft               HTTP Early Data                 August 2017
    document.  It's not shouting; when they are capitalized, they have
    the special meaning defined in [RFC2119].
 
-2.  Supporting Early Data in HTTP Servers
+2.  Early Data in HTTP
+
+   Conceptually, early data is concatenated with other application to
+   form a single stream.  This can mean that requests are entirely
+   contained within early data, or only part of a request is early.  In
+   a multiplexed protocol, like HTTP/2 [RFC7540] or HTTP/QUIC [HQ],
+   multiple requests might be partially delivered in early data.
+
+   The model that this document assumes is that once the TLS handshake
+   completes, early data is not replayed.  However, it is important to
+   note that this does not mean that early data will not be or has not
+   been replayed on another connection.
+
+3.  Supporting Early Data in HTTP Servers
 
    A server decides whether or not to offer a client the ability to send
    early data on future connections when sending the TLS session ticket.
@@ -146,8 +159,16 @@ Internet-Draft               HTTP Early Data                 August 2017
 
    3.  The server can cause a client to retry a request and not use
        early data by responding with the 4NN (Too Early) status code
-       (Section 4.2), in cases where the risk of replay is judged too
+       (Section 5.2), in cases where the risk of replay is judged too
        great.
+
+
+
+
+Thomson, et al.         Expires February 5, 2018                [Page 3]
+
+Internet-Draft               HTTP Early Data                 August 2017
+
 
    4.  Finally, TLS [TLS13] describes several mitigation strategies that
        reduce the ability of an attacker to successfully replay early
@@ -161,14 +182,6 @@ Internet-Draft               HTTP Early Data                 August 2017
    to the origin server).  In general, if processing a request does not
    have state-changing side effects, the consequences of replay are not
    significant.
-
-
-
-
-Thomson, et al.         Expires February 5, 2018                [Page 3]
-
-Internet-Draft               HTTP Early Data                 August 2017
-
 
    The request method's safety ([RFC7231], Section 4.2.1) is one way to
    determine this.  However, some resources do elect to associate side
@@ -189,7 +202,7 @@ Internet-Draft               HTTP Early Data                 August 2017
    that processing.
 
    Intermediary servers do not have sufficient information to make this
-   determination, so Section 4.2 describes a way for the origin to
+   determination, so Section 5.2 describes a way for the origin to
    signal to them that a particular request isn't appropriate for early
    data.  Intermediaries that accept early data MUST implement that
    mechanism.
@@ -204,10 +217,19 @@ Internet-Draft               HTTP Early Data                 August 2017
    "max_early_data_size" field of the "early_data" TLS extension.  This
    can be used to avoid committing an arbitrary amount of memory for
    deferred requests.  A server SHOULD ensure that when it accepts early
+
+
+
+
+Thomson, et al.         Expires February 5, 2018                [Page 4]
+
+Internet-Draft               HTTP Early Data                 August 2017
+
+
    data, it can defer processing of requests until after the TLS
    handshake completes.
 
-3.  Using Early Data in HTTP Clients
+4.  Using Early Data in HTTP Clients
 
    A client that wishes to use early data commences sending HTTP
    requests immediately after sending the TLS ClientHello.
@@ -218,13 +240,6 @@ Internet-Draft               HTTP Early Data                 August 2017
    safe HTTP methods (see [RFC7231], Section 4.2.1) in early data when
    it is available, and SHOULD NOT send unsafe methods (or methods whose
    safety is not known) in early data.
-
-
-
-Thomson, et al.         Expires February 5, 2018                [Page 4]
-
-Internet-Draft               HTTP Early Data                 August 2017
-
 
    If the server rejects early data at the TLS layer, a client MUST
    start sending again as though the connection was new.  For HTTP/2,
@@ -244,7 +259,7 @@ Internet-Draft               HTTP Early Data                 August 2017
    violation of requirements in TLS).
 
    Clients that use early data MUST retry requests upon receipt of a 4NN
-   (Too Early) status code; see Section 4.2.
+   (Too Early) status code; see Section 5.2.
 
    An intermediary MUST NOT use early data when forwarding a request
    unless early data was used on a previous hop, or it knows that the
@@ -254,11 +269,19 @@ Internet-Draft               HTTP Early Data                 August 2017
    arrived in early data or arrived with the "Early-Data" header field
    set to "1".
 
-4.  Extensions for Early Data in HTTP
+5.  Extensions for Early Data in HTTP
 
    Because HTTP requests can span multiple "hops", it is necessary to
    explicitly communicate whether a request has been sent in early data
    on a previous connection.  Likewise, some means of explicitly
+
+
+
+Thomson, et al.         Expires February 5, 2018                [Page 5]
+
+Internet-Draft               HTTP Early Data                 August 2017
+
+
    triggering a retry when early data is not desirable is necessary.
    Finally, it is necessary to know whether the client will actually
    perform such a retry.
@@ -274,14 +297,6 @@ Internet-Draft               HTTP Early Data                 August 2017
 
    They are designed to enable better coordination of the use of early
    data between the user agent and origin server, and also when a
-
-
-
-Thomson, et al.         Expires February 5, 2018                [Page 5]
-
-Internet-Draft               HTTP Early Data                 August 2017
-
-
    gateway (also "reverse proxy", "Content Delivery Network", or
    "surrogate") is present.
 
@@ -291,7 +306,7 @@ Internet-Draft               HTTP Early Data                 August 2017
    to decide whether the risk of replay is acceptable.  These extensions
    allow coordination between a gateway and its origin server.
 
-4.1.  The Early-Data Header Field
+5.1.  The Early-Data Header Field
 
    The "Early-Data" request header field indicates that the request has
    been conveyed in early data, and additionally indicates that a client
@@ -315,21 +330,6 @@ Internet-Draft               HTTP Early Data                 August 2017
    An intermediary MUST NOT remove this header field if it is present in
    a request.
 
-   The "Early-Data" header field is not intended for use by user agents
-   (that is, the original initiator of a request).  Sending a request in
-   early data implies that the client understands this specification and
-   is willing to retry a request in response to a 4NN (Too Early) status
-   code.  A user agent that sends a request in early data does not need
-   to include the "Early-Data" header field.
-
-4.2.  The 4NN (Too Early) Status Code
-
-   A 4NN (Too Early) status code indicates that the server is unwilling
-   to risk processing a request that might be replayed.
-
-   Clients (user-agents and intermediaries) that sent the request in
-   early data MUST automatically retry the request when receiving a 4NN
-   (Too Early) response status code.  Such retries MUST NOT be sent in
 
 
 
@@ -338,6 +338,21 @@ Thomson, et al.         Expires February 5, 2018                [Page 6]
 Internet-Draft               HTTP Early Data                 August 2017
 
 
+   The "Early-Data" header field is not intended for use by user agents
+   (that is, the original initiator of a request).  Sending a request in
+   early data implies that the client understands this specification and
+   is willing to retry a request in response to a 4NN (Too Early) status
+   code.  A user agent that sends a request in early data does not need
+   to include the "Early-Data" header field.
+
+5.2.  The 4NN (Too Early) Status Code
+
+   A 4NN (Too Early) status code indicates that the server is unwilling
+   to risk processing a request that might be replayed.
+
+   Clients (user-agents and intermediaries) that sent the request in
+   early data MUST automatically retry the request when receiving a 4NN
+   (Too Early) response status code.  Such retries MUST NOT be sent in
    early data, and SHOULD NOT be sent if the TLS handshake on the
    original connection does not successfully complete.
 
@@ -355,7 +370,7 @@ Internet-Draft               HTTP Early Data                 August 2017
    The 4NN (Too Early) status code is not cacheable by default.  Its
    payload is not the representation of any identified resource.
 
-5.  Security Considerations
+6.  Security Considerations
 
    Using early data exposes a client to the risk that their request is
    replayed.  A retried or replayed request can produce different side
@@ -372,7 +387,14 @@ Internet-Draft               HTTP Early Data                 August 2017
    response.  A gateway that is uncertain about whether an origin server
    supports the "Early-Data" header field SHOULD disable early data.
 
-6.  IANA Considerations
+
+
+Thomson, et al.         Expires February 5, 2018                [Page 7]
+
+Internet-Draft               HTTP Early Data                 August 2017
+
+
+7.  IANA Considerations
 
    This document registers the "Early-Data" header field in the "Message
    Headers" registry [HEADERS].
@@ -387,13 +409,6 @@ Internet-Draft               HTTP Early Data                 August 2017
 
    Specification document(s):  This document
 
-
-
-Thomson, et al.         Expires February 5, 2018                [Page 7]
-
-Internet-Draft               HTTP Early Data                 August 2017
-
-
    Related information:  (empty)
 
    This document registers the 4NN (Too Early) status code in the
@@ -406,9 +421,9 @@ Internet-Draft               HTTP Early Data                 August 2017
 
    Reference:  This document
 
-7.  References
+8.  References
 
-7.1.  Normative References
+8.1.  Normative References
 
    [ABNF]     Crocker, D., Ed. and P. Overell, "Augmented BNF for Syntax
               Specifications: ABNF", STD 68, RFC 5234,
@@ -425,6 +440,16 @@ Internet-Draft               HTTP Early Data                 August 2017
               RFC 7230, DOI 10.17487/RFC7230, June 2014,
               <http://www.rfc-editor.org/info/rfc7230>.
 
+
+
+
+
+
+Thomson, et al.         Expires February 5, 2018                [Page 8]
+
+Internet-Draft               HTTP Early Data                 August 2017
+
+
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
@@ -439,22 +464,16 @@ Internet-Draft               HTTP Early Data                 August 2017
               Version 1.3", draft-ietf-tls-tls13-21 (work in progress),
               July 2017.
 
-
-
-
-
-
-
-Thomson, et al.         Expires February 5, 2018                [Page 8]
-
-Internet-Draft               HTTP Early Data                 August 2017
-
-
-7.2.  Informative References
+8.2.  Informative References
 
    [HQ]       Bishop, M., "Hypertext Transfer Protocol (HTTP) over
               QUIC", draft-ietf-quic-http-04 (work in progress), June
               2017.
+
+   [RFC7540]  Belshe, M., Peon, R., and M. Thomson, Ed., "Hypertext
+              Transfer Protocol Version 2 (HTTP/2)", RFC 7540,
+              DOI 10.17487/RFC7540, May 2015,
+              <http://www.rfc-editor.org/info/rfc7540>.
 
 Authors' Addresses
 
@@ -474,25 +493,6 @@ Authors' Addresses
    HAProxy Technologies
 
    Email: willy@haproxy.org
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
