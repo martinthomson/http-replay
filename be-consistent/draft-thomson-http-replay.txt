@@ -406,6 +406,11 @@ Internet-Draft               HTTP Early Data                 August 2017
    4NN status code, or delaying processing until the handshake
    completes.
 
+   A server MUST use the 4NN status code if the request is marked with
+   the Early-Data header field.  Presence of the header field indicates
+   that early data was used on a previous hop.  Completion of the TLS
+   handshake on that hop isn't visible to the server.
+
    Servers can sometimes initiated processing on requests that are only
    partially received.  These considerations apply to any processing
    that the server might apply.  Parsing header fields and request
@@ -437,11 +442,6 @@ Internet-Draft               HTTP Early Data                 August 2017
 
    Description:  Too Early
 
-   Reference:  This document
-
-
-
-
 
 
 
@@ -449,6 +449,8 @@ Thomson, et al.         Expires February 5, 2018                [Page 8]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
+
+   Reference:  This document
 
 7.  References
 
@@ -495,8 +497,6 @@ Authors' Addresses
    Mozilla
 
    Email: martin.thomson@gmail.com
-
-
 
 
 
