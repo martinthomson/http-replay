@@ -74,8 +74,8 @@ Table of Contents
      5.1.  Gateways and Early Data . . . . . . . . . . . . . . . . .   7
      5.2.  Consistent Handling of Early Data . . . . . . . . . . . .   7
    6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
-   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
-     7.1.  Normative References  . . . . . . . . . . . . . . . . . .   8
+   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   9
+     7.1.  Normative References  . . . . . . . . . . . . . . . . . .   9
      7.2.  Informative References  . . . . . . . . . . . . . . . . .   9
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   9
 
@@ -186,7 +186,7 @@ Internet-Draft               HTTP Early Data                 August 2017
    server starts acting upon the contents of a request.  Any time a
    server might initiate processing prior to completion of the handshake
    needs to consider how a possible replay of early data could affect
-   that processing.
+   that processing (see also Section 5.2).
 
    Intermediary servers do not have sufficient information to make this
    determination, so Section 4.2 describes a way for the origin to
@@ -406,6 +406,12 @@ Internet-Draft               HTTP Early Data                 August 2017
    4NN status code, or delaying processing until the handshake
    completes.
 
+   Servers can sometimes initiated processing on requests that are only
+   partially received.  These considerations apply to any processing
+   that the server might apply.  Parsing header fields and request
+   routing is likely to be safe from side-effects, but other actions
+   might not be.
+
 6.  IANA Considerations
 
    This document registers the "Early-Data" header field in the "Message
@@ -433,14 +439,8 @@ Internet-Draft               HTTP Early Data                 August 2017
 
    Reference:  This document
 
-7.  References
 
-7.1.  Normative References
 
-   [ABNF]     Crocker, D., Ed. and P. Overell, "Augmented BNF for Syntax
-              Specifications: ABNF", STD 68, RFC 5234,
-              DOI 10.17487/RFC5234, January 2008,
-              <http://www.rfc-editor.org/info/rfc5234>.
 
 
 
@@ -449,6 +449,15 @@ Thomson, et al.         Expires February 5, 2018                [Page 8]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
+
+7.  References
+
+7.1.  Normative References
+
+   [ABNF]     Crocker, D., Ed. and P. Overell, "Augmented BNF for Syntax
+              Specifications: ABNF", STD 68, RFC 5234,
+              DOI 10.17487/RFC5234, January 2008,
+              <http://www.rfc-editor.org/info/rfc5234>.
 
    [HEADERS]  Klyne, G., Nottingham, M., and J. Mogul, "Registration
               Procedures for Message Header Fields", BCP 90, RFC 3864,
@@ -488,6 +497,15 @@ Authors' Addresses
    Email: martin.thomson@gmail.com
 
 
+
+
+
+
+Thomson, et al.         Expires February 5, 2018                [Page 9]
+
+Internet-Draft               HTTP Early Data                 August 2017
+
+
    Mark Nottingham
    true
 
@@ -501,4 +519,42 @@ Authors' Addresses
 
 
 
-Thomson, et al.         Expires February 5, 2018                [Page 9]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Thomson, et al.         Expires February 5, 2018               [Page 10]
