@@ -382,10 +382,10 @@ Internet-Draft               HTTP Early Data                 August 2017
    TLS handshake completes, then all instances of the server need to
    agree and either reject the request or delay processing.
 
-   In order to be used for HTTP, A TLS implementation MUST ensure that
-   it is possible to correctly identify early data.  This is necessary
-   even if early data arrives at the same time as the TLS Finished
-   message from the client, which completes the handshake.  If early
+
+
+
+
 
 
 
@@ -393,9 +393,6 @@ Thomson, et al.         Expires February 5, 2018                [Page 7]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
-
-   data is misclassified, a server might process requests under the
-   misapprehension that they can't be or weren't replayed elsewhere.
 
 6.  IANA Considerations
 
@@ -442,6 +439,9 @@ Internet-Draft               HTTP Early Data                 August 2017
               Protocol (HTTP/1.1): Message Syntax and Routing",
               RFC 7230, DOI 10.17487/RFC7230, June 2014,
               <http://www.rfc-editor.org/info/rfc7230>.
+
+
+
 
 
 
