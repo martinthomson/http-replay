@@ -411,7 +411,7 @@ Internet-Draft               HTTP Early Data                 August 2017
    that early data was used on a previous hop.  Completion of the TLS
    handshake on that hop isn't visible to the server.
 
-   Servers can sometimes initiated processing on requests that are only
+   Servers can sometimes initiate processing on requests that are only
    partially received.  These considerations apply to any processing
    that the server might apply.  Parsing header fields and request
    routing is likely to be safe from side-effects, but other actions
