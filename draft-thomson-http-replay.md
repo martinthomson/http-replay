@@ -256,11 +256,10 @@ response status code. Such retries MUST NOT be sent in early data, and SHOULD
 NOT be sent if the TLS handshake on the original connection does not
 successfully complete.
 
-Intermediaries that receive the 4NN (Too Early) status code MUST NOT
-automatically retry requests when the original request already contained the
-`Early-Data` header field with a value of "1" or the request arrived at the
-intermediary in early data; instead, they MUST forward the 4NN (Too Early)
-response to the client.
+Intermediaries that receive a 4NN (Too Early) status code MAY automatically
+retry requests after allowing the handshake to complete unless the original
+request contained the `Early-Data` header field when it was received.
+Otherwise, an intermediary MUST forward the 4NN (Too Early) status code.
 
 The server cannot assume that a client is able to retry a request unless the
 request is received in early data or the `Early-Data` header field is set to
