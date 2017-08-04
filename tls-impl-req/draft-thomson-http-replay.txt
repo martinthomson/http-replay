@@ -407,12 +407,12 @@ Internet-Draft               HTTP Early Data                 August 2017
 
 6.2.  TLS Implementation Requirements
 
-   In order to be used for HTTP, A TLS implementation MUST ensure that
-   it is possible to correctly identify early data.  This is necessary
-   even if early data arrives at the same time as the TLS Finished
-   message from the client, which completes the handshake.  If early
-   data is misclassified, a server might process requests under the
-   misapprehension that they can't be or weren't replayed elsewhere.
+   In order to be used for early data in HTTP, A TLS implementation MUST
+   ensure that it is possible to correctly identify early data.  This is
+   necessary even if early data arrives at the same time as the TLS
+   Finished message from the client, which completes the handshake.  If
+   early data is misclassified, a server might process requests under
+   the misapprehension that they can't be or weren't replayed elsewhere.
 
 7.  IANA Considerations
 

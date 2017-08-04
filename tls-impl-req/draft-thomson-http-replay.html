@@ -493,7 +493,7 @@ Early-Data: 1
 <h2 id="rfc.section.6.2">
 <a href="#rfc.section.6.2">6.2.</a> <a href="#tls-implementation-requirements" id="tls-implementation-requirements">TLS Implementation Requirements</a>
 </h2>
-<p id="rfc.section.6.2.p.1">In order to be used for HTTP, A TLS implementation MUST ensure that it is possible to correctly identify early data.  This is necessary even if early data arrives at the same time as the TLS Finished message from the client, which completes the handshake.  If early data is misclassified, a server might process requests under the misapprehension that they can&#8217;t be or weren&#8217;t replayed elsewhere.</p>
+<p id="rfc.section.6.2.p.1">In order to be used for early data in HTTP, A TLS implementation MUST ensure that it is possible to correctly identify early data.  This is necessary even if early data arrives at the same time as the TLS Finished message from the client, which completes the handshake.  If early data is misclassified, a server might process requests under the misapprehension that they can&#8217;t be or weren&#8217;t replayed elsewhere.</p>
 <h1 id="rfc.section.7">
 <a href="#rfc.section.7">7.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a>
 </h1>
