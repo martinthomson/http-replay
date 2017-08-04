@@ -295,7 +295,7 @@ address {
 
   <meta name="dct.creator" content="Thomson, M., Nottingham, M., and W. Tarreau" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-thomson-http-replay-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2017-7-27" />
+  <meta name="dct.issued" scheme="ISO8601" content="2017-8-04" />
   <meta name="dct.abstract" content="This document explains the risks of using early data for HTTP and describes techniques for reducing them. In particular, it defines a mechanism that enables clients to communicate with servers about early data, to assure correct operation." />
   <meta name="description" content="This document explains the risks of using early data for HTTP and describes techniques for reducing them. In particular, it defines a mechanism that enables clients to communicate with servers about early data, to assure correct operation." />
 
@@ -319,7 +319,7 @@ address {
 <td class="right">M. Nottingham</td>
 </tr>
 <tr>
-<td class="left">Expires: January 28, 2018</td>
+<td class="left">Expires: February 5, 2018</td>
 <td class="right">true</td>
 </tr>
 <tr>
@@ -332,7 +332,7 @@ address {
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">July 27, 2017</td>
+<td class="right">August 04, 2017</td>
 </tr>
 
     	
@@ -348,7 +348,7 @@ address {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on January 28, 2018.</p>
+<p>This Internet-Draft will expire on February 5, 2018.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2017 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -439,7 +439,7 @@ address {
 
 <ul>
 <li>The <samp>Early-Data</samp> header field is included in requests that are received in early data.</li>
-<li>The 4NN (Too Early) status code is defined for an origin server to indicate that a request could not be processed due to the consequences of a possible replay attack.</li>
+<li>The 4NN (Too Early) status code is defined for an server to indicate that a request could not be processed due to the consequences of a possible replay attack.</li>
 </ul>
 <p id="rfc.section.4.p.4">They are designed to enable better coordination of the use of early data between the user agent and origin server, and also when a gateway (also &#8220;reverse proxy&#8221;, &#8220;Content Delivery Network&#8221;, or &#8220;surrogate&#8221;) is present.</p>
 <p id="rfc.section.4.p.5">Gateways typically don&#8217;t have specific information about whether a given request can be processed safely when it is sent in early data. In many cases, only the origin server has the necessary information to decide whether the risk of replay is acceptable. These extensions allow coordination between a gateway and its origin server.</p>

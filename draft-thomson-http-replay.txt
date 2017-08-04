@@ -5,10 +5,10 @@
 httpbis                                                       M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                           M. Nottingham
-Expires: January 28, 2018                                           true
+Expires: February 5, 2018                                           true
                                                               W. Tarreau
                                                     HAProxy Technologies
-                                                           July 27, 2017
+                                                         August 04, 2017
 
 
                         Using Early Data in HTTP
@@ -36,7 +36,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on January 28, 2018.
+   This Internet-Draft will expire on February 5, 2018.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Thomson, et al.         Expires January 28, 2018                [Page 1]
+Thomson, et al.         Expires February 5, 2018                [Page 1]
 
-Internet-Draft               HTTP Early Data                   July 2017
+Internet-Draft               HTTP Early Data                 August 2017
 
 
    the Trust Legal Provisions and are provided without warranty as
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Thomson, et al.         Expires January 28, 2018                [Page 2]
+Thomson, et al.         Expires February 5, 2018                [Page 2]
 
-Internet-Draft               HTTP Early Data                   July 2017
+Internet-Draft               HTTP Early Data                 August 2017
 
 
    The advice in this document also applies to use of 0-RTT in HTTP over
@@ -165,9 +165,9 @@ Internet-Draft               HTTP Early Data                   July 2017
 
 
 
-Thomson, et al.         Expires January 28, 2018                [Page 3]
+Thomson, et al.         Expires February 5, 2018                [Page 3]
 
-Internet-Draft               HTTP Early Data                   July 2017
+Internet-Draft               HTTP Early Data                 August 2017
 
 
    The request method's safety ([RFC7231], Section 4.2.1) is one way to
@@ -221,9 +221,9 @@ Internet-Draft               HTTP Early Data                   July 2017
 
 
 
-Thomson, et al.         Expires January 28, 2018                [Page 4]
+Thomson, et al.         Expires February 5, 2018                [Page 4]
 
-Internet-Draft               HTTP Early Data                   July 2017
+Internet-Draft               HTTP Early Data                 August 2017
 
 
    If the server rejects early data at the TLS layer, a client MUST
@@ -268,7 +268,7 @@ Internet-Draft               HTTP Early Data                   July 2017
    o  The "Early-Data" header field is included in requests that are
       received in early data.
 
-   o  The 4NN (Too Early) status code is defined for an origin server to
+   o  The 4NN (Too Early) status code is defined for an server to
       indicate that a request could not be processed due to the
       consequences of a possible replay attack.
 
@@ -277,9 +277,9 @@ Internet-Draft               HTTP Early Data                   July 2017
 
 
 
-Thomson, et al.         Expires January 28, 2018                [Page 5]
+Thomson, et al.         Expires February 5, 2018                [Page 5]
 
-Internet-Draft               HTTP Early Data                   July 2017
+Internet-Draft               HTTP Early Data                 August 2017
 
 
    gateway (also "reverse proxy", "Content Delivery Network", or
@@ -333,9 +333,9 @@ Internet-Draft               HTTP Early Data                   July 2017
 
 
 
-Thomson, et al.         Expires January 28, 2018                [Page 6]
+Thomson, et al.         Expires February 5, 2018                [Page 6]
 
-Internet-Draft               HTTP Early Data                   July 2017
+Internet-Draft               HTTP Early Data                 August 2017
 
 
    early data, and SHOULD NOT be sent if the TLS handshake on the
@@ -389,9 +389,9 @@ Internet-Draft               HTTP Early Data                   July 2017
 
 
 
-Thomson, et al.         Expires January 28, 2018                [Page 7]
+Thomson, et al.         Expires February 5, 2018                [Page 7]
 
-Internet-Draft               HTTP Early Data                   July 2017
+Internet-Draft               HTTP Early Data                 August 2017
 
 
    Related information:  (empty)
@@ -445,9 +445,9 @@ Internet-Draft               HTTP Early Data                   July 2017
 
 
 
-Thomson, et al.         Expires January 28, 2018                [Page 8]
+Thomson, et al.         Expires February 5, 2018                [Page 8]
 
-Internet-Draft               HTTP Early Data                   July 2017
+Internet-Draft               HTTP Early Data                 August 2017
 
 
 7.2.  Informative References
@@ -501,4 +501,4 @@ Authors' Addresses
 
 
 
-Thomson, et al.         Expires January 28, 2018                [Page 9]
+Thomson, et al.         Expires February 5, 2018                [Page 9]
