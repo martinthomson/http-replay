@@ -68,7 +68,7 @@ Table of Contents
    2.  Early Data in HTTP  . . . . . . . . . . . . . . . . . . . . .   3
    3.  Supporting Early Data in HTTP Servers . . . . . . . . . . . .   3
    4.  Using Early Data in HTTP Clients  . . . . . . . . . . . . . .   5
-   5.  Extensions for Early Data in HTTP . . . . . . . . . . . . . .   5
+   5.  Extensions for Early Data in HTTP . . . . . . . . . . . . . .   6
      5.1.  The Early-Data Header Field . . . . . . . . . . . . . . .   6
      5.2.  The 4NN (Too Early) Status Code . . . . . . . . . . . . .   7
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
@@ -201,6 +201,11 @@ Internet-Draft               HTTP Early Data                 August 2017
    needs to consider how a possible replay of early data could affect
    that processing.
 
+   A server can partially process requests that are incomplete.  Parsing
+   header fields - without acting on the values - and determining
+   request routing is likely to be safe from side-effects, but other
+   actions might not be.
+
    Intermediary servers do not have sufficient information to make this
    determination, so Section 5.2 describes a way for the origin to
    signal to them that a particular request isn't appropriate for early
@@ -213,11 +218,6 @@ Internet-Draft               HTTP Early Data                 August 2017
    MUST process all requests in early data, even if the server rejects
    the request by sending a 4NN (Too Early) response.
 
-   A server can limit the amount of early data with the
-   "max_early_data_size" field of the "early_data" TLS extension.  This
-   can be used to avoid committing an arbitrary amount of memory for
-   deferred requests.  A server SHOULD ensure that when it accepts early
-
 
 
 
@@ -226,6 +226,10 @@ Thomson, et al.         Expires February 5, 2018                [Page 4]
 Internet-Draft               HTTP Early Data                 August 2017
 
 
+   A server can limit the amount of early data with the
+   "max_early_data_size" field of the "early_data" TLS extension.  This
+   can be used to avoid committing an arbitrary amount of memory for
+   deferred requests.  A server SHOULD ensure that when it accepts early
    data, it can defer processing of requests until after the TLS
    handshake completes.
 
@@ -269,11 +273,7 @@ Internet-Draft               HTTP Early Data                 August 2017
    arrived in early data or arrived with the "Early-Data" header field
    set to "1".
 
-5.  Extensions for Early Data in HTTP
 
-   Because HTTP requests can span multiple "hops", it is necessary to
-   explicitly communicate whether a request has been sent in early data
-   on a previous connection.  Likewise, some means of explicitly
 
 
 
@@ -282,6 +282,11 @@ Thomson, et al.         Expires February 5, 2018                [Page 5]
 Internet-Draft               HTTP Early Data                 August 2017
 
 
+5.  Extensions for Early Data in HTTP
+
+   Because HTTP requests can span multiple "hops", it is necessary to
+   explicitly communicate whether a request has been sent in early data
+   on a previous connection.  Likewise, some means of explicitly
    triggering a retry when early data is not desirable is necessary.
    Finally, it is necessary to know whether the client will actually
    perform such a retry.
@@ -323,12 +328,7 @@ Internet-Draft               HTTP Early Data                 August 2017
    Host: example.com
    Early-Data: 1
 
-   An intermediary that forwards a request received in TLS early data
-   MUST send it with the "Early-Data" header field set to "1" (i.e., it
-   adds it if not present in the request).
 
-   An intermediary MUST NOT remove this header field if it is present in
-   a request.
 
 
 
@@ -337,6 +337,13 @@ Thomson, et al.         Expires February 5, 2018                [Page 6]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
+
+   An intermediary that forwards a request received in TLS early data
+   MUST send it with the "Early-Data" header field set to "1" (i.e., it
+   adds it if not present in the request).
+
+   An intermediary MUST NOT remove this header field if it is present in
+   a request.
 
    The "Early-Data" header field is not intended for use by user agents
    (that is, the original initiator of a request).  Sending a request in
@@ -378,6 +385,15 @@ Internet-Draft               HTTP Early Data                 August 2017
    and retries might be used for traffic analysis to recover information
    about requests or the resources those requests target.
 
+
+
+
+
+Thomson, et al.         Expires February 5, 2018                [Page 7]
+
+Internet-Draft               HTTP Early Data                 August 2017
+
+
    A gateway that forwards requests that were received in early data
    MUST only do so if it knows that the server that receives those
    requests understands the "Early-Data" header field and will correctly
@@ -386,13 +402,6 @@ Internet-Draft               HTTP Early Data                 August 2017
    the TLS handshake completes, or send a 4NN (Too Early) status code in
    response.  A gateway that is uncertain about whether an origin server
    supports the "Early-Data" header field SHOULD disable early data.
-
-
-
-Thomson, et al.         Expires February 5, 2018                [Page 7]
-
-Internet-Draft               HTTP Early Data                 August 2017
-
 
 7.  IANA Considerations
 
@@ -430,15 +439,6 @@ Internet-Draft               HTTP Early Data                 August 2017
               DOI 10.17487/RFC5234, January 2008,
               <http://www.rfc-editor.org/info/rfc5234>.
 
-   [HEADERS]  Klyne, G., Nottingham, M., and J. Mogul, "Registration
-              Procedures for Message Header Fields", BCP 90, RFC 3864,
-              DOI 10.17487/RFC3864, September 2004,
-              <http://www.rfc-editor.org/info/rfc3864>.
-
-   [HTTP]     Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
-              Protocol (HTTP/1.1): Message Syntax and Routing",
-              RFC 7230, DOI 10.17487/RFC7230, June 2014,
-              <http://www.rfc-editor.org/info/rfc7230>.
 
 
 
@@ -449,6 +449,16 @@ Thomson, et al.         Expires February 5, 2018                [Page 8]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
+
+   [HEADERS]  Klyne, G., Nottingham, M., and J. Mogul, "Registration
+              Procedures for Message Header Fields", BCP 90, RFC 3864,
+              DOI 10.17487/RFC3864, September 2004,
+              <http://www.rfc-editor.org/info/rfc3864>.
+
+   [HTTP]     Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
+              Protocol (HTTP/1.1): Message Syntax and Routing",
+              RFC 7230, DOI 10.17487/RFC7230, June 2014,
+              <http://www.rfc-editor.org/info/rfc7230>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -489,6 +499,13 @@ Authors' Addresses
    Email: mnot@mnot.net
 
 
+
+
+Thomson, et al.         Expires February 5, 2018                [Page 9]
+
+Internet-Draft               HTTP Early Data                 August 2017
+
+
    Willy Tarreau
    HAProxy Technologies
 
@@ -501,4 +518,43 @@ Authors' Addresses
 
 
 
-Thomson, et al.         Expires February 5, 2018                [Page 9]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Thomson, et al.         Expires February 5, 2018               [Page 10]
