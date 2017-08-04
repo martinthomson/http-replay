@@ -262,7 +262,7 @@ wait until the TLS handshake completes in order to render the request safe from
 risk of replay.  The Early-Data header field indicates that early data was used
 on a previous hop.  Completion of the TLS handshake on that hop isn't visible to
 the server.  A server MUST use the 4NN (Too Early) status code to reject
-requests that it determines are unsafe if they are marked with the Early-Data
+requests that it cannot safely process if they are marked with the Early-Data
 header field.
 
 
