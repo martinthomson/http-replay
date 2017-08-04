@@ -61,7 +61,7 @@ request, but these techniques can be difficult to deploy, and still leave some
 possibility of a successful attack.
 
 Note that this is different from automated or user-initiated retries; replays
-are under the control of an attacker, and are therefore malicious.
+are initiated by an attacker without the awareness of the client.
 
 To help mitigate the risk of replays in HTTP, this document gives an overview
 of techniques for controlling these risks in servers, and defines requirements
