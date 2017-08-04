@@ -74,8 +74,8 @@ Table of Contents
      5.1.  Gateways and Early Data . . . . . . . . . . . . . . . . .   7
      5.2.  Consistent Handling of Early Data . . . . . . . . . . . .   7
    6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
-   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   9
-     7.1.  Normative References  . . . . . . . . . . . . . . . . . .   9
+   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
+     7.1.  Normative References  . . . . . . . . . . . . . . . . . .   8
      7.2.  Informative References  . . . . . . . . . . . . . . . . .   9
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   9
 
@@ -378,14 +378,14 @@ Internet-Draft               HTTP Early Data                 August 2017
 
    Consistent treatment of a request that arrives in - or partially in -
    early data is critical to avoiding inappropriate processing of
-   replayed requests.  Requests that might be processed prior to the
-   handshake completing MUST be processed the same way, even if the
-   handshake is complete when processing occurs.
+   replayed requests.  If a request is not safe to process before the
+   TLS handshake completes, then all instances of the server need to
+   agree and either reject the request or delay processing.
 
-   A TLS implementation MUST ensure that it is possible to correctly
-   identify early data.  This is necessary even if early data arrives at
-   the same time as the TLS Finished message from the client.  If early
-   data is misclassified, requests might erroneously appear to be safe
+   In order to be used for HTTP, A TLS implementation MUST ensure that
+   it is possible to correctly identify early data.  This is necessary
+   even if early data arrives at the same time as the TLS Finished
+   message from the client, which completes the handshake.  If early
 
 
 
@@ -394,28 +394,8 @@ Thomson, et al.         Expires February 5, 2018                [Page 7]
 Internet-Draft               HTTP Early Data                 August 2017
 
 
-   to handle.  Even though the handshake might complete successfully on
-   this connection, this is no guarantee that the same early data was
-   not processed prior to handshake completion on another connection
-   where the early data was replayed.
-
-   A server MUST NOT process requests that arrive in early data, or
-   requests marked with the "Early-Data" header field unless it
-   determines that the processing is free from side-effects.  Otherwise,
-   the server MUST consistently use the same approach: either using the
-   4NN status code, or delaying processing until the handshake
-   completes.
-
-   A server MUST use the 4NN status code if the request is marked with
-   the Early-Data header field.  Presence of the header field indicates
-   that early data was used on a previous hop.  Completion of the TLS
-   handshake on that hop isn't visible to the server.
-
-   Servers can sometimes initiate processing on requests that are only
-   partially received.  These considerations apply to any processing
-   that the server might apply.  Parsing header fields and request
-   routing is likely to be safe from side-effects, but other actions
-   might not be.
+   data is misclassified, a server might process requests under the
+   misapprehension that they can't be or weren't replayed elsewhere.
 
 6.  IANA Considerations
 
@@ -442,14 +422,6 @@ Internet-Draft               HTTP Early Data                 August 2017
 
    Description:  Too Early
 
-
-
-
-Thomson, et al.         Expires February 5, 2018                [Page 8]
-
-Internet-Draft               HTTP Early Data                 August 2017
-
-
    Reference:  This document
 
 7.  References
@@ -470,6 +442,13 @@ Internet-Draft               HTTP Early Data                 August 2017
               Protocol (HTTP/1.1): Message Syntax and Routing",
               RFC 7230, DOI 10.17487/RFC7230, June 2014,
               <http://www.rfc-editor.org/info/rfc7230>.
+
+
+
+Thomson, et al.         Expires February 5, 2018                [Page 8]
+
+Internet-Draft               HTTP Early Data                 August 2017
+
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -499,13 +478,6 @@ Authors' Addresses
    Email: martin.thomson@gmail.com
 
 
-
-
-Thomson, et al.         Expires February 5, 2018                [Page 9]
-
-Internet-Draft               HTTP Early Data                 August 2017
-
-
    Mark Nottingham
    true
 
@@ -529,32 +501,4 @@ Internet-Draft               HTTP Early Data                 August 2017
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Thomson, et al.         Expires February 5, 2018               [Page 10]
+Thomson, et al.         Expires February 5, 2018                [Page 9]
