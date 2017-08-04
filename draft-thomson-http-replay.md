@@ -196,9 +196,9 @@ To meet these needs, two signalling mechanisms are defined:
 * The `Early-Data` header field is included in requests that are received in
   early data.
 
-* The 4NN (Too Early) status code is defined for an origin server to indicate
-  that a request could not be processed due to the consequences of a possible
-  replay attack.
+* The 4NN (Too Early) status code is defined for an server to indicate that a
+  request could not be processed due to the consequences of a possible replay
+  attack.
 
 They are designed to enable better coordination of the use of early data
 between the user agent and origin server, and also when a gateway (also
