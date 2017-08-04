@@ -142,6 +142,10 @@ upon the contents of a request.  Any time a server might initiate processing
 prior to completion of the handshake needs to consider how a possible replay of
 early data could affect that processing.
 
+A server can partially process requests that are incomplete.  Parsing header
+fields - without acting on the values - and determining request routing is
+likely to be safe from side-effects, but other actions might not be.
+
 Intermediary servers do not have sufficient information to make this
 determination, so {{status}} describes a way for the origin to signal to them
 that a particular request isn't appropriate for early data. Intermediaries that
