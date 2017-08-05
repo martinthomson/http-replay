@@ -5,10 +5,10 @@
 httpbis                                                       M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                           M. Nottingham
-Expires: February 5, 2018                                           true
+Expires: February 6, 2018                                           true
                                                               W. Tarreau
                                                     HAProxy Technologies
-                                                         August 04, 2017
+                                                         August 05, 2017
 
 
                         Using Early Data in HTTP
@@ -36,7 +36,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on February 5, 2018.
+   This Internet-Draft will expire on February 6, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Thomson, et al.         Expires February 5, 2018                [Page 1]
+Thomson, et al.         Expires February 6, 2018                [Page 1]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thomson, et al.         Expires February 5, 2018                [Page 2]
+Thomson, et al.         Expires February 6, 2018                [Page 2]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -165,7 +165,7 @@ Internet-Draft               HTTP Early Data                 August 2017
 
 
 
-Thomson, et al.         Expires February 5, 2018                [Page 3]
+Thomson, et al.         Expires February 6, 2018                [Page 3]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -221,7 +221,7 @@ Internet-Draft               HTTP Early Data                 August 2017
 
 
 
-Thomson, et al.         Expires February 5, 2018                [Page 4]
+Thomson, et al.         Expires February 6, 2018                [Page 4]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -277,7 +277,7 @@ Internet-Draft               HTTP Early Data                 August 2017
 
 
 
-Thomson, et al.         Expires February 5, 2018                [Page 5]
+Thomson, et al.         Expires February 6, 2018                [Page 5]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -333,7 +333,7 @@ Internet-Draft               HTTP Early Data                 August 2017
 
 
 
-Thomson, et al.         Expires February 5, 2018                [Page 6]
+Thomson, et al.         Expires February 6, 2018                [Page 6]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -345,14 +345,12 @@ Internet-Draft               HTTP Early Data                 August 2017
    code.  A user agent that sends a request in early data does not need
    to include the "Early-Data" header field.
 
-   A server that receives a request marked with the Early-Data header
-   field cannot wait until the TLS handshake completes in order to
-   render the request safe from risk of replay.  The Early-Data header
-   field indicates that early data was used on a previous hop.
-   Completion of the TLS handshake on that hop isn't visible to the
-   server.  A server MUST use the 4NN (Too Early) status code to reject
-   requests that it cannot safely process if they are marked with the
-   Early-Data header field.
+   A server cannot make a request that contains the Early-Data header
+   field safe for processing by waiting for the handshake to complete.
+   A request that is marked with Early-Data was sent in early data on a
+   previous hop.  Requests that contain the Early-Data field and cannot
+   be safely processed MUST be rejected using the 4NN (Too Early) status
+   code.
 
 5.2.  The 4NN (Too Early) Status Code
 
@@ -389,7 +387,9 @@ Internet-Draft               HTTP Early Data                 August 2017
 
 
 
-Thomson, et al.         Expires February 5, 2018                [Page 7]
+
+
+Thomson, et al.         Expires February 6, 2018                [Page 7]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -445,7 +445,7 @@ Internet-Draft               HTTP Early Data                 August 2017
 
 
 
-Thomson, et al.         Expires February 5, 2018                [Page 8]
+Thomson, et al.         Expires February 6, 2018                [Page 8]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -501,7 +501,7 @@ Authors' Addresses
 
 
 
-Thomson, et al.         Expires February 5, 2018                [Page 9]
+Thomson, et al.         Expires February 6, 2018                [Page 9]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -557,4 +557,4 @@ Internet-Draft               HTTP Early Data                 August 2017
 
 
 
-Thomson, et al.         Expires February 5, 2018               [Page 10]
+Thomson, et al.         Expires February 6, 2018               [Page 10]
