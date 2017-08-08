@@ -261,6 +261,12 @@ that the client understands this specification and is willing to retry a request
 in response to a 4NN (Too Early) status code.  A user agent that sends a request
 in early data does not need to include the `Early-Data` header field.
 
+A server cannot make a request that contains the Early-Data header field safe
+for processing by waiting for the handshake to complete. A request that is
+marked with Early-Data was sent in early data on a previous hop. Requests that
+contain the Early-Data field and cannot be safely processed MUST be rejected
+using the 4NN (Too Early) status code.
+
 
 ## The 4NN (Too Early) Status Code {#status}
 
