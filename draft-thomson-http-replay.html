@@ -475,6 +475,7 @@ Early-Data: 1
 <p id="rfc.section.5.1.p.4">An intermediary that forwards a request received in TLS early data MUST send it with the <samp>Early-Data</samp> header field set to &#8220;1&#8221; (i.e., it adds it if not present in the request).</p>
 <p id="rfc.section.5.1.p.5">An intermediary MUST NOT remove this header field if it is present in a request.</p>
 <p id="rfc.section.5.1.p.6">The <samp>Early-Data</samp> header field is not intended for use by user agents (that is, the original initiator of a request).  Sending a request in early data implies that the client understands this specification and is willing to retry a request in response to a 4NN (Too Early) status code.  A user agent that sends a request in early data does not need to include the <samp>Early-Data</samp> header field.</p>
+<p id="rfc.section.5.1.p.7">A server cannot make a request that contains the Early-Data header field safe for processing by waiting for the handshake to complete. A request that is marked with Early-Data was sent in early data on a previous hop. Requests that contain the Early-Data field and cannot be safely processed MUST be rejected using the 4NN (Too Early) status code.</p>
 <h2 id="rfc.section.5.2">
 <a href="#rfc.section.5.2">5.2.</a> <a href="#status" id="status">The 4NN (Too Early) Status Code</a>
 </h2>

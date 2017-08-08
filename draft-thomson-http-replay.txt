@@ -71,7 +71,7 @@ Table of Contents
    5.  Extensions for Early Data in HTTP . . . . . . . . . . . . . .   6
      5.1.  The Early-Data Header Field . . . . . . . . . . . . . . .   6
      5.2.  The 4NN (Too Early) Status Code . . . . . . . . . . . . .   7
-   6.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
+   6.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
      6.1.  Gateways and Early Data . . . . . . . . . . . . . . . . .   8
      6.2.  TLS Implementation Requirements . . . . . . . . . . . . .   8
    7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
@@ -356,6 +356,13 @@ Internet-Draft               HTTP Early Data                 August 2017
    code.  A user agent that sends a request in early data does not need
    to include the "Early-Data" header field.
 
+   A server cannot make a request that contains the Early-Data header
+   field safe for processing by waiting for the handshake to complete.
+   A request that is marked with Early-Data was sent in early data on a
+   previous hop.  Requests that contain the Early-Data field and cannot
+   be safely processed MUST be rejected using the 4NN (Too Early) status
+   code.
+
 5.2.  The 4NN (Too Early) Status Code
 
    A 4NN (Too Early) status code indicates that the server is unwilling
@@ -378,14 +385,7 @@ Internet-Draft               HTTP Early Data                 August 2017
    header field is set to "1".  A server SHOULD NOT emit the 4NN status
    code unless one of these conditions is met.
 
-   The 4NN (Too Early) status code is not cacheable by default.  Its
-   payload is not the representation of any identified resource.
 
-6.  Security Considerations
-
-   Using early data exposes a client to the risk that their request is
-   replayed.  A retried or replayed request can produce different side
-   effects on the server.  In addition to those side effects, replays
 
 
 
@@ -394,6 +394,14 @@ Thomson, et al.         Expires February 9, 2018                [Page 7]
 Internet-Draft               HTTP Early Data                 August 2017
 
 
+   The 4NN (Too Early) status code is not cacheable by default.  Its
+   payload is not the representation of any identified resource.
+
+6.  Security Considerations
+
+   Using early data exposes a client to the risk that their request is
+   replayed.  A retried or replayed request can produce different side
+   effects on the server.  In addition to those side effects, replays
    and retries might be used for traffic analysis to recover information
    about requests or the resources those requests target.
 
@@ -434,14 +442,6 @@ Internet-Draft               HTTP Early Data                 August 2017
 
    Related information:  (empty)
 
-   This document registers the 4NN (Too Early) status code in the
-   "Hypertext Transfer Protocol (HTTP) Status Code" registry established
-   in [RFC7231].
-
-   Value:  4NN
-
-   Description:  Too Early
-
 
 
 
@@ -449,6 +449,14 @@ Thomson, et al.         Expires February 9, 2018                [Page 8]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
+
+   This document registers the 4NN (Too Early) status code in the
+   "Hypertext Transfer Protocol (HTTP) Status Code" registry established
+   in [RFC7231].
+
+   Value:  4NN
+
+   Description:  Too Early
 
    Reference:  This document
 
@@ -491,20 +499,17 @@ Internet-Draft               HTTP Early Data                 August 2017
               QUIC", draft-ietf-quic-http-04 (work in progress), June
               2017.
 
-   [RFC7540]  Belshe, M., Peon, R., and M. Thomson, Ed., "Hypertext
-              Transfer Protocol Version 2 (HTTP/2)", RFC 7540,
-              DOI 10.17487/RFC7540, May 2015,
-              <http://www.rfc-editor.org/info/rfc7540>.
-
-
-
-
 
 
 Thomson, et al.         Expires February 9, 2018                [Page 9]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
+
+   [RFC7540]  Belshe, M., Peon, R., and M. Thomson, Ed., "Hypertext
+              Transfer Protocol Version 2 (HTTP/2)", RFC 7540,
+              DOI 10.17487/RFC7540, May 2015,
+              <http://www.rfc-editor.org/info/rfc7540>.
 
 Authors' Addresses
 
@@ -524,11 +529,6 @@ Authors' Addresses
    HAProxy Technologies
 
    Email: willy@haproxy.org
-
-
-
-
-
 
 
 
