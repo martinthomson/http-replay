@@ -311,14 +311,14 @@ forwarding the request until the TLS handshake completes, or send a 4NN (Too
 Early) status code in response.  A gateway that is uncertain about whether an
 origin server supports the `Early-Data` header field SHOULD disable early data.
 
-## TLS Implementation Requirements
+## Denial of Service
 
-In order to be used for early data in HTTP, A TLS implementation MUST ensure
-that it is possible to correctly identify early data.  This is necessary even
-if early data arrives at the same time as the TLS Finished message from the
-client, which completes the handshake.  If early data is misclassified, a
-server might process requests under the misapprehension that they can't be or
-weren't replayed elsewhere.
+Accepting early data exposes a server to potential denial of service through the
+replay of requests that are expensive to handle.  A server that is under load
+SHOULD prefer rejecting TLS early data as a whole rather than accepting early
+data and selectively processing requests.  Generating a 503 (Service
+Unavailable) or 4NN (Too Early) status code often leads to clients retrying
+requests, which could result in increased load.
 
 
 # IANA Considerations
