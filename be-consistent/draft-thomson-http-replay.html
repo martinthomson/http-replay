@@ -286,6 +286,7 @@ address {
 <link href="#rfc.section.6" rel="Chapter" title="6 Security Considerations">
 <link href="#rfc.section.6.1" rel="Chapter" title="6.1 Gateways and Early Data">
 <link href="#rfc.section.6.2" rel="Chapter" title="6.2 Consistent Handling of Early Data">
+<link href="#rfc.section.6.3" rel="Chapter" title="6.3 Denial of Service">
 <link href="#rfc.section.7" rel="Chapter" title="7 IANA Considerations">
 <link href="#rfc.references" rel="Chapter" title="8 References">
 <link href="#rfc.references.1" rel="Chapter" title="8.1 Normative References">
@@ -298,7 +299,7 @@ address {
 
   <meta name="dct.creator" content="Thomson, M., Nottingham, M., and W. Tarreau" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-thomson-http-replay-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2017-8-08" />
+  <meta name="dct.issued" scheme="ISO8601" content="2017-8-09" />
   <meta name="dct.abstract" content="This document explains the risks of using early data for HTTP and describes techniques for reducing them. In particular, it defines a mechanism that enables clients to communicate with servers about early data, to assure correct operation." />
   <meta name="description" content="This document explains the risks of using early data for HTTP and describes techniques for reducing them. In particular, it defines a mechanism that enables clients to communicate with servers about early data, to assure correct operation." />
 
@@ -322,7 +323,7 @@ address {
 <td class="right">M. Nottingham</td>
 </tr>
 <tr>
-<td class="left">Expires: February 9, 2018</td>
+<td class="left">Expires: February 10, 2018</td>
 <td class="right">true</td>
 </tr>
 <tr>
@@ -335,7 +336,7 @@ address {
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">August 08, 2017</td>
+<td class="right">August 09, 2017</td>
 </tr>
 
     	
@@ -351,7 +352,7 @@ address {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on February 9, 2018.</p>
+<p>This Internet-Draft will expire on February 10, 2018.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2017 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -382,6 +383,8 @@ address {
 <ul><li>6.1.   <a href="#rfc.section.6.1">Gateways and Early Data</a>
 </li>
 <li>6.2.   <a href="#rfc.section.6.2">Consistent Handling of Early Data</a>
+</li>
+<li>6.3.   <a href="#rfc.section.6.3">Denial of Service</a>
 </li>
 </ul><li>7.   <a href="#rfc.section.7">IANA Considerations</a>
 </li>
@@ -496,6 +499,10 @@ Early-Data: 1
 <a href="#rfc.section.6.2">6.2.</a> <a href="#be-consistent" id="be-consistent">Consistent Handling of Early Data</a>
 </h2>
 <p id="rfc.section.6.2.p.1">Consistent treatment of a request that arrives in - or partially in - early data is critical to avoiding inappropriate processing of replayed requests.  If a request is not safe to process before the TLS handshake completes, then all instances of the server need to agree and either reject the request or delay processing.</p>
+<h2 id="rfc.section.6.3">
+<a href="#rfc.section.6.3">6.3.</a> <a href="#denial-of-service" id="denial-of-service">Denial of Service</a>
+</h2>
+<p id="rfc.section.6.3.p.1">Accepting early data exposes a server to potential denial of service through the replay of requests that are expensive to handle.  A server that is under load SHOULD prefer rejecting TLS early data as a whole rather than accepting early data and selectively processing requests.  Generating a 503 (Service Unavailable) or 4NN (Too Early) status code often leads to clients retrying requests, which could result in increased load.</p>
 <h1 id="rfc.section.7">
 <a href="#rfc.section.7">7.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a>
 </h1>
