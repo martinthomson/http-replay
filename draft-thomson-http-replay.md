@@ -140,7 +140,7 @@ request being sent after the handshake completes.  This does not necessarily
 affect handling of that request; what matters is when the server starts acting
 upon the contents of a request.  Any time a server might initiate processing
 prior to completion of the handshake needs to consider how a possible replay of
-early data could affect that processing.
+early data could affect that processing (see also {{be-consistent}}).
 
 A server can partially process requests that are incomplete.  Parsing header
 fields - without acting on the values - and determining request routing is
@@ -310,6 +310,14 @@ code.  A gateway that isn't certain about server support SHOULD either delay
 forwarding the request until the TLS handshake completes, or send a 4NN (Too
 Early) status code in response.  A gateway that is uncertain about whether an
 origin server supports the `Early-Data` header field SHOULD disable early data.
+
+## Consistent Handling of Early Data {#be-consistent}
+
+Consistent treatment of a request that arrives in - or partially in - early data
+is critical to avoiding inappropriate processing of replayed requests.  If a
+request is not safe to process before the TLS handshake completes, then all
+instances of the server need to agree and either reject the request or delay
+processing.
 
 ## Denial of Service
 
