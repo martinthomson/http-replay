@@ -285,7 +285,8 @@ address {
 <link href="#rfc.section.5.2" rel="Chapter" title="5.2 The 4NN (Too Early) Status Code">
 <link href="#rfc.section.6" rel="Chapter" title="6 Security Considerations">
 <link href="#rfc.section.6.1" rel="Chapter" title="6.1 Gateways and Early Data">
-<link href="#rfc.section.6.2" rel="Chapter" title="6.2 Denial of Service">
+<link href="#rfc.section.6.2" rel="Chapter" title="6.2 Consistent Handling of Early Data">
+<link href="#rfc.section.6.3" rel="Chapter" title="6.3 Denial of Service">
 <link href="#rfc.section.7" rel="Chapter" title="7 IANA Considerations">
 <link href="#rfc.references" rel="Chapter" title="8 References">
 <link href="#rfc.references.1" rel="Chapter" title="8.1 Normative References">
@@ -381,7 +382,9 @@ address {
 </li>
 <ul><li>6.1.   <a href="#rfc.section.6.1">Gateways and Early Data</a>
 </li>
-<li>6.2.   <a href="#rfc.section.6.2">Denial of Service</a>
+<li>6.2.   <a href="#rfc.section.6.2">Consistent Handling of Early Data</a>
+</li>
+<li>6.3.   <a href="#rfc.section.6.3">Denial of Service</a>
 </li>
 </ul><li>7.   <a href="#rfc.section.7">IANA Considerations</a>
 </li>
@@ -431,7 +434,7 @@ address {
 <p id="rfc.section.3.p.4">For a given request, the level of tolerance to replay risk is specific to the resource it operates upon (and therefore only known to the origin server). In general, if processing a request does not have state-changing side effects, the consequences of replay are not significant.</p>
 <p id="rfc.section.3.p.5">The request method&#8217;s safety (<a href="#RFC7231" class="xref">[RFC7231]</a>, Section 4.2.1) is one way to determine this. However, some resources do elect to associate side effects with safe methods, so this cannot be universally relied upon.</p>
 <p id="rfc.section.3.p.6">It is RECOMMENDED that origin servers allow resources to explicitly configure whether early data is appropriate in requests. Absent such explicit information, they SHOULD mitigate against early data in requests that have unsafe methods, using the techniques outlined above.</p>
-<p id="rfc.section.3.p.7">A request might be sent partially in early data with the remainder of the request being sent after the handshake completes.  This does not necessarily affect handling of that request; what matters is when the server starts acting upon the contents of a request.  Any time a server might initiate processing prior to completion of the handshake needs to consider how a possible replay of early data could affect that processing.</p>
+<p id="rfc.section.3.p.7">A request might be sent partially in early data with the remainder of the request being sent after the handshake completes.  This does not necessarily affect handling of that request; what matters is when the server starts acting upon the contents of a request.  Any time a server might initiate processing prior to completion of the handshake needs to consider how a possible replay of early data could affect that processing (see also <a href="#be-consistent" class="xref">Section 6.2</a>).</p>
 <p id="rfc.section.3.p.8">A server can partially process requests that are incomplete.  Parsing header fields - without acting on the values - and determining request routing is likely to be safe from side-effects, but other actions might not be.</p>
 <p id="rfc.section.3.p.9">Intermediary servers do not have sufficient information to make this determination, so <a href="#status" class="xref">Section 5.2</a> describes a way for the origin to signal to them that a particular request isn&#8217;t appropriate for early data. Intermediaries that accept early data MUST implement that mechanism.</p>
 <p id="rfc.section.3.p.10">Note that a server cannot choose to selectively reject early data at the TLS layer. TLS only permits a server to accept all early data, or none of it. Once a server has decided to accept early data, it MUST process all requests in early data, even if the server rejects the request by sending a 4NN (Too Early) response.</p>
@@ -493,9 +496,13 @@ Early-Data: 1
 </h2>
 <p id="rfc.section.6.1.p.1">A gateway that forwards requests that were received in early data MUST only do so if it knows that the server that receives those requests understands the <samp>Early-Data</samp> header field and will correctly generate a 4NN (Too Early) status code.  A gateway that isn&#8217;t certain about server support SHOULD either delay forwarding the request until the TLS handshake completes, or send a 4NN (Too Early) status code in response.  A gateway that is uncertain about whether an origin server supports the <samp>Early-Data</samp> header field SHOULD disable early data.</p>
 <h2 id="rfc.section.6.2">
-<a href="#rfc.section.6.2">6.2.</a> <a href="#denial-of-service" id="denial-of-service">Denial of Service</a>
+<a href="#rfc.section.6.2">6.2.</a> <a href="#be-consistent" id="be-consistent">Consistent Handling of Early Data</a>
 </h2>
-<p id="rfc.section.6.2.p.1">Accepting early data exposes a server to potential denial of service through the replay of requests that are expensive to handle.  A server that is under load SHOULD prefer rejecting TLS early data as a whole rather than accepting early data and selectively processing requests.  Generating a 503 (Service Unavailable) or 4NN (Too Early) status code often leads to clients retrying requests, which could result in increased load.</p>
+<p id="rfc.section.6.2.p.1">Consistent treatment of a request that arrives in - or partially in - early data is critical to avoiding inappropriate processing of replayed requests.  If a request is not safe to process before the TLS handshake completes, then all instances of the server need to agree and either reject the request or delay processing.</p>
+<h2 id="rfc.section.6.3">
+<a href="#rfc.section.6.3">6.3.</a> <a href="#denial-of-service" id="denial-of-service">Denial of Service</a>
+</h2>
+<p id="rfc.section.6.3.p.1">Accepting early data exposes a server to potential denial of service through the replay of requests that are expensive to handle.  A server that is under load SHOULD prefer rejecting TLS early data as a whole rather than accepting early data and selectively processing requests.  Generating a 503 (Service Unavailable) or 4NN (Too Early) status code often leads to clients retrying requests, which could result in increased load.</p>
 <h1 id="rfc.section.7">
 <a href="#rfc.section.7">7.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a>
 </h1>

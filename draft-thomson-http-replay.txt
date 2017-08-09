@@ -73,11 +73,12 @@ Table of Contents
      5.2.  The 4NN (Too Early) Status Code . . . . . . . . . . . . .   7
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
      6.1.  Gateways and Early Data . . . . . . . . . . . . . . . . .   8
-     6.2.  Denial of Service . . . . . . . . . . . . . . . . . . . .   8
+     6.2.  Consistent Handling of Early Data . . . . . . . . . . . .   8
+     6.3.  Denial of Service . . . . . . . . . . . . . . . . . . . .   8
    7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
    8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   9
      8.1.  Normative References  . . . . . . . . . . . . . . . . . .   9
-     8.2.  Informative References  . . . . . . . . . . . . . . . . .   9
+     8.2.  Informative References  . . . . . . . . . . . . . . . . .  10
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  10
 
 1.  Introduction
@@ -103,7 +104,6 @@ Table of Contents
    Note that this is different from automated or user-initiated retries;
    replays are initiated by an attacker without the awareness of the
    client.
-
 
 
 
@@ -204,7 +204,7 @@ Internet-Draft               HTTP Early Data                 August 2017
    server starts acting upon the contents of a request.  Any time a
    server might initiate processing prior to completion of the handshake
    needs to consider how a possible replay of early data could affect
-   that processing.
+   that processing (see also Section 6.2).
 
    A server can partially process requests that are incomplete.  Parsing
    header fields - without acting on the values - and determining
@@ -416,7 +416,15 @@ Internet-Draft               HTTP Early Data                 August 2017
    response.  A gateway that is uncertain about whether an origin server
    supports the "Early-Data" header field SHOULD disable early data.
 
-6.2.  Denial of Service
+6.2.  Consistent Handling of Early Data
+
+   Consistent treatment of a request that arrives in - or partially in -
+   early data is critical to avoiding inappropriate processing of
+   replayed requests.  If a request is not safe to process before the
+   TLS handshake completes, then all instances of the server need to
+   agree and either reject the request or delay processing.
+
+6.3.  Denial of Service
 
    Accepting early data exposes a server to potential denial of service
    through the replay of requests that are expensive to handle.  A
@@ -435,6 +443,13 @@ Internet-Draft               HTTP Early Data                 August 2017
 
    Applicable protocol:  http
 
+
+
+Thomson, et al.         Expires February 10, 2018               [Page 8]
+
+Internet-Draft               HTTP Early Data                 August 2017
+
+
    Status:  standard
 
    Author/Change controller:  IETF
@@ -442,13 +457,6 @@ Internet-Draft               HTTP Early Data                 August 2017
    Specification document(s):  This document
 
    Related information:  (empty)
-
-
-
-Thomson, et al.         Expires February 10, 2018               [Page 8]
-
-Internet-Draft               HTTP Early Data                 August 2017
-
 
    This document registers the 4NN (Too Early) status code in the
    "Hypertext Transfer Protocol (HTTP) Status Code" registry established
@@ -489,6 +497,15 @@ Internet-Draft               HTTP Early Data                 August 2017
               DOI 10.17487/RFC7231, June 2014,
               <http://www.rfc-editor.org/info/rfc7231>.
 
+
+
+
+
+Thomson, et al.         Expires February 10, 2018               [Page 9]
+
+Internet-Draft               HTTP Early Data                 August 2017
+
+
    [TLS13]    Rescorla, E., "The Transport Layer Security (TLS) Protocol
               Version 1.3", draft-ietf-tls-tls13-21 (work in progress),
               July 2017.
@@ -498,13 +515,6 @@ Internet-Draft               HTTP Early Data                 August 2017
    [HQ]       Bishop, M., "Hypertext Transfer Protocol (HTTP) over
               QUIC", draft-ietf-quic-http-04 (work in progress), June
               2017.
-
-
-
-Thomson, et al.         Expires February 10, 2018               [Page 9]
-
-Internet-Draft               HTTP Early Data                 August 2017
-
 
    [RFC7540]  Belshe, M., Peon, R., and M. Thomson, Ed., "Hypertext
               Transfer Protocol Version 2 (HTTP/2)", RFC 7540,
@@ -529,16 +539,6 @@ Authors' Addresses
    HAProxy Technologies
 
    Email: willy@haproxy.org
-
-
-
-
-
-
-
-
-
-
 
 
 
