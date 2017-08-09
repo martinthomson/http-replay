@@ -319,6 +319,15 @@ request is not safe to process before the TLS handshake completes, then all
 instances of the server need to agree and either reject the request or delay
 processing.
 
+## Denial of Service
+
+Accepting early data exposes a server to potential denial of service through the
+replay of requests that are expensive to handle.  A server that is under load
+SHOULD prefer rejecting TLS early data as a whole rather than accepting early
+data and selectively processing requests.  Generating a 503 (Service
+Unavailable) or 4NN (Too Early) status code often leads to clients retrying
+requests, which could result in increased load.
+
 
 # IANA Considerations
 
