@@ -5,10 +5,10 @@
 httpbis                                                       M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                           M. Nottingham
-Expires: February 9, 2018                                           true
+Expires: February 10, 2018                                          true
                                                               W. Tarreau
                                                     HAProxy Technologies
-                                                         August 08, 2017
+                                                         August 09, 2017
 
 
                         Using Early Data in HTTP
@@ -36,7 +36,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on February 9, 2018.
+   This Internet-Draft will expire on February 10, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Thomson, et al.         Expires February 9, 2018                [Page 1]
+Thomson, et al.         Expires February 10, 2018               [Page 1]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -73,7 +73,7 @@ Table of Contents
      5.2.  The 4NN (Too Early) Status Code . . . . . . . . . . . . .   7
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
      6.1.  Gateways and Early Data . . . . . . . . . . . . . . . . .   8
-     6.2.  TLS Implementation Requirements . . . . . . . . . . . . .   8
+     6.2.  Denial of Service . . . . . . . . . . . . . . . . . . . .   8
    7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
    8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   9
      8.1.  Normative References  . . . . . . . . . . . . . . . . . .   9
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thomson, et al.         Expires February 9, 2018                [Page 2]
+Thomson, et al.         Expires February 10, 2018               [Page 2]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -165,7 +165,7 @@ Internet-Draft               HTTP Early Data                 August 2017
 
 
 
-Thomson, et al.         Expires February 9, 2018                [Page 3]
+Thomson, et al.         Expires February 10, 2018               [Page 3]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -221,7 +221,7 @@ Internet-Draft               HTTP Early Data                 August 2017
 
 
 
-Thomson, et al.         Expires February 9, 2018                [Page 4]
+Thomson, et al.         Expires February 10, 2018               [Page 4]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -277,7 +277,7 @@ Internet-Draft               HTTP Early Data                 August 2017
 
 
 
-Thomson, et al.         Expires February 9, 2018                [Page 5]
+Thomson, et al.         Expires February 10, 2018               [Page 5]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -333,7 +333,7 @@ Internet-Draft               HTTP Early Data                 August 2017
 
 
 
-Thomson, et al.         Expires February 9, 2018                [Page 6]
+Thomson, et al.         Expires February 10, 2018               [Page 6]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -389,7 +389,7 @@ Internet-Draft               HTTP Early Data                 August 2017
 
 
 
-Thomson, et al.         Expires February 9, 2018                [Page 7]
+Thomson, et al.         Expires February 10, 2018               [Page 7]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -416,14 +416,15 @@ Internet-Draft               HTTP Early Data                 August 2017
    response.  A gateway that is uncertain about whether an origin server
    supports the "Early-Data" header field SHOULD disable early data.
 
-6.2.  TLS Implementation Requirements
+6.2.  Denial of Service
 
-   In order to be used for early data in HTTP, A TLS implementation MUST
-   ensure that it is possible to correctly identify early data.  This is
-   necessary even if early data arrives at the same time as the TLS
-   Finished message from the client, which completes the handshake.  If
-   early data is misclassified, a server might process requests under
-   the misapprehension that they can't be or weren't replayed elsewhere.
+   Accepting early data exposes a server to potential denial of service
+   through the replay of requests that are expensive to handle.  A
+   server that is under load SHOULD prefer rejecting TLS early data as a
+   whole rather than accepting early data and selectively processing
+   requests.  Generating a 503 (Service Unavailable) or 4NN (Too Early)
+   status code often leads to clients retrying requests, which could
+   result in increased load.
 
 7.  IANA Considerations
 
@@ -444,8 +445,7 @@ Internet-Draft               HTTP Early Data                 August 2017
 
 
 
-
-Thomson, et al.         Expires February 9, 2018                [Page 8]
+Thomson, et al.         Expires February 10, 2018               [Page 8]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -501,7 +501,7 @@ Internet-Draft               HTTP Early Data                 August 2017
 
 
 
-Thomson, et al.         Expires February 9, 2018                [Page 9]
+Thomson, et al.         Expires February 10, 2018               [Page 9]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -557,4 +557,4 @@ Authors' Addresses
 
 
 
-Thomson, et al.         Expires February 9, 2018               [Page 10]
+Thomson, et al.         Expires February 10, 2018              [Page 10]
