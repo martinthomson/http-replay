@@ -87,7 +87,8 @@ or only part of a request is early.  In a multiplexed protocol, like HTTP/2
 delivered in early data.
 
 The model that this document assumes is that once the TLS handshake completes,
-early data is not replayed.  However, it is important to note that this does not
+the early data received on that TLS connection is known to not be a replayed copy
+copy of that data.  However, it is important to note that this does not
 mean that early data will not be or has not been replayed on another connection.
 
 
@@ -139,7 +140,7 @@ A request might be sent partially in early data with the remainder of the
 request being sent after the handshake completes.  This does not necessarily
 affect handling of that request; what matters is when the server starts acting
 upon the contents of a request.  Any time a server might initiate processing
-prior to completion of the handshake needs to consider how a possible replay of
+prior to completion of the handshake it needs to consider how a possible replay of
 early data could affect that processing (see also {{be-consistent}}).
 
 A server can partially process requests that are incomplete.  Parsing header
@@ -213,7 +214,7 @@ To meet these needs, two signalling mechanisms are defined:
 * The `Early-Data` header field is included in requests that are received in
   early data.
 
-* The 4NN (Too Early) status code is defined for an server to indicate that a
+* The 4NN (Too Early) status code is defined for a server to indicate that a
   request could not be processed due to the consequences of a possible replay
   attack.
 
