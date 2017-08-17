@@ -5,10 +5,10 @@
 httpbis                                                       M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                           M. Nottingham
-Expires: February 10, 2018                                          true
+Expires: February 18, 2018                                          true
                                                               W. Tarreau
                                                     HAProxy Technologies
-                                                         August 09, 2017
+                                                         August 17, 2017
 
 
                         Using Early Data in HTTP
@@ -36,7 +36,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on February 10, 2018.
+   This Internet-Draft will expire on February 18, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Thomson, et al.         Expires February 10, 2018               [Page 1]
+Thomson, et al.         Expires February 18, 2018               [Page 1]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thomson, et al.         Expires February 10, 2018               [Page 2]
+Thomson, et al.         Expires February 18, 2018               [Page 2]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -136,9 +136,10 @@ Internet-Draft               HTTP Early Data                 August 2017
    multiple requests might be partially delivered in early data.
 
    The model that this document assumes is that once the TLS handshake
-   completes, early data is not replayed.  However, it is important to
-   note that this does not mean that early data will not be or has not
-   been replayed on another connection.
+   completes, the early data received on that TLS connection is known to
+   not be a replayed copy copy of that data.  However, it is important
+   to note that this does not mean that early data will not be or has
+   not been replayed on another connection.
 
 3.  Supporting Early Data in HTTP Servers
 
@@ -164,8 +165,7 @@ Internet-Draft               HTTP Early Data                 August 2017
 
 
 
-
-Thomson, et al.         Expires February 10, 2018               [Page 3]
+Thomson, et al.         Expires February 18, 2018               [Page 3]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -203,7 +203,7 @@ Internet-Draft               HTTP Early Data                 August 2017
    necessarily affect handling of that request; what matters is when the
    server starts acting upon the contents of a request.  Any time a
    server might initiate processing prior to completion of the handshake
-   needs to consider how a possible replay of early data could affect
+   it needs to consider how a possible replay of early data could affect
    that processing (see also Section 6.2).
 
    A server can partially process requests that are incomplete.  Parsing
@@ -221,7 +221,7 @@ Internet-Draft               HTTP Early Data                 August 2017
 
 
 
-Thomson, et al.         Expires February 10, 2018               [Page 4]
+Thomson, et al.         Expires February 18, 2018               [Page 4]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -277,7 +277,7 @@ Internet-Draft               HTTP Early Data                 August 2017
 
 
 
-Thomson, et al.         Expires February 10, 2018               [Page 5]
+Thomson, et al.         Expires February 18, 2018               [Page 5]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -301,7 +301,7 @@ Internet-Draft               HTTP Early Data                 August 2017
    o  The "Early-Data" header field is included in requests that are
       received in early data.
 
-   o  The 4NN (Too Early) status code is defined for an server to
+   o  The 4NN (Too Early) status code is defined for a server to
       indicate that a request could not be processed due to the
       consequences of a possible replay attack.
 
@@ -333,7 +333,7 @@ Internet-Draft               HTTP Early Data                 August 2017
 
 
 
-Thomson, et al.         Expires February 10, 2018               [Page 6]
+Thomson, et al.         Expires February 18, 2018               [Page 6]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -389,7 +389,7 @@ Internet-Draft               HTTP Early Data                 August 2017
 
 
 
-Thomson, et al.         Expires February 10, 2018               [Page 7]
+Thomson, et al.         Expires February 18, 2018               [Page 7]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -445,7 +445,7 @@ Internet-Draft               HTTP Early Data                 August 2017
 
 
 
-Thomson, et al.         Expires February 10, 2018               [Page 8]
+Thomson, et al.         Expires February 18, 2018               [Page 8]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -474,34 +474,34 @@ Internet-Draft               HTTP Early Data                 August 2017
 
    [ABNF]     Crocker, D., Ed. and P. Overell, "Augmented BNF for Syntax
               Specifications: ABNF", STD 68, RFC 5234,
-              DOI 10.17487/RFC5234, January 2008,
-              <http://www.rfc-editor.org/info/rfc5234>.
+              DOI 10.17487/RFC5234, January 2008, <https://www.rfc-
+              editor.org/info/rfc5234>.
 
    [HEADERS]  Klyne, G., Nottingham, M., and J. Mogul, "Registration
               Procedures for Message Header Fields", BCP 90, RFC 3864,
-              DOI 10.17487/RFC3864, September 2004,
-              <http://www.rfc-editor.org/info/rfc3864>.
+              DOI 10.17487/RFC3864, September 2004, <https://www.rfc-
+              editor.org/info/rfc3864>.
 
    [HTTP]     Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
               Protocol (HTTP/1.1): Message Syntax and Routing",
               RFC 7230, DOI 10.17487/RFC7230, June 2014,
-              <http://www.rfc-editor.org/info/rfc7230>.
+              <https://www.rfc-editor.org/info/rfc7230>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997,
-              <http://www.rfc-editor.org/info/rfc2119>.
+              DOI 10.17487/RFC2119, March 1997, <https://www.rfc-
+              editor.org/info/rfc2119>.
 
    [RFC7231]  Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
               Protocol (HTTP/1.1): Semantics and Content", RFC 7231,
-              DOI 10.17487/RFC7231, June 2014,
-              <http://www.rfc-editor.org/info/rfc7231>.
+              DOI 10.17487/RFC7231, June 2014, <https://www.rfc-
+              editor.org/info/rfc7231>.
 
 
 
 
 
-Thomson, et al.         Expires February 10, 2018               [Page 9]
+Thomson, et al.         Expires February 18, 2018               [Page 9]
 
 Internet-Draft               HTTP Early Data                 August 2017
 
@@ -513,13 +513,13 @@ Internet-Draft               HTTP Early Data                 August 2017
 8.2.  Informative References
 
    [HQ]       Bishop, M., "Hypertext Transfer Protocol (HTTP) over
-              QUIC", draft-ietf-quic-http-04 (work in progress), June
+              QUIC", draft-ietf-quic-http-05 (work in progress), August
               2017.
 
    [RFC7540]  Belshe, M., Peon, R., and M. Thomson, Ed., "Hypertext
               Transfer Protocol Version 2 (HTTP/2)", RFC 7540,
-              DOI 10.17487/RFC7540, May 2015,
-              <http://www.rfc-editor.org/info/rfc7540>.
+              DOI 10.17487/RFC7540, May 2015, <https://www.rfc-
+              editor.org/info/rfc7540>.
 
 Appendix A.  Acknowledgments
 
@@ -557,4 +557,4 @@ Authors' Addresses
 
 
 
-Thomson, et al.         Expires February 10, 2018              [Page 10]
+Thomson, et al.         Expires February 18, 2018              [Page 10]
