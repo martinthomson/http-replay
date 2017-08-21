@@ -429,10 +429,10 @@ address {
 <p></p>
 
 <ol>
+<li>TLS <a href="#TLS13" class="xref">[TLS13]</a> mandates the use of replay detection strategies that reduce the ability of an attacker to successfully replay early data.  These anti-replay techniques reduce but don&#8217;t completely eliminate the chance of data being replayed and ensure a fixed upper limit to the number of replays.</li>
 <li>The server can choose whether it will process early data before the TLS handshake completes. By deferring processing, it can ensure that only a successfully completed connection is used for the request(s) therein.  Assuming that a replayed ClientHello will not result in additional connections being made by the client, this provides the server with some assurance that the early data was not replayed.</li>
 <li>If the server receives multiple requests in early data, it can determine whether to defer HTTP processing on a per-request basis. This may require buffering the responses to preserve ordering in HTTP/1.1.</li>
 <li>The server can cause a client to retry a request and not use early data by responding with the 4NN (Too Early) status code (<a href="#status" class="xref">Section 5.2</a>), in cases where the risk of replay is judged too great.</li>
-<li>Finally, TLS <a href="#TLS13" class="xref">[TLS13]</a> describes several mitigation strategies that reduce the ability of an attacker to successfully replay early data. Servers are strongly encouraged to implement these techniques, but to also recognize that they are imperfect.  These anti-replay techniques can reduce the number of replays that will be successful from being essentially unbounded to a fixed value.</li>
 </ol>
 <p id="rfc.section.3.p.4">For a given request, the level of tolerance to replay risk is specific to the resource it operates upon (and therefore only known to the origin server). In general, if processing a request does not have state-changing side effects, the consequences of replay are not significant.</p>
 <p id="rfc.section.3.p.5">The request method&#8217;s safety (<a href="#RFC7231" class="xref">[RFC7231]</a>, Section 4.2.1) is one way to determine this. However, some resources do elect to associate side effects with safe methods, so this cannot be universally relied upon.</p>
