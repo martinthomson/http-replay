@@ -88,8 +88,8 @@ delivered in early data.
 
 The model that this document assumes is that once the TLS handshake completes,
 the early data received on that TLS connection is known to not be a replayed copy
-copy of that data.  However, it is important to note that this does not
-mean that early data will not be or has not been replayed on another connection.
+of that data.  However, it is important to note that this does not mean that
+early data will not be or has not been replayed on another connection.
 
 
 # Supporting Early Data in HTTP Servers
