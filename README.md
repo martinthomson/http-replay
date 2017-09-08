@@ -1,3 +1,6 @@
+This work has been adopted by the [HTTP working group](http://httpwg.org) the latest
+version of this work is maintained at [https://github.com/httpwg/http-extensions]().
+
 # Using TLS Early Data in HTTP
 
 This is the working area for the individual Internet-Draft, "Using TLS Early Data in HTTP".
