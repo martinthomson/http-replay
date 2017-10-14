@@ -291,15 +291,16 @@ address {
 <link href="#rfc.references" rel="Chapter" title="8 References">
 <link href="#rfc.references.1" rel="Chapter" title="8.1 Normative References">
 <link href="#rfc.references.2" rel="Chapter" title="8.2 Informative References">
+<link href="#rfc.appendix.A" rel="Chapter" title="A Acknowledgments">
 <link href="#rfc.authors" rel="Chapter">
 
 
-  <meta name="generator" content="xml2rfc version 2.6.1 - http://tools.ietf.org/tools/xml2rfc" />
+  <meta name="generator" content="xml2rfc version 2.8.2 - https://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Thomson, M., Nottingham, M., and W. Tarreau" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-thomson-http-replay-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2017-8-09" />
+  <meta name="dct.issued" scheme="ISO8601" content="2017-10-14" />
   <meta name="dct.abstract" content="This document explains the risks of using early data for HTTP and describes techniques for reducing them. In particular, it defines a mechanism that enables clients to communicate with servers about early data, to assure correct operation." />
   <meta name="description" content="This document explains the risks of using early data for HTTP and describes techniques for reducing them. In particular, it defines a mechanism that enables clients to communicate with servers about early data, to assure correct operation." />
 
@@ -323,7 +324,7 @@ address {
 <td class="right">M. Nottingham</td>
 </tr>
 <tr>
-<td class="left">Expires: February 10, 2018</td>
+<td class="left">Expires: April 17, 2018</td>
 <td class="right">true</td>
 </tr>
 <tr>
@@ -336,7 +337,7 @@ address {
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">August 09, 2017</td>
+<td class="right">October 14, 2017</td>
 </tr>
 
     	
@@ -350,12 +351,12 @@ address {
 <p>This document explains the risks of using early data for HTTP and describes techniques for reducing them. In particular, it defines a mechanism that enables clients to communicate with servers about early data, to assure correct operation.</p>
 <h1 id="rfc.status"><a href="#rfc.status">Status of This Memo</a></h1>
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
-<p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
+<p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on February 10, 2018.</p>
+<p>This Internet-Draft will expire on April 17, 2018.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2017 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
-<p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
+<p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
 
   
   <hr class="noprint" />
@@ -394,7 +395,9 @@ address {
 </li>
 <li>8.2.   <a href="#rfc.references.2">Informative References</a>
 </li>
-</ul><li><a href="#rfc.authors">Authors' Addresses</a>
+</ul><li>Appendix A.   <a href="#rfc.appendix.A">Acknowledgments</a>
+</li>
+<li><a href="#rfc.authors">Authors' Addresses</a>
 </li>
 
 
@@ -417,7 +420,7 @@ address {
 <a href="#rfc.section.2">2.</a> <a href="#early-data-in-http" id="early-data-in-http">Early Data in HTTP</a>
 </h1>
 <p id="rfc.section.2.p.1">Conceptually, early data is concatenated with other application to form a single stream.  This can mean that requests are entirely contained within early data, or only part of a request is early.  In a multiplexed protocol, like HTTP/2 <a href="#RFC7540" class="xref">[RFC7540]</a> or HTTP/QUIC <a href="#HQ" class="xref">[HQ]</a>, multiple requests might be partially delivered in early data.</p>
-<p id="rfc.section.2.p.2">The model that this document assumes is that once the TLS handshake completes, early data is not replayed.  However, it is important to note that this does not mean that early data will not be or has not been replayed on another connection.</p>
+<p id="rfc.section.2.p.2">The model that this document assumes is that once the TLS handshake completes, the early data received on that TLS connection is known to not be a replayed copy of that data.  However, it is important to note that this does not mean that early data will not be or has not been replayed on another connection.</p>
 <h1 id="rfc.section.3">
 <a href="#rfc.section.3">3.</a> <a href="#supporting-early-data-in-http-servers" id="supporting-early-data-in-http-servers">Supporting Early Data in HTTP Servers</a>
 </h1>
@@ -426,15 +429,15 @@ address {
 <p></p>
 
 <ol>
+<li>TLS <a href="#TLS13" class="xref">[TLS13]</a> mandates the use of replay detection strategies that reduce the ability of an attacker to successfully replay early data.  These anti-replay techniques reduce but don&#8217;t completely eliminate the chance of data being replayed and ensure a fixed upper limit to the number of replays.</li>
 <li>The server can choose whether it will process early data before the TLS handshake completes. By deferring processing, it can ensure that only a successfully completed connection is used for the request(s) therein.  Assuming that a replayed ClientHello will not result in additional connections being made by the client, this provides the server with some assurance that the early data was not replayed.</li>
 <li>If the server receives multiple requests in early data, it can determine whether to defer HTTP processing on a per-request basis. This may require buffering the responses to preserve ordering in HTTP/1.1.</li>
 <li>The server can cause a client to retry a request and not use early data by responding with the 4NN (Too Early) status code (<a href="#status" class="xref">Section 5.2</a>), in cases where the risk of replay is judged too great.</li>
-<li>Finally, TLS <a href="#TLS13" class="xref">[TLS13]</a> describes several mitigation strategies that reduce the ability of an attacker to successfully replay early data. Servers are strongly encouraged to implement these techniques, but to also recognize that they are imperfect.  These anti-replay techniques can reduce the number of replays that will be successful from being essentially unbounded to a fixed value.</li>
 </ol>
 <p id="rfc.section.3.p.4">For a given request, the level of tolerance to replay risk is specific to the resource it operates upon (and therefore only known to the origin server). In general, if processing a request does not have state-changing side effects, the consequences of replay are not significant.</p>
 <p id="rfc.section.3.p.5">The request method&#8217;s safety (<a href="#RFC7231" class="xref">[RFC7231]</a>, Section 4.2.1) is one way to determine this. However, some resources do elect to associate side effects with safe methods, so this cannot be universally relied upon.</p>
 <p id="rfc.section.3.p.6">It is RECOMMENDED that origin servers allow resources to explicitly configure whether early data is appropriate in requests. Absent such explicit information, they SHOULD mitigate against early data in requests that have unsafe methods, using the techniques outlined above.</p>
-<p id="rfc.section.3.p.7">A request might be sent partially in early data with the remainder of the request being sent after the handshake completes.  This does not necessarily affect handling of that request; what matters is when the server starts acting upon the contents of a request.  Any time a server might initiate processing prior to completion of the handshake needs to consider how a possible replay of early data could affect that processing (see also <a href="#be-consistent" class="xref">Section 6.2</a>).</p>
+<p id="rfc.section.3.p.7">A request might be sent partially in early data with the remainder of the request being sent after the handshake completes.  This does not necessarily affect handling of that request; what matters is when the server starts acting upon the contents of a request.  Any time a server might initiate processing prior to completion of the handshake it needs to consider how a possible replay of early data could affect that processing (see also <a href="#be-consistent" class="xref">Section 6.2</a>).</p>
 <p id="rfc.section.3.p.8">A server can partially process requests that are incomplete.  Parsing header fields - without acting on the values - and determining request routing is likely to be safe from side-effects, but other actions might not be.</p>
 <p id="rfc.section.3.p.9">Intermediary servers do not have sufficient information to make this determination, so <a href="#status" class="xref">Section 5.2</a> describes a way for the origin to signal to them that a particular request isn&#8217;t appropriate for early data. Intermediaries that accept early data MUST implement that mechanism.</p>
 <p id="rfc.section.3.p.10">Note that a server cannot choose to selectively reject early data at the TLS layer. TLS only permits a server to accept all early data, or none of it. Once a server has decided to accept early data, it MUST process all requests in early data, even if the server rejects the request by sending a 4NN (Too Early) response.</p>
@@ -457,7 +460,7 @@ address {
 
 <ul>
 <li>The <samp>Early-Data</samp> header field is included in requests that are received in early data.</li>
-<li>The 4NN (Too Early) status code is defined for an server to indicate that a request could not be processed due to the consequences of a possible replay attack.</li>
+<li>The 4NN (Too Early) status code is defined for a server to indicate that a request could not be processed due to the consequences of a possible replay attack.</li>
 </ul>
 <p id="rfc.section.5.p.4">They are designed to enable better coordination of the use of early data between the user agent and origin server, and also when a gateway (also &#8220;reverse proxy&#8221;, &#8220;Content Delivery Network&#8221;, or &#8220;surrogate&#8221;) is present.</p>
 <p id="rfc.section.5.p.5">Gateways typically don&#8217;t have specific information about whether a given request can be processed safely when it is sent in early data. In many cases, only the origin server has the necessary information to decide whether the risk of replay is acceptable. These extensions allow coordination between a gateway and its origin server.</p>
@@ -542,32 +545,32 @@ Early-Data: 1
 <tr>
 <td class="reference"><b id="ABNF">[ABNF]</b></td>
 <td class="top">
-<a>Crocker, D.</a> and <a>P. Overell</a>, "<a href="http://tools.ietf.org/html/rfc5234">Augmented BNF for Syntax Specifications: ABNF</a>", STD 68, RFC 5234, DOI 10.17487/RFC5234, January 2008.</td>
+<a>Crocker, D.</a> and <a>P. Overell</a>, "<a href="https://tools.ietf.org/html/rfc5234">Augmented BNF for Syntax Specifications: ABNF</a>", STD 68, RFC 5234, DOI 10.17487/RFC5234, January 2008.</td>
 </tr>
 <tr>
 <td class="reference"><b id="HEADERS">[HEADERS]</b></td>
 <td class="top">
-<a>Klyne, G.</a>, <a>Nottingham, M.</a> and <a>J. Mogul</a>, "<a href="http://tools.ietf.org/html/rfc3864">Registration Procedures for Message Header Fields</a>", BCP 90, RFC 3864, DOI 10.17487/RFC3864, September 2004.</td>
+<a>Klyne, G.</a>, <a>Nottingham, M.</a> and <a>J. Mogul</a>, "<a href="https://tools.ietf.org/html/rfc3864">Registration Procedures for Message Header Fields</a>", BCP 90, RFC 3864, DOI 10.17487/RFC3864, September 2004.</td>
 </tr>
 <tr>
 <td class="reference"><b id="HTTP">[HTTP]</b></td>
 <td class="top">
-<a>Fielding, R.</a> and <a>J. Reschke</a>, "<a href="http://tools.ietf.org/html/rfc7230">Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing</a>", RFC 7230, DOI 10.17487/RFC7230, June 2014.</td>
+<a>Fielding, R.</a> and <a>J. Reschke</a>, "<a href="https://tools.ietf.org/html/rfc7230">Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing</a>", RFC 7230, DOI 10.17487/RFC7230, June 2014.</td>
 </tr>
 <tr>
 <td class="reference"><b id="RFC2119">[RFC2119]</b></td>
 <td class="top">
-<a>Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
+<a>Bradner, S.</a>, "<a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
 </tr>
 <tr>
 <td class="reference"><b id="RFC7231">[RFC7231]</b></td>
 <td class="top">
-<a>Fielding, R.</a> and <a>J. Reschke</a>, "<a href="http://tools.ietf.org/html/rfc7231">Hypertext Transfer Protocol (HTTP/1.1): Semantics and Content</a>", RFC 7231, DOI 10.17487/RFC7231, June 2014.</td>
+<a>Fielding, R.</a> and <a>J. Reschke</a>, "<a href="https://tools.ietf.org/html/rfc7231">Hypertext Transfer Protocol (HTTP/1.1): Semantics and Content</a>", RFC 7231, DOI 10.17487/RFC7231, June 2014.</td>
 </tr>
 <tr>
 <td class="reference"><b id="TLS13">[TLS13]</b></td>
 <td class="top">
-<a>Rescorla, E.</a>, "<a href="http://tools.ietf.org/html/draft-ietf-tls-tls13-21">The Transport Layer Security (TLS) Protocol Version 1.3</a>", Internet-Draft draft-ietf-tls-tls13-21, July 2017.</td>
+<a>Rescorla, E.</a>, "<a href="https://tools.ietf.org/html/draft-ietf-tls-tls13-21">The Transport Layer Security (TLS) Protocol Version 1.3</a>", Internet-Draft draft-ietf-tls-tls13-21, July 2017.</td>
 </tr>
 </tbody></table>
 <h2 id="rfc.references.2">
@@ -576,14 +579,18 @@ Early-Data: 1
 <tr>
 <td class="reference"><b id="HQ">[HQ]</b></td>
 <td class="top">
-<a>Bishop, M.</a>, "<a href="http://tools.ietf.org/html/draft-ietf-quic-http-04">Hypertext Transfer Protocol (HTTP) over QUIC</a>", Internet-Draft draft-ietf-quic-http-04, June 2017.</td>
+<a>Bishop, M.</a>, "<a href="https://tools.ietf.org/html/draft-ietf-quic-http-06">Hypertext Transfer Protocol (HTTP) over QUIC</a>", Internet-Draft draft-ietf-quic-http-06, September 2017.</td>
 </tr>
 <tr>
 <td class="reference"><b id="RFC7540">[RFC7540]</b></td>
 <td class="top">
-<a>Belshe, M.</a>, <a>Peon, R.</a> and <a>M. Thomson</a>, "<a href="http://tools.ietf.org/html/rfc7540">Hypertext Transfer Protocol Version 2 (HTTP/2)</a>", RFC 7540, DOI 10.17487/RFC7540, May 2015.</td>
+<a>Belshe, M.</a>, <a>Peon, R.</a> and <a>M. Thomson</a>, "<a href="https://tools.ietf.org/html/rfc7540">Hypertext Transfer Protocol Version 2 (HTTP/2)</a>", RFC 7540, DOI 10.17487/RFC7540, May 2015.</td>
 </tr>
 </tbody></table>
+<h1 id="rfc.appendix.A">
+<a href="#rfc.appendix.A">Appendix A.</a> <a href="#acknowledgments" id="acknowledgments">Acknowledgments</a>
+</h1>
+<p id="rfc.section.A.p.1">This document was not easy to produce.  The following people made substantial contributions to the quality and completeness of the document: Subodh Iyengar, Benjamin Kaduk, Ilari Liusavaara, Kazuho Oku, and Victor Vasiliev.</p>
 <h1 id="rfc.authors"><a href="#rfc.authors">Authors' Addresses</a></h1>
 <div class="avoidbreak">
   <address class="vcard">
