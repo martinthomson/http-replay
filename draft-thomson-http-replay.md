@@ -277,11 +277,10 @@ using the 4NN (Too Early) status code.
 A 4NN (Too Early) status code indicates that the server is unwilling to risk
 processing a request that might be replayed.
 
-Clients (user-agents and intermediaries) that sent the request in early data
-MUST automatically retry the request when receiving a 4NN (Too Early)
-response status code. Such retries MUST NOT be sent in early data, and SHOULD
-NOT be sent if the TLS handshake on the original connection does not
-successfully complete.
+Clients that send a request in early data MUST automatically retry the request
+when receiving a 4NN (Too Early) response status code. Such retries MUST NOT be
+sent in early data, and SHOULD NOT be sent if the TLS handshake on the original
+connection does not successfully complete.
 
 Intermediaries that receive a 4NN (Too Early) status code MAY automatically
 retry requests after allowing the handshake to complete unless the original
