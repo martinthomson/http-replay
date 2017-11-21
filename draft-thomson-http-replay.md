@@ -190,7 +190,8 @@ forwards the same messages from the client to another server instance that will
 reject early data.  The client the retries the request, resulting in the request
 being processed twice.  Replays are also possible if there are multiple server
 instances that will accept early data, or if the same server accepts early data
-multiple times (though this would be in violation of requirements in TLS).
+multiple times (though this would be in violation of requirements in Section 8
+of {{!TLS13}}).
 
 Clients that use early data MUST retry requests upon receipt of a 4NN (Too
 Early) status code; see {{status}}.
